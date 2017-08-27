@@ -60,7 +60,7 @@
 );
 GO
 
-CREATE NONCLUSTERED INDEX IX_FactPlayerHistory_PlayerId_GameweekId_SeasonId_WasHome_OpponentTeamId_Inc_TotalPoints_Minutes
+CREATE NONCLUSTERED INDEX IX_FactPlayerHistory_PlayerKey_GameweekKey_SeasonKey_WasHome_OpponentTeamKey_Inc_TotalPoints_Minutes
 ON [dbo].[FactPlayerHistory] ([PlayerKey],[GameweekKey],[SeasonKey],[WasHome],[OpponentTeamKey])
 INCLUDE ([TotalPoints],[Minutes]);
 GO

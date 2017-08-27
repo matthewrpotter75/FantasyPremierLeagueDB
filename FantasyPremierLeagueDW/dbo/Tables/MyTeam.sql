@@ -9,5 +9,5 @@ CREATE TABLE dbo.MyTeam
 );
 GO
 
-CREATE NONCLUSTERED INDEX [IX_MyTeam_PlayerId] ON [dbo].[MyTeam] (PlayerKey);
+CREATE NONCLUSTERED INDEX [IX_MyTeam_PlayerKey] ON [dbo].[MyTeam] (PlayerKey);
 GO

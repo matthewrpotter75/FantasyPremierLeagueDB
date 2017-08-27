@@ -20,7 +20,7 @@
     [StrengthDefenceAway] INT NOT NULL,
     [TeamDivision] INT NOT NULL,
 	CONSTRAINT [PK_DimTeamAttribute] PRIMARY KEY CLUSTERED ([TeamAttributeKey] ASC),
-	CONSTRAINT [FK_DimTeamAttribute_TeamId_SeasonId] FOREIGN KEY ([TeamKey],[SeasonKey]) REFERENCES [dbo].[DimTeamSeason] ([TeamKey],[SeasonKey]),
+	CONSTRAINT [FK_DimTeamAttribute_TeamKey_SeasonKey] FOREIGN KEY ([TeamKey],[SeasonKey]) REFERENCES [dbo].[DimTeamSeason] ([TeamKey],[SeasonKey]),
 	CONSTRAINT [FK_DimTeamAttribute_TeamKey] FOREIGN KEY ([TeamKey]) REFERENCES [dbo].[DimTeam] ([TeamKey]),
 	CONSTRAINT [FK_DimTeamAttribute_SeasonKey] FOREIGN KEY ([SeasonKey]) REFERENCES [dbo].[DimSeason] ([SeasonKey])
 );

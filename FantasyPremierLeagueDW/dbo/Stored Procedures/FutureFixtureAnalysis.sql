@@ -86,7 +86,7 @@ BEGIN
 	COUNT(ph.PlayerKey) AS Games,
 	SUM(ph.[Minutes]) AS PlayerMinutes,
 	--CASE WHEN SUM(ph.[Minutes]) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/SUM(ph.[Minutes]) * 90 ELSE 0 END AS PPG
-	CASE WHEN COUNT(ph.gameweekKey) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/COUNT(ph.gameweekKey) ELSE 0 END AS PPG
+	CASE WHEN COUNT(ph.GameweekKey) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/COUNT(ph.GameweekKey) ELSE 0 END AS PPG
 	FROM dbo.FactPlayerHistory ph
 	INNER JOIN dbo.DimPlayer p
 	ON ph.PlayerKey = p.PlayerKey
@@ -103,7 +103,7 @@ BEGIN
 	;WITH PlayerHistoryRanked AS
 	(
 		SELECT PlayerKey,
-		gameweekKey,
+		GameweekKey,
 		ROW_NUMBER() OVER (PARTITION BY PlayerKey ORDER BY GameweekKey DESC) AS GameweekInc,
 		TotalPoints,
 		[Minutes],

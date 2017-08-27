@@ -19,12 +19,12 @@ USING
 	(11,'2016/17','20160801','20170601'),
 	(12,'2017/18','20170801','20180601')
 )
-AS Source ([SeasonId], [SeasonName], [SeasonStartDate], [SeasonEndDate])
-ON Target.[SeasonKey] = Source.SeasonId
+AS Source ([SeasonKey], [SeasonName], [SeasonStartDate], [SeasonEndDate])
+ON Target.[SeasonKey] = Source.SeasonKey
 WHEN MATCHED THEN 
 UPDATE SET [SeasonName] = Source.[SeasonName], [SeasonStartDate] = Source.[SeasonStartDate], [SeasonEndDate] = Source.[SeasonEndDate]
 WHEN NOT MATCHED BY TARGET THEN 
 INSERT ([SeasonKey], [SeasonName], [SeasonStartDate], [SeasonEndDate]) 
-VALUES ([SeasonId], [SeasonName], [SeasonStartDate], [SeasonEndDate])  
+VALUES ([SeasonKey], [SeasonName], [SeasonStartDate], [SeasonEndDate])  
 WHEN NOT MATCHED BY SOURCE THEN 
 DELETE;
