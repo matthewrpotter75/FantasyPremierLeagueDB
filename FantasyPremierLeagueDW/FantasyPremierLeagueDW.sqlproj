@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>FantasyPremierLeagueDW</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{3fd7af6d-cc25-4368-8df3-4883e474655c}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>FantasyPremierLeagueDW</RootNamespace>
+    <AssemblyName>FantasyPremierLeagueDW</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo" />
+    <Folder Include="Security" />
+    <Folder Include="dbo\Tables" />
+    <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="dbo\Views" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PopulateDimSeason.sql" />
+    <Build Include="Security\FantasyPremierLeagueDW.sql" />
+    <Build Include="Security\FantasyPremierLeagueDW_Login.sql" />
+    <Build Include="Security\Permissions.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Tables\DimGameweek.sql" />
+    <Build Include="dbo\Tables\FactGameweekFixture.sql" />
+    <Build Include="dbo\Tables\DimPlayer.sql" />
+    <Build Include="dbo\Tables\DimPlayerAttribute.sql" />
+    <None Include="FantasyPremierLeagueDW_ProjectToDB.scmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FantasyPremierLeagueDW.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\DimPlayerPosition.sql" />
+    <Build Include="dbo\Tables\DimPlayerSeason.sql" />
+    <Build Include="dbo\Tables\DimPlayerTeamGameweek.sql" />
+    <Build Include="dbo\Tables\DimSeason.sql" />
+    <Build Include="dbo\Tables\DimTeam.sql" />
+    <Build Include="dbo\Tables\DimTeamAttribute.sql" />
+    <Build Include="dbo\Tables\DimTeamSeason.sql" />
+    <Build Include="dbo\Tables\FactPlayerHistory.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerGameweekHistory.sql" />
+    <Build Include="dbo\Tables\FactPlayerHistoryPastSeasons.sql" />
+    <Build Include="dbo\Tables\FactPlayerCurrentStats.sql" />
+    <Build Include="dbo\Tables\DimTeamDifficulty.sql" />
+    <Build Include="dbo\Tables\FactTeamResults.sql" />
+    <Build Include="dbo\Views\vwFactPlayerHistoryForAnalysis.sql" />
+    <Build Include="dbo\Stored Procedures\GetGameweekPlayerHistoryForSeason.sql" />
+    <Build Include="dbo\Tables\DimTeamGameweekFixture.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerGameweekHistoryComparison.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerGameweekHistoryComparisonClub2Club.sql" />
+    <Build Include="dbo\Tables\MyTeam.sql" />
+    <Build Include="dbo\Stored Procedures\GetMyTeamFixturesAndDifficulty.sql" />
+    <Build Include="dbo\Stored Procedures\GetAllTeamFixturesAndDifficulty.sql" />
+    <Build Include="dbo\Stored Procedures\GetAllTeamsUpcomingAverageDifficulty.sql" />
+    <Build Include="dbo\Tables\FactPlayerGameweekNews.sql" />
+    <Build Include="dbo\Tables\FactPlayerGameweekStatus.sql" />
+    <Build Include="dbo\Stored Procedures\FutureFixtureAnalysis.sql" />
+    <Build Include="dbo\Views\vwGetPlayerPointsStats.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPointsStatsByPlayerPosition.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPointsStats.sql" />
+    <Build Include="dbo\Views\vwPlayerAveragePointsByDifficulty.sql" />
+    <Build Include="dbo\Views\vwPlayerAveragePointsGroupedByDifficultyWasHome.sql" />
+    <Build Include="dbo\Stored Procedures\GetTotalPointsByPlayerPositionAndGameweekRange.sql" />
+    <Build Include="dbo\Stored Procedures\GetTotalPointsByTeamAndPlayerPositionAndGameweekRange.sql" />
+    <Build Include="dbo\Stored Procedures\GetTotalPointsByPlayerPositionAndGameweekRangePivoted.sql" />
+    <Build Include="dbo\Stored Procedures\GetMyTeamPlayerPoints.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="FantasyPremierLeagueDW.refactorlog" />
+  </ItemGroup>
+</Project>

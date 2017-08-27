@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[Teams] (
+    [id]                    INT      NOT NULL,
+    [name]                  VARCHAR (50) NOT NULL,
+    [code]                  INT     NOT NULL,
+    [short_name]            VARCHAR (3)  NOT NULL,
+    [unavailable]           BIT          NOT NULL,
+    [strength]              INT      NOT NULL,
+    [position]              INT      NOT NULL,
+    [played]                INT      NOT NULL,
+    [win]                   INT      NOT NULL,
+    [loss]                  INT      NOT NULL,
+    [draw]                  INT      NOT NULL,
+    [points]                INT      NOT NULL,
+    [form]                  INT      NULL,
+    [link_url]              VARCHAR (50) NOT NULL,
+    [strength_overall_home] INT     NOT NULL,
+    [strength_overall_away] INT     NOT NULL,
+    [strength_attack_home]  INT     NOT NULL,
+    [strength_attack_away]  INT     NOT NULL,
+    [strength_defence_home] INT     NOT NULL,
+    [strength_defence_away] INT     NOT NULL,
+    [team_division]         INT      NOT NULL,
+    CONSTRAINT [PK_Teams] PRIMARY KEY CLUSTERED ([id] ASC)
+);
+

@@ -1,0 +1,2 @@
+﻿CREATE LOGIN [FantasyPremierLeagueDW]
+    WITH PASSWORD = N'|hUxse{l%qqgKc{yiaGoNhcimsFT7_&#$!~<4hzMjhgdsasf', DEFAULT_DATABASE = [FantasyPremierLeagueDW], DEFAULT_LANGUAGE = [British], CHECK_POLICY = OFF;

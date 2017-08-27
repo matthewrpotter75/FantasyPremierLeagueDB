@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>FantasyPremierLeagueDB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{1498f4dd-7abc-4379-86c1-21eb011d3a3b}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>FantasyPremierLeagueDB</RootNamespace>
+    <AssemblyName>FantasyPremierLeagueDB</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>Latin1_General_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+    <EnableFullTextSearch>False</EnableFullTextSearch>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Security\" />
+    <Folder Include="dbo\Stored Procedures" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\Teams.sql" />
+    <Build Include="dbo\Tables\game.sql" />
+    <Build Include="dbo\Tables\Gameweeks.sql" />
+    <Build Include="dbo\Tables\current_event_fixture.sql" />
+    <Build Include="dbo\Tables\next_event_fixture.sql" />
+    <Build Include="dbo\Tables\element_type.sql" />
+    <Build Include="dbo\Tables\sub_positions_locked.sql" />
+    <Build Include="dbo\Tables\PlayerPositions.sql" />
+    <Build Include="dbo\Tables\Players.sql" />
+    <Build Include="dbo\Tables\months.sql" />
+    <Build Include="dbo\Tables\formations.sql" />
+    <Build Include="dbo\Tables\fixture.sql" />
+    <Build Include="dbo\Tables\history_summary.sql" />
+    <Build Include="dbo\Tables\Fixtures.sql" />
+    <Build Include="dbo\Tables\PlayerHistory.sql" />
+    <Build Include="dbo\Tables\HistoryPast.sql" />
+    <Build Include="dbo\Tables\fixtures_summary.sql" />
+    <Build Include="Security\FantasyPremierLeague.sql" />
+    <Build Include="Security\FantasyPremierLeague_Login.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="Security\Permissions.sql" />
+    <Build Include="dbo\Tables\Difficulty.sql" />
+    <Build Include="dbo\Tables\GameweekFixtures.sql" />
+    <Build Include="dbo\Stored Procedures\FutureFixtureAnalysis.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPointsByPosition.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPoints.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPointsByTeam.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPointsByName.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerGameweekHistoryByName.sql" />
+    <Build Include="dbo\Stored Procedures\ComparePlayersByTeamAndPosition.sql" />
+    <Build Include="dbo\Tables\MyTeam.sql" />
+    <None Include="PopuateGameweekFixtures_FixturesOnly.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FantasyPremierLeagueDB.publish.xml" />
+    <None Include="PopulateDifficulty.sql" />
+    <None Include="PopuateGameweekFixtures.sql" />
+    <None Include="FantasyPremierLeague_ProjectToDB.scmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
+  </ItemGroup>
+</Project>
