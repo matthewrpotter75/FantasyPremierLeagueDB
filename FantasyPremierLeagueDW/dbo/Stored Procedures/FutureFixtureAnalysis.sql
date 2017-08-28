@@ -34,9 +34,11 @@ BEGIN
 	SET @GameweekEnd = @GameweekStart + (@Gameweeks - 1);
 
 	--Get list of fixtures in the gameweeks to be analysed
-	SELECT f.GameweekKey, td.Difficulty, f.TeamKey, f.OpponentTeamKey, CAST(KickoffTime AS DATE) AS KickoffDate
+	SELECT f.GameweekKey, td.Difficulty, f.TeamKey, f.OpponentTeamKey, CAST(gf.KickoffTime AS DATE) AS KickoffDate
 	INTO #Fixtures
 	FROM dbo.DimTeamGameweekFixture f
+	INNER JOIN dbo.FactGameweekFixture gf
+	ON f.GameweekFixtureKey = gf.GameweekFixtureKey
 	INNER JOIN dbo.DimTeamDifficulty td
 	ON f.OpponentTeamKey = td.TeamKey
 	AND f.SeasonKey = @SeasonKey

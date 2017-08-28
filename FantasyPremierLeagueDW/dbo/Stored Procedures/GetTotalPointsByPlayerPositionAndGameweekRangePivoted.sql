@@ -154,6 +154,6 @@ BEGIN
 	ON tp.TeamName = ap.TeamName
 	INNER JOIN TeamMinMaxAvgPoints tmmap
 	ON ap.TeamName = tmmap.TeamName
-	ORDER BY TeamName;
+	ORDER BY tp.TeamName;
 
 END
