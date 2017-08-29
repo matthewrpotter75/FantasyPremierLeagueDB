@@ -1,4 +1,5 @@
 ﻿CREATE TABLE [dbo].[Fixtures] (
+	[fixtureid]              INT IDENTITY(1,1) NOT NULL,
     [id]                     INT		   NOT NULL,
     [kickoff_time_formatted] VARCHAR (16)  NULL,
     [event_name]             VARCHAR (16)  NULL,

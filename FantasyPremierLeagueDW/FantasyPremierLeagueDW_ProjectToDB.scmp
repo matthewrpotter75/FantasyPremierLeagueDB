@@ -1004,35 +1004,11 @@
     </SelectedItem>
     <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Name>dbo</Name>
-      <Name>FutureFixtureAnalysis</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
       <Name>GetAllTeamFixturesAndDifficulty</Name>
     </SelectedItem>
     <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Name>dbo</Name>
-      <Name>GetAllTeamsUpcomingAverageDifficulty</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
-      <Name>GetGameweekPlayerHistoryForSeason</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
       <Name>GetMyTeamFixturesAndDifficulty</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
-      <Name>GetPlayerGameweekHistory</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
-      <Name>GetPlayerGameweekHistoryComparison</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
-      <Name>GetPlayerGameweekHistoryComparisonClub2Club</Name>
     </SelectedItem>
     <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlTable, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Name>dbo</Name>
@@ -1136,35 +1112,11 @@
     </SelectedItem>
     <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Name>dbo</Name>
-      <Name>FutureFixtureAnalysis</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
       <Name>GetAllTeamFixturesAndDifficulty</Name>
     </SelectedItem>
     <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Name>dbo</Name>
-      <Name>GetAllTeamsUpcomingAverageDifficulty</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
-      <Name>GetGameweekPlayerHistoryForSeason</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
       <Name>GetMyTeamFixturesAndDifficulty</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
-      <Name>GetPlayerGameweekHistory</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
-      <Name>GetPlayerGameweekHistoryComparison</Name>
-    </SelectedItem>
-    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlProcedure, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Name>dbo</Name>
-      <Name>GetPlayerGameweekHistoryComparisonClub2Club</Name>
     </SelectedItem>
     <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlTable, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Name>dbo</Name>
@@ -1189,6 +1141,23 @@
     <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlTable, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Name>dbo</Name>
       <Name>return_cluster</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlTable, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>dbo</Name>
+      <Name>MyTeamOLD</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlPrimaryKeyConstraint, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>dbo</Name>
+      <Name>PK_MyTeamOLD</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlForeignKeyConstraint, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>dbo</Name>
+      <Name>FK_MyTeamOLD_PlayerKey</Name>
+    </SelectedItem>
+    <SelectedItem Type="Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlIndex, Microsoft.Data.Tools.Schema.Sql, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>dbo</Name>
+      <Name>MyTeamOLD</Name>
+      <Name>IX_MyTeamOLD_PlayerId</Name>
     </SelectedItem>
   </ExcludedTargetElements>
 </SchemaComparison>
