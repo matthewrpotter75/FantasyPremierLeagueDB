@@ -5,7 +5,7 @@
 	[SeasonKey] INT NOT NULL,
 	[HomeTeamKey] INT NOT NULL,
 	[AwayTeamKey] INT NOT NULL,
-	[KickoffTime] SMALLDATETIME NOT NULL,
+	[KickoffTime] SMALLDATETIME NULL,
     [HomeTeamScore] TINYINT NULL,
     [AwayTeamScore] TINYINT NULL,
 	CONSTRAINT [PK_FactGameweekFixture] PRIMARY KEY CLUSTERED ([GameweekFixtureKey] ASC),

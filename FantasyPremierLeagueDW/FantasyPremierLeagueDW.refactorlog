@@ -805,4 +805,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[FK_MyTeam_PlayerKey]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="61d0a2e0-5666-4b51-b0d0-727e13321461" ChangeDateTime="08/31/2017 01:06:39">
+    <Property Name="ElementName" Value="[dbo].[DimPlayerAttribute].[PlayerAttributeId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DimPlayerAttribute]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[PlayerAttributeKey]" />
+  </Operation>
 </Operations>
