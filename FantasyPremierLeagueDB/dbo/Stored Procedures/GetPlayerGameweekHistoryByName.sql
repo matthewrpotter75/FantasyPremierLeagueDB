@@ -6,6 +6,8 @@
 AS
 BEGIN
 
+	SET NOCOUNT ON;
+
 	;WITH PlayerPoints AS
 	(
 		SELECT ph.playerId,

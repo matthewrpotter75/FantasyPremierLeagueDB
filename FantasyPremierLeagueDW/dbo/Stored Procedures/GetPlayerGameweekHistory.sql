@@ -7,6 +7,8 @@ CREATE PROCEDURE dbo.GetPlayerGameweekHistory
 AS
 BEGIN
 
+	SET NOCOUNT ON;
+
 	IF @PlayerKey IS NULL
 	BEGIN
 

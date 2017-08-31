@@ -9,6 +9,8 @@
 AS
 BEGIN
 
+	SET NOCOUNT ON;
+
 	DECLARE @gameweekStart INT, @gameweekEnd INT, @gameweekStartDate DATE;
 
 	--Get next gameweek

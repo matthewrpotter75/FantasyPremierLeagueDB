@@ -9,6 +9,8 @@ CREATE PROCEDURE [dbo].[GetPlayerPointsByTeam]
 AS
 BEGIN
 
+	SET NOCOUNT ON;
+
 	IF @teamId IS NULL AND @teamShortName IS NOT NULL
 	BEGIN
 

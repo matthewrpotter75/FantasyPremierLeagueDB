@@ -6,6 +6,8 @@ CREATE PROCEDURE dbo.ComparePlayersByTeamAndPosition
 AS
 BEGIN
 
+	SET NOCOUNT ON;
+
 	DECLARE @cols AS NVARCHAR(MAX),
 			@selectcols AS NVARCHAR(MAX),
 			@query  AS NVARCHAR(MAX)

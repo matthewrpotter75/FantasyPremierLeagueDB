@@ -13,6 +13,8 @@ CREATE PROCEDURE dbo.GetPlayerGameweekHistoryComparison
 AS
 BEGIN
 
+	SET NOCOUNT ON;
+
 	IF @PlayerKey IS NULL
 	BEGIN
 
