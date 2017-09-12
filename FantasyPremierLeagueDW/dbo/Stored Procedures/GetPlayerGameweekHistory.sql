@@ -7,8 +7,6 @@ CREATE PROCEDURE dbo.GetPlayerGameweekHistory
 AS
 BEGIN
 
-	SET NOCOUNT ON;
-
 	IF @PlayerKey IS NULL
 	BEGIN
 
@@ -29,6 +27,7 @@ BEGIN
 	dat.TeamShortName AS AwayTeam, 
 	fph.WasHome,
 	fph.OpponentTeamKey, 
+	dtd.Difficulty,
 	fph.[Minutes], 
 	fph.TotalPoints
 	FROM dbo.FactPlayerHistory fph
@@ -40,6 +39,10 @@ BEGIN
 	ON dgf.HomeTeamKey = dht.TeamKey
 	INNER JOIN dbo.DimTeam dat
 	ON dgf.AwayTeamKey = dat.TeamKey
+	INNER JOIN dbo.DimTeamDifficulty dtd
+	ON fph.OpponentTeamKey = dtd.TeamKey
+	AND fph.WasHome = dtd.IsOpponentHome
+	AND fph.SeasonKey = dtd.SeasonKey
 	WHERE fph.PlayerKey = @PlayerKey
 	ORDER BY fph.GameweekFixtureKey;
 

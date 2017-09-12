@@ -121,6 +121,8 @@
     <Build Include="FullTextIndexes.sql" />
     <Build Include="dbo\Stored Procedures\CopyMyTeamPreviousGameweekToNext.sql" />
     <Build Include="dbo\Stored Procedures\ReplaceMyTeamPlayerWithNewPlayer.sql" />
+    <Build Include="dbo\Stored Procedures\GetBestTeamBasedOnPredictions.sql" />
+    <Build Include="dbo\Stored Procedures\FutureFixturePlayerPointsPredictions.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="FantasyPremierLeagueDW.refactorlog" />
