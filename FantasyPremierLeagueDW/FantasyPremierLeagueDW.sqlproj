@@ -63,6 +63,7 @@
     <Folder Include="dbo\Stored Procedures" />
     <Folder Include="dbo\Views" />
     <Folder Include="Storage\" />
+    <Folder Include="dbo\Functions" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PopulateDimSeason.sql" />
@@ -123,6 +124,21 @@
     <Build Include="dbo\Stored Procedures\ReplaceMyTeamPlayerWithNewPlayer.sql" />
     <Build Include="dbo\Stored Procedures\GetBestTeamBasedOnPredictions.sql" />
     <Build Include="dbo\Stored Procedures\FutureFixturePlayerPointsPredictions.sql" />
+    <Build Include="dbo\Functions\fnGetOverallPPG.sql" />
+    <Build Include="dbo\Functions\fnGetPlayerHistoryRankedByPoints.sql" />
+    <Build Include="dbo\Functions\fnGetPPGByPlayerPlayerPositionDificulty10Gameweeks.sql" />
+    <Build Include="dbo\Functions\fnGetPPGByPlayerPlayerPositionDificulty5Gameweeks.sql" />
+    <Build Include="dbo\Functions\fnGetPPGByPlayerPlayerPositionDificultyGameweeks.sql" />
+    <Build Include="dbo\Functions\fnGetPPGByPlayerPlayerPositionDificulty.sql" />
+    <Build Include="dbo\Functions\fnGetOverallDifficultyPPG.sql" />
+    <Build Include="dbo\Functions\fnGetFixtures.sql" />
+    <Build Include="dbo\Functions\fnActualPlayerPoints.sql" />
+    <Build Include="dbo\Functions\fnGetPlayerHistoryRankedByGameweek.sql" />
+    <Build Include="dbo\Functions\fnGetOverallTeamPPG.sql" />
+    <Build Include="dbo\Stored Procedures\OutputStoredProcedure_1.sql" />
+    <Build Include="dbo\Stored Procedures\GetMyTeamCurrentGameweek_1.sql" />
+    <Build Include="dbo\Stored Procedures\FutureFixturePlayerPointsPredictionsWithTimer_1.sql" />
+    <Build Include="dbo\Stored Procedures\FutureFixturePlayerPointsPredictionsRefactored_1.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="FantasyPremierLeagueDW.refactorlog" />

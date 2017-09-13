@@ -1,13 +1,13 @@
---CREATE PROCEDURE dbo.GetBestTeamBasedOnPredictions
---(
-	DECLARE
+CREATE PROCEDURE dbo.GetBestTeamBasedOnPredictions
+(
+	--DECLARE
 	@SeasonKey INT = NULL,
 	@Gameweeks INT = 5,
 	@MinutesLimit INT = 30,
 	@Debug BIT = 0,
 	@GameweekStart INT = NULL
---)
---AS
+)
+AS
 BEGIN
 
 	SET NOCOUNT ON;
