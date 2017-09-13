@@ -10,164 +10,185 @@ CREATE PROCEDURE dbo.GetBestTeamBasedOnPredictions
 AS
 BEGIN
 
-	SET NOCOUNT ON;
+	BEGIN TRY
 
-	DECLARE @Gameweek INT, @GameweekEnd INT;
-	DECLARE @PlayerPositionKey INT = 1;
+		SET NOCOUNT ON;
 
-	IF @SeasonKey IS NULL
-	BEGIN
-		SELECT @SeasonKey = SeasonKey FROM dbo.DimSeason WHERE GETDATE() BETWEEN SeasonStartDate AND SeasonEndDate;
-	END
+		DECLARE @Gameweek INT, @GameweekEnd INT;
+		DECLARE @PlayerPositionKey INT = 1;
 
-	--Get next gameweek
-	IF @GameweekStart IS NULL
-	BEGIN
+		IF @SeasonKey IS NULL
+		BEGIN
+			SELECT @SeasonKey = SeasonKey FROM dbo.DimSeason WHERE GETDATE() BETWEEN SeasonStartDate AND SeasonEndDate;
+		END
 
-		SELECT @GameweekStart =
+		--Get next gameweek
+		IF @GameweekStart IS NULL
+		BEGIN
+
+			SELECT @GameweekStart =
+			(
+				SELECT TOP 1 GameweekKey
+				FROM dbo.DimGameweek
+				WHERE DATEADD(hour,1,DeadlineTime) > GETDATE()
+				ORDER BY DeadlineTime
+			);
+
+		END
+
+		--Get end of gameweek range
+		SET @GameweekEnd = @GameweekStart + (@Gameweeks - 1);
+
+		IF OBJECT_ID('tempdb..#Players') IS NOT NULL
+			DROP TABLE #Players;
+
+		IF OBJECT_ID('tempdb..#SelectedTopPlayers') IS NOT NULL
+			DROP TABLE #SelectedTopPlayers;
+
+		CREATE TABLE #Players 
 		(
-			SELECT TOP 1 GameweekKey
-			FROM dbo.DimGameweek
-			WHERE DATEADD(hour,1,DeadlineTime) > GETDATE()
-			ORDER BY DeadlineTime
+			SeasonKey INT,
+			GameweekStartKey INT,
+			Gameweeks INT,
+			PlayerPositionKey INT,
+			PlayerKey INT,
+			PlayerName VARCHAR(100),
+			Cost INT,
+			PlayerPosition VARCHAR(3),
+			TeamName VARCHAR(100),
+			CurrentPoints INT,
+			TotalGames INT,
+			PredictedPoints DECIMAL(10,6)
 		);
 
-	END
-
-	--Get end of gameweek range
-	SET @GameweekEnd = @GameweekStart + (@Gameweeks - 1);
-
-	IF OBJECT_ID('tempdb..#Players') IS NOT NULL
-		DROP TABLE #Players;
-
-	IF OBJECT_ID('tempdb..#SelectedTopPlayers') IS NOT NULL
-		DROP TABLE #SelectedTopPlayers;
-
-	CREATE TABLE #Players 
-	(
-		SeasonKey INT,
-		GameweekStartKey INT,
-		Gameweeks INT,
-		PlayerPositionKey INT,
-		PlayerKey INT,
-		PlayerName VARCHAR(100),
-		Cost INT,
-		PlayerPosition VARCHAR(3),
-		TeamName VARCHAR(100),
-		CurrentPoints INT,
-		TotalGames INT,
-		PredictedPoints DECIMAL(10,6)
-	);
-
-	SELECT @SeasonKey AS SeasonKey, @GameweekStart AS GameweekStart, @GameweekEnd AS GameweekEnd, @Gameweeks AS Gameweeks;
-
-	SET @Gameweek = @GameweekStart;
-
-	WHILE @PlayerPositionKey <= 4
-	BEGIN
-
-		RAISERROR('Gameweek %d starting', 0, 1, @Gameweek) WITH NOWAIT;
+		SELECT @SeasonKey AS SeasonKey, @GameweekStart AS GameweekStart, @GameweekEnd AS GameweekEnd, @Gameweeks AS Gameweeks;
 
 		SET @Gameweek = @GameweekStart;
 
-		INSERT INTO #Players
-		EXEC dbo.FutureFixturePlayerPointsPredictions
-		@SeasonKey = @SeasonKey,
-		@Gameweeks = 5,
-		@GameweekStart = @Gameweek,
-		@PlayerPositionKey = @PlayerPositionKey,
-		@MinutesLimit = @MinutesLimit;
-
-		WHILE @Gameweek <= @GameweekEnd
+		WHILE @PlayerPositionKey <= 4
 		BEGIN
 
-			RAISERROR('Gameweek %d PlayerPosition %d', 0, 1, @Gameweek, @PlayerPositionKey) WITH NOWAIT;
+			RAISERROR('PlayerPositionKey %d starting', 0, 1, @PlayerPositionKey) WITH NOWAIT;
+
+			SET @Gameweek = @GameweekStart;
 
 			INSERT INTO #Players
-			EXEC dbo.FutureFixturePlayerPointsPredictions
+			EXEC dbo.FutureFixturePlayerPointsPredictionsRefactored
 			@SeasonKey = @SeasonKey,
-			@Gameweeks = 1,
+			@Gameweeks = 5,
 			@GameweekStart = @Gameweek,
 			@PlayerPositionKey = @PlayerPositionKey,
 			@MinutesLimit = @MinutesLimit;
 
-			SET @Gameweek = @Gameweek + 1;
+			WHILE @Gameweek <= @GameweekEnd
+			BEGIN
+
+				RAISERROR('Gameweek %d PlayerPosition %d', 0, 1, @Gameweek, @PlayerPositionKey) WITH NOWAIT;
+
+				INSERT INTO #Players
+				EXEC dbo.FutureFixturePlayerPointsPredictionsRefactored
+				@SeasonKey = @SeasonKey,
+				@Gameweeks = 1,
+				@GameweekStart = @Gameweek,
+				@PlayerPositionKey = @PlayerPositionKey,
+				@MinutesLimit = @MinutesLimit;
+
+				SET @Gameweek = @Gameweek + 1;
+
+			END
+
+			SET @PlayerPositionKey = @PlayerPositionKey + 1;
 
 		END
 
-		SET @PlayerPositionKey = @PlayerPositionKey + 1;
+		SELECT *,
+		(PredictedPoints * 1.00)/(Cost * 0.10) AS PredictedPointsPerCost
+		FROM #Players
+		ORDER BY GameweekStartKey, Gameweeks DESC, PlayerPositionKey, PredictedPoints DESC;
 
-	END
+		CREATE TABLE #SelectedTopPlayers 
+		(
+			SeasonKey INT,
+			GameweekStartKey INT,
+			Gameweeks INT,
+			PlayerPositionKey INT,
+			PlayerKey INT,
+			PlayerName VARCHAR(100),
+			Cost INT,
+			PlayerPosition VARCHAR(3),
+			TeamName VARCHAR(100),
+			CurrentPoints INT,
+			TotalGames INT,
+			PredictedPoints DECIMAL(10,6),
+			PredictedPointsPerCost DECIMAL(10,6)
+		);
 
-	SELECT *,
-	(PredictedPoints * 1.00)/(Cost * 0.10) AS PredictedPointsPerCost
-	FROM #Players
-	ORDER BY GameweekStartKey, Gameweeks DESC, PlayerPositionKey, PredictedPoints DESC;
+		INSERT INTO #SelectedTopPlayers
+		SELECT TOP (2) *,
+		(PredictedPoints * 1.00)/(Cost * 0.10) AS PredictedPointsPerCost
+		FROM #Players
+		WHERE PlayerPosition = 'GKP'
+		AND Gameweeks = 5
+		ORDER BY PredictedPoints DESC;
 
-	CREATE TABLE #SelectedTopPlayers 
-	(
-		SeasonKey INT,
-		GameweekStartKey INT,
-		Gameweeks INT,
-		PlayerPositionKey INT,
-		PlayerKey INT,
-		PlayerName VARCHAR(100),
-		Cost INT,
-		PlayerPosition VARCHAR(3),
-		TeamName VARCHAR(100),
-		CurrentPoints INT,
-		TotalGames INT,
-		PredictedPoints DECIMAL(10,6),
-		PredictedPointsPerCost DECIMAL(10,6)
-	);
+		INSERT INTO #SelectedTopPlayers
+		SELECT TOP (5) *,
+		(PredictedPoints * 1.00)/(Cost * 0.10) AS PredictedPointsPerCost
+		FROM #Players
+		WHERE PlayerPosition = 'DEF'
+		AND Gameweeks = 5
+		ORDER BY PredictedPoints DESC;
 
-	INSERT INTO #SelectedTopPlayers
-	SELECT TOP (2) *,
-	(PredictedPoints * 1.00)/(Cost * 0.10) AS PredictedPointsPerCost
-	FROM #Players
-	WHERE PlayerPosition = 'GKP'
-	AND Gameweeks = 5
-	ORDER BY PredictedPoints DESC;
+		INSERT INTO #SelectedTopPlayers
+		SELECT TOP (5) *,
+		(PredictedPoints * 1.00)/(Cost * 0.10) AS PredictedPointsPerCost
+		FROM #Players
+		WHERE PlayerPosition = 'MID'
+		AND Gameweeks = 5
+		ORDER BY PredictedPoints DESC;
 
-	INSERT INTO #SelectedTopPlayers
-	SELECT TOP (5) *,
-	(PredictedPoints * 1.00)/(Cost * 0.10) AS PredictedPointsPerCost
-	FROM #Players
-	WHERE PlayerPosition = 'DEF'
-	AND Gameweeks = 5
-	ORDER BY PredictedPoints DESC;
+		INSERT INTO #SelectedTopPlayers
+		SELECT TOP (3) *,
+		(PredictedPoints * 1.00)/(Cost * 0.10) AS PredictedPointsPerCost
+		FROM #Players
+		WHERE PlayerPosition = 'FWD'
+		AND Gameweeks = 5
+		ORDER BY PredictedPoints DESC;
 
-	INSERT INTO #SelectedTopPlayers
-	SELECT TOP (5) *,
-	(PredictedPoints * 1.00)/(Cost * 0.10) AS PredictedPointsPerCost
-	FROM #Players
-	WHERE PlayerPosition = 'MID'
-	AND Gameweeks = 5
-	ORDER BY PredictedPoints DESC;
+		SELECT *
+		FROM #SelectedTopPlayers
+		ORDER BY PlayerPositionKey, PredictedPoints DESC;
 
-	INSERT INTO #SelectedTopPlayers
-	SELECT TOP (3) *,
-	(PredictedPoints * 1.00)/(Cost * 0.10) AS PredictedPointsPerCost
-	FROM #Players
-	WHERE PlayerPosition = 'FWD'
-	AND Gameweeks = 5
-	ORDER BY PredictedPoints DESC;
+		SELECT TeamName, COUNT(*) AS PlayerCount
+		FROM #SelectedTopPlayers
+		GROUP BY TeamName
+		ORDER BY TeamName;
 
-	SELECT *
-	FROM #SelectedTopPlayers
-	ORDER BY PlayerPositionKey, PredictedPoints DESC;
+		SELECT PlayerPosition, SUM(Cost) AS TotalCost
+		FROM #SelectedTopPlayers
+		GROUP BY PlayerPosition, PlayerPositionKey
+		ORDER BY PlayerPositionKey;
 
-	SELECT TeamName, COUNT(*) AS PlayerCount
-	FROM #SelectedTopPlayers
-	GROUP BY TeamName
-	ORDER BY TeamName;
+		SELECT SUM(Cost) AS TotalCost
+		FROM #SelectedTopPlayers;
 
-	SELECT PlayerPosition, SUM(Cost) AS TotalCost
-	FROM #SelectedTopPlayers
-	GROUP BY PlayerPosition, PlayerPositionKey
-	ORDER BY PlayerPositionKey;
+	END TRY
+	BEGIN CATCH
 
-	SELECT SUM(Cost) AS TotalCost
-	FROM #SelectedTopPlayers;
+		DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+
+		SELECT
+			@ErrorMessage = ERROR_MESSAGE(),
+			@ErrorSeverity = ERROR_SEVERITY(),
+			@ErrorState = ERROR_STATE();
+
+		RAISERROR
+		(
+			@ErrorMessage, -- Message text
+			@ErrorSeverity, -- Severity
+			@ErrorState -- State
+		);
+
+	END CATCH
 
 END

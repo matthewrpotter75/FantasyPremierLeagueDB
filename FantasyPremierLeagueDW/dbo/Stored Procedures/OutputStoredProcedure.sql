@@ -2,7 +2,6 @@ CREATE PROCEDURE dbo.OutputStoredProcedure
 (
 	@Step VARCHAR(50),
 	@Time DATETIME = NULL OUTPUT
-	--@RunTime SMALLDATETIME OUTPUT
 )
 AS
 BEGIN
@@ -30,7 +29,5 @@ BEGIN
 		RAISERROR('%s: %s (%s s)', 0, 1, @Step, @strTime, @Timediff) WITH NOWAIT;
 
 	END
-
-	--SET @RunTime = @Time;
 
 END
