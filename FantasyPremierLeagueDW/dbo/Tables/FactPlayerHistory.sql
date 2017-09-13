@@ -69,3 +69,13 @@ CREATE NONCLUSTERED INDEX IX_FactPlayerHistory_Minutes_Inc_PlayerKey_SeasonKey_W
 ON [dbo].[FactPlayerHistory] ([Minutes])
 INCLUDE ([PlayerKey],[SeasonKey],[WasHome],[TotalPoints],[OpponentTeamKey])
 GO
+
+CREATE NONCLUSTERED INDEX IX_FactPlayerHistory_Minutes_Inc_PlayerHistoryKey_PlayerKey_GameweekKey_SeasonKey_WasHome_TotalPoints_OpponentTeamKey
+ON [dbo].[FactPlayerHistory] ([Minutes])
+INCLUDE ([PlayerHistoryKey],[PlayerKey],[GameweekKey],[SeasonKey],[WasHome],[TotalPoints],[OpponentTeamKey])
+GO
+
+CREATE NONCLUSTERED INDEX IX_FactPlayerHistory_SeasonKey_Inc_PlayerKey_TotalPoints_Minutes
+ON [dbo].[FactPlayerHistory] ([SeasonKey])
+INCLUDE ([PlayerKey],[TotalPoints],[Minutes])
+GO
