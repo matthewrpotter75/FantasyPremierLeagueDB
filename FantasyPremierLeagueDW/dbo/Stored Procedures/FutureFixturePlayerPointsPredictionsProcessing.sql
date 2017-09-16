@@ -11,6 +11,9 @@ CREATE PROCEDURE dbo.FutureFixturePlayerPointsPredictionsProcessing
 	@GameweekStart INT,
 	@GameweekEnd INT,
 	@GameweekStartDate SMALLDATETIME,
+	@PredictionPointsAllWeighting INT = 5,
+	@PredictionPoints5Weighting INT = 3,
+	@PredictionPoints10Weighting INT = 2,
 	@NumOfRowsToReturn INT = 20
 )
 AS
@@ -43,11 +46,25 @@ BEGIN
 		IF OBJECT_ID('tempdb..#FixtureDifficulty') IS NOT NULL
 			DROP TABLE #FixtureDifficulty;
 
-		IF OBJECT_ID('tempdb..##PlayerPredictions') IS NOT NULL
-			DROP TABLE ##PlayerPredictions;
+		IF OBJECT_ID('tempdb..#PlayerPredictions') IS NOT NULL
+			DROP TABLE #PlayerPredictions;
+
+		IF OBJECT_ID('tempdb..#PlayingPercentagesPrevious5') IS NOT NULL
+		DROP TABLE #PlayingPercentagesPrevious5;
 
 		IF OBJECT_ID('tempdb..#PlayingPercentages') IS NOT NULL
 			DROP TABLE #PlayingPercentages;
+
+		DECLARE @CurrentSeasonKey INT, @CurrentGameweekKey INT, @AnalysisDeadlineTime SMALLDATETIME;
+
+		SELECT @CurrentSeasonKey = SeasonKey FROM dbo.DimSeason WHERE GETDATE() BETWEEN SeasonStartDate AND SeasonEndDate;
+		SELECT TOP (1)  @CurrentGameweekKey = GameweekKey FROM dbo.DimGameweek WHERE SeasonKey = @CurrentSeasonKey AND GETDATE() < DeadlineTime ORDER BY DeadlineTime;
+		SELECT @AnalysisDeadlineTime = DeadlineTime FROM dbo.DimGameweek WHERE SeasonKey = @SeasonKey AND GameweekKey = @GameweekStart;
+
+		DECLARE @TotalPredictionPointsWeighting INT, @TotalExtraPredictionPointsWeighting INT;
+
+		SET @TotalPredictionPointsWeighting = 100 + @PredictionPointsAllWeighting + @PredictionPoints5Weighting + @PredictionPoints10Weighting;
+		SET @TotalExtraPredictionPointsWeighting = 200 + @PredictionPointsAllWeighting + @PredictionPoints5Weighting + @PredictionPoints10Weighting;
 
 		IF @TimerDebug = 1
 		BEGIN
@@ -327,22 +344,120 @@ BEGIN
 			SET @time = GETDATE();
 		END
 
-		SELECT ph.PlayerKey,
-		SUM(ph.[minutes]) AS TotalMinutes,
-		MIN(ttm.TotalGames) AS TotalGames,
-		SUM(ph.TotalPoints) AS CurrentPoints,
-		SUM(ph.[minutes] * 1.00)/(MIN(ttm.TotalGames) * 90) AS FractionOfMinutesPlayed
+		;WITH Previous5Gameweeks AS
+		(
+			SELECT SeasonKey,
+			GameweekKey,
+			ROW_NUMBER() OVER (ORDER BY SeasonKey DESC, GameweekKey DESC) AS GameweekRank
+			FROM dbo.DimGameweek
+			WHERE DeadlineTime < @AnalysisDeadlineTime
+		),
+		TotalPlayerMinutes AS
+		(
+			SELECT ph.PlayerKey,
+			pa.TeamKey,
+			SUM(ph.[Minutes]) AS TotalPlayerMinutes,
+			SUM(ph.TotalPoints) AS CurrentPoints
+			FROM dbo.FactPlayerHistory ph
+			INNER JOIN dbo.DimPlayerAttribute pa
+			ON ph.PlayerKey = pa.PlayerKey
+			AND ph.SeasonKey = pa.SeasonKey
+			INNER JOIN Previous5Gameweeks prv5
+			ON ph.SeasonKey = prv5.SeasonKey
+			AND ph.GameweekKey = prv5.GameweekKey
+			WHERE pa.PlayerPositionKey = @PlayerPositionKey
+			AND prv5.GameweekRank <= 5
+			GROUP BY ph.PlayerKey, pa.TeamKey
+		),
+		TotalPlayerTeamMinutes AS
+		(
+			SELECT pa.PlayerKey, 
+			pa.TeamKey,
+			COUNT(DISTINCT tgf.GameweekFixtureKey) AS TotalPlayerTeamGames
+			FROM dbo.DimTeamGameweekFixture tgf
+			INNER JOIN dbo.DimPlayerAttribute pa
+			ON tgf.TeamKey = pa.TeamKey
+			AND tgf.SeasonKey = pa.SeasonKey
+			INNER JOIN Previous5Gameweeks prv5
+			ON tgf.SeasonKey = prv5.SeasonKey
+			AND tgf.GameweekKey = prv5.GameweekKey
+			WHERE prv5.GameweekRank <= 5
+			GROUP BY pa.PlayerKey, pa.TeamKey
+			--ORDER BY pa.TeamKey, pa.PlayerKey
+		)
+		SELECT tpm.PlayerKey,
+		p.PlayerName,
+		SUM(tpm.TotalPlayerMinutes) AS TotalPlayerMinutes,
+		SUM(tptm.TotalPlayerTeamGames) AS TotalPlayerGames,
+		(SUM(tptm.TotalPlayerTeamGames) * 90) AS TotalPlayerTeamMinutes,
+		SUM(tpm.CurrentPoints) AS CurrentPoints,
+		SUM(tpm.TotalPlayerMinutes * 1.00)/(SUM(tptm.TotalPlayerTeamGames) * 90) AS Prev5FractionOfMinutesPlayed
+		INTO #PlayingPercentagesPrevious5
+		FROM TotalPlayerMinutes tpm
+		INNER JOIN TotalPlayerTeamMinutes tptm
+		ON tpm.PlayerKey = tptm.PlayerKey
+		AND tpm.TeamKey = tptm.TeamKey
+		INNER JOIN dbo.DimPlayer p
+		ON tpm.PlayerKey = p.PlayerKey
+		INNER JOIN dbo.DimPlayerSeason ps
+		ON p.PlayerKey = ps.PlayerKey
+		AND ps.SeasonKey = @SeasonKey
+		--WHERE p.PlayerKey = @PlayerKey
+		GROUP BY tpm.PlayerKey, p .PlayerName
+		ORDER BY tpm.PlayerKey;
+
+		IF @TimerDebug = 1
+		BEGIN
+			EXEC dbo.OutputStoredProcedure @Step='#PlayingPercentagesPrevious5', @Time=@time OUTPUT;
+			SET @time = GETDATE();
+		END
+
+		;WITH TotalPlayerTeamMinutes AS
+		(
+			SELECT pa.PlayerKey, 
+			pa.TeamKey,
+			COUNT(DISTINCT tgf.GameweekFixtureKey) AS TotalPlayerTeamGames
+			FROM dbo.DimTeamGameweekFixture tgf
+			INNER JOIN dbo.DimPlayerAttribute pa
+			ON tgf.TeamKey = pa.TeamKey
+			AND tgf.SeasonKey = pa.SeasonKey
+			WHERE (tgf.SeasonKey < @CurrentSeasonKey OR (tgf.SeasonKey = @CurrentSeasonKey AND tgf.GameweekKey < @CurrentGameweekKey))
+			GROUP BY pa.PlayerKey, pa.TeamKey
+			--ORDER BY pa.TeamKey, pa.PlayerKey
+		),
+		TotalPlayerMinutes AS
+		(
+			SELECT ph.PlayerKey,
+			pa.TeamKey,
+			SUM(ph.[Minutes]) AS TotalPlayerMinutes,
+			SUM(ph.TotalPoints) AS CurrentPoints
+			FROM dbo.FactPlayerHistory ph
+			INNER JOIN dbo.DimPlayerAttribute pa
+			ON ph.PlayerKey = pa.PlayerKey
+			AND ph.SeasonKey = pa.SeasonKey
+			WHERE pa.PlayerPositionKey = @PlayerPositionKey
+			GROUP BY ph.PlayerKey, pa.TeamKey
+		)
+		SELECT tpm.PlayerKey,
+		p.PlayerName,
+		SUM(tpm.TotalPlayerMinutes) AS TotalPlayerMinutes,
+		SUM(tptm.TotalPlayerTeamGames) AS TotalPlayerGames,
+		(SUM(tptm.TotalPlayerTeamGames) * 90) AS TotalPlayerTeamMinutes,
+		SUM(tpm.CurrentPoints) AS CurrentPoints,
+		SUM(tpm.TotalPlayerMinutes * 1.00)/(SUM(tptm.TotalPlayerTeamGames) * 90) AS OverallFractionOfMinutesPlayed
 		INTO #PlayingPercentages
-		FROM dbo.FactPlayerHistory ph
-		INNER JOIN dbo.DimPlayerAttribute pa
-		ON ph.PlayerKey = pa.PlayerKey
-		AND pa.SeasonKey = @SeasonKey
-		INNER JOIN #TotalTeamMinutes ttm
-		ON pa.TeamKey = ttm.TeamKey
-		WHERE ph.SeasonKey = @SeasonKey
-		AND pa.PlayerPositionKey = @PlayerPositionKey
-		GROUP BY ph.PlayerKey
-		ORDER BY ph.PlayerKey;
+		FROM TotalPlayerMinutes tpm
+		INNER JOIN TotalPlayerTeamMinutes tptm
+		ON tpm.PlayerKey = tptm.PlayerKey
+		AND tpm.TeamKey = tptm.TeamKey
+		INNER JOIN dbo.DimPlayer p
+		ON tpm.PlayerKey = p.PlayerKey
+		INNER JOIN dbo.DimPlayerSeason ps
+		ON p.PlayerKey = ps.PlayerKey
+		AND ps.SeasonKey = @SeasonKey
+		--WHERE p.PlayerKey = @PlayerKey
+		GROUP BY tpm.PlayerKey, p .PlayerName
+		ORDER BY tpm.PlayerKey;
 
 		IF @TimerDebug = 1
 		BEGIN
@@ -354,24 +469,23 @@ BEGIN
 		;WITH PlayerPredictions AS
 		(
 			SELECT PlayerKey,
-			MIN(ChanceOfPlayingNextRound) AS ChanceOfPlayingNextRound,
-			SUM(Diff1Points + Diff2Points + Diff3Points + Diff4Points + Diff5Points) AS PredictedPoints,
-			SUM(Diff1Points5 + Diff2Points5 + Diff3Points5 + Diff4Points5 + Diff5Points5) AS PredictedPoints5,
-			SUM(Diff1Points10 + Diff2Points10 + Diff3Points10 + Diff4Points10 + Diff5Points10) AS PredictedPoints10,
-			SUM(TotalGames) AS TotalGames
+			ChanceOfPlayingNextRound,
+			Diff1Points + Diff2Points + Diff3Points + Diff4Points + Diff5Points AS PredictedPointsAll,
+			Diff1Points5 + Diff2Points5 + Diff3Points5 + Diff4Points5 + Diff5Points5 AS PredictedPoints5,
+			Diff1Points10 + Diff2Points10 + Diff3Points10 + Diff4Points10 + Diff5Points10 AS PredictedPoints10,
+			TotalGames AS TotalGames
 			FROM #PlayerPredictions
-			GROUP BY PlayerKey
 		),
 		PlayerPredictionsWeighted AS
 		(
 			SELECT PlayerKey,
 			ChanceOfPlayingNextRound,
-			PredictedPoints,
+			PredictedPointsAll,
 			PredictedPoints5,
 			PredictedPoints10,
-			(PredictedPoints * 5) AS PredictedPointsWeighted,
-			(PredictedPoints5 * 3) AS PredictedPoints5Weighted,
-			(PredictedPoints10 * 2) AS PredictedPoints10Weighted,
+			(PredictedPointsAll * @PredictionPointsAllWeighting) AS PredictedPointsAllWeighted,
+			(PredictedPoints5 * @PredictionPoints5Weighting) AS PredictedPoints5Weighted,
+			(PredictedPoints10 * @PredictionPoints10Weighting) AS PredictedPoints10Weighted,
 			TotalGames
 			FROM PlayerPredictions
 		),
@@ -418,6 +532,25 @@ BEGIN
 			AND f.IsHome = ot.WasHome
 			GROUP BY p.PlayerKey
 		),
+		PlayingPercentages AS
+		(
+			SELECT pct.PlayerKey,
+			pct.TotalPlayerGames,
+			pct.TotalPlayerMinutes,
+			pct.TotalPlayerTeamMinutes,
+			pct.CurrentPoints,
+			pct.OverallFractionOfMinutesPlayed,
+			pctprv5.Prev5FractionOfMinutesPlayed,
+			CASE
+				WHEN pct.OverallFractionOfMinutesPlayed > 0.7 AND pctprv5.Prev5FractionOfMinutesPlayed > 0.5 THEN 1.00
+				WHEN pct.OverallFractionOfMinutesPlayed > 0.3 AND pctprv5.Prev5FractionOfMinutesPlayed < 0.5 THEN pct.OverallFractionOfMinutesPlayed
+				WHEN pct.OverallFractionOfMinutesPlayed <= 0.3 AND pctprv5.Prev5FractionOfMinutesPlayed < 0.3 THEN pct.OverallFractionOfMinutesPlayed
+				ELSE 0
+			END AS StartingProbability
+			FROM #PlayingPercentages pct
+			FULL OUTER JOIN #PlayingPercentagesPrevious5 pctprv5
+			ON pct.PlayerKey = pctprv5.PlayerKey
+		),
 		CurrentCost AS
 		(
 			SELECT pgs.PlayerKey,
@@ -442,51 +575,56 @@ BEGIN
 			@GameweekStart AS GameweekStartKey,
 			@Gameweeks AS Gameweeks,
 			@PlayerPositionKey AS PlayerPositionKey,
+			@PredictionPointsAllWeighting AS PredictionPointsAllWeighting,
+			@PredictionPoints5Weighting AS PredictionPoints5Weighting,
+			@PredictionPoints10Weighting AS PredictionPoints10Weighting,
 			ppw.PlayerKey,
 			p.PlayerName,
 			cost.Cost,
 			pp.SingularNameShort AS PlayerPosition,
 			t.TeamName,
-			pct.TotalGames AS PredictionTotalGames,
-			pct.TotalMinutes,
+			pct.TotalPlayerGames,
+			pct.TotalPlayerMinutes,
 			pct.CurrentPoints,
-			ppw.PredictedPoints AS PredictionPointsAll,
+			ppw.PredictedPointsAll,
 			ppw.PredictedPoints5,
 			ppw.PredictedPoints10,
 			oppg.OverallPPGPredictionPoints,
 			otppg.OverallTeamPPGPredictionPoints,
 			odppg.OverallDifficultyPPGPredictionPoints,
-			pct.FractionOfMinutesPlayed,
+			pct.OverallFractionOfMinutesPlayed,
+			pct.Prev5FractionOfMinutesPlayed,
+			pct.StartingProbability,
 			ppw.TotalGames,
 			otppg.TotalGames AS TeamTotalGames,
 			odppg.TotalGames AS DifficultyTotalGames,
 			CASE 
 				WHEN ppw.TotalGames >= 10 THEN 1
-				WHEN ppw.TotalGames < 10 AND otppg.TotalGames >= 40 THEN 2
+				WHEN ppw.TotalGames < 10 AND otppg.TotalGames >= 100 THEN 2
 				ELSE 3
-			END
-			AS PredictedPointsPath,
+			END AS PredictedPointsPath,
 			CASE 
 				WHEN ppw.TotalGames >= 10 THEN
-					((ppw.PredictedPoints + ppw.PredictedPoints5 + ppw.PredictedPoints10 + oppg.OverallPPGPredictionPoints) / 4) * pct.FractionOfMinutesPlayed
-				WHEN ppw.TotalGames < 10 AND otppg.TotalGames >= 40 THEN
-					((ppw.PredictedPoints + ppw.PredictedPoints5 + ppw.PredictedPoints10 + otppg.OverallTeamPPGPredictionPoints) / 4) * pct.FractionOfMinutesPlayed
+					--((ppw.PredictedPoints + ppw.PredictedPoints5 + ppw.PredictedPoints10 + oppg.OverallPPGPredictionPoints) / 4) * ISNULL(pct.FractionOfMinutesPlayed, 1.00)
+					((ppw.PredictedPointsAll + ppw.PredictedPoints5 + ppw.PredictedPoints10 + oppg.OverallPPGPredictionPoints) / 4) * ISNULL(pct.StartingProbability, 0)
+				WHEN ppw.TotalGames < 10 AND otppg.TotalGames >= 100 THEN
+					--((ppw.PredictedPoints + ppw.PredictedPoints5 + ppw.PredictedPoints10 + otppg.OverallTeamPPGPredictionPoints) / 4) * ISNULL(pct.FractionOfMinutesPlayed, 1.00)
+					((ppw.PredictedPointsAll + ppw.PredictedPoints5 + ppw.PredictedPoints10 + otppg.OverallTeamPPGPredictionPoints) / 4) * ISNULL(pct.StartingProbability, 0)
 				ELSE
-					((ppw.PredictedPoints + ppw.PredictedPoints5 + ppw.PredictedPoints10 + odppg.OverallDifficultyPPGPredictionPoints + otppg.OverallTeamPPGPredictionPoints) / 5) * pct.FractionOfMinutesPlayed
+					--((ppw.PredictedPoints + ppw.PredictedPoints5 + ppw.PredictedPoints10 + odppg.OverallDifficultyPPGPredictionPoints + otppg.OverallTeamPPGPredictionPoints) / 5) * ISNULL(pct.FractionOfMinutesPlayed, 1.00)
+					((ppw.PredictedPointsAll + ppw.PredictedPoints5 + ppw.PredictedPoints10 + odppg.OverallDifficultyPPGPredictionPoints + otppg.OverallTeamPPGPredictionPoints) / 5) * ISNULL(pct.StartingProbability, 0)
 			END
 			AS PredictedPoints,
 			CASE 
 				WHEN ppw.TotalGames >= 10 THEN
-					((ppw.PredictedPointsWeighted + ppw.PredictedPoints5Weighted + ppw.PredictedPoints10Weighted + oppg.OverallPPGPredictionPointsWeighted) / 110) * pct.FractionOfMinutesPlayed
-				WHEN ppw.TotalGames < 10 AND otppg.TotalGames >= 40 THEN
-					((ppw.PredictedPointsWeighted + ppw.PredictedPoints5Weighted + ppw.PredictedPoints10Weighted + otppg.OverallTeamPPGPredictionPointsWeighted) / 110) * pct.FractionOfMinutesPlayed
+					((ppw.PredictedPointsAllWeighted + ppw.PredictedPoints5Weighted + ppw.PredictedPoints10Weighted + oppg.OverallPPGPredictionPointsWeighted) / @TotalPredictionPointsWeighting) * ISNULL(pct.StartingProbability, 0)
+				WHEN ppw.TotalGames < 10 AND otppg.TotalGames >= 100 THEN
+					((ppw.PredictedPointsAllWeighted + ppw.PredictedPoints5Weighted + ppw.PredictedPoints10Weighted + otppg.OverallTeamPPGPredictionPointsWeighted) / @TotalPredictionPointsWeighting) * ISNULL(pct.StartingProbability, 0)
 				ELSE
-					((ppw.PredictedPointsWeighted + ppw.PredictedPoints5Weighted + ppw.PredictedPoints10Weighted + otppg.OverallTeamPPGPredictionPointsWeighted + odppg.OverallDifficultyPPGPredictionPointsWeighted) / 210) * pct.FractionOfMinutesPlayed
+					((ppw.PredictedPointsAllWeighted + ppw.PredictedPoints5Weighted + ppw.PredictedPoints10Weighted + otppg.OverallTeamPPGPredictionPointsWeighted + odppg.OverallDifficultyPPGPredictionPointsWeighted) / @TotalExtraPredictionPointsWeighting) * ISNULL(pct.StartingProbability, 0)
 			END AS PredictedPointsWeighted,
 			ppw.ChanceOfPlayingNextRound
 		FROM PlayerPredictionsWeighted ppw
-		INNER JOIN OverallPPG oppg
-		ON ppw.PlayerKey = oppg.PlayerKey
 		INNER JOIN dbo.DimPlayer p
 		ON ppw.PlayerKey = p.PlayerKey
 		INNER JOIN dbo.DimPlayerAttribute pa
@@ -498,14 +636,18 @@ BEGIN
 		ON pa.PlayerPositionKey = pp.PlayerPositionKey
 		INNER JOIN dbo.DimTeam t
 		ON pa.TeamKey = t.TeamKey
-		INNER JOIN #PlayingPercentages pct
+		--LEFT JOIN #PlayingPercentages pct
+		--ON ppw.PlayerKey = pct.PlayerKey
+		INNER JOIN OverallPPG oppg
+		ON ppw.PlayerKey = oppg.PlayerKey
+		LEFT JOIN PlayingPercentages pct
 		ON ppw.PlayerKey = pct.PlayerKey
 		INNER JOIN OverallDifficultyPPG odppg
 		ON ppw.PlayerKey = odppg.PlayerKey
 		INNER JOIN OverallTeamPPG otppg
-		ON ppw.PlayerKey = otppg.PlayerKey
+		ON ppw.PlayerKey = otppg.PlayerKey;
 		--WHERE ISNULL(ppw.ChanceOfPlayingNextRound, 100) > 0
-		ORDER BY PredictedPoints DESC;
+		--ORDER BY PredictedPoints DESC;
 
 		IF @TimerDebug = 1
 		BEGIN
@@ -573,9 +715,9 @@ BEGIN
 				PredictedPoints,
 				PredictedPoints5,
 				PredictedPoints10,
-				(PredictedPoints * 5) AS PredictedPointsWeighted,
-				(PredictedPoints5 * 3) AS PredictedPoints5Weighted,
-				(PredictedPoints10 * 2) AS PredictedPoints10Weighted,
+				(PredictedPoints * @PredictionPointsAllWeighting) AS PredictedPointsWeighted,
+				(PredictedPoints5 * @PredictionPoints5Weighting) AS PredictedPoints5Weighted,
+				(PredictedPoints10 * @PredictionPoints10Weighting) AS PredictedPoints10Weighted,
 				TotalGames
 				FROM PlayerPredictions
 				ORDER BY PlayerKey;;
@@ -650,20 +792,20 @@ BEGIN
 			
 				SELECT *
 				FROM #PPG
-				WHERE playerKey = @PlayerKey
+				WHERE PlayerKey = @PlayerKey
 				ORDER BY OpponentDifficulty;
 
 				SELECT '#PlayerPPG';
 			
 				SELECT *
 				FROM #PlayerPPG
-				WHERE playerKey = @PlayerKey;
+				WHERE PlayerKey = @PlayerKey;
 
 				SELECT '#FixtureDifficulty';
 			
 				SELECT *
 				FROM #FixtureDifficulty
-				WHERE playerKey = @PlayerKey;
+				WHERE PlayerKey = @PlayerKey;
 
 				SELECT '#PlayerPredictions';
 			
@@ -671,7 +813,7 @@ BEGIN
 				FROM #PlayerPredictions pp
 				INNER JOIN dbo.DimPlayer p
 				ON pp.PlayerKey = p.PlayerKey
-				WHERE pp.playerKey = @PlayerKey;
+				WHERE pp.PlayerKey = @PlayerKey;
 
 				SELECT 'CTE PlayerPredictions';
 			
@@ -704,9 +846,9 @@ BEGIN
 				PredictedPoints,
 				PredictedPoints5,
 				PredictedPoints10,
-				(PredictedPoints * 5) AS PredictedPointsWeighted,
-				(PredictedPoints5 * 3) AS PredictedPoints5Weighted,
-				(PredictedPoints10 * 2) AS PredictedPoints10Weighted,
+				(PredictedPoints * @PredictionPointsAllWeighting) AS PredictedPointsWeighted,
+				(PredictedPoints5 * @PredictionPoints5Weighting) AS PredictedPoints5Weighted,
+				(PredictedPoints10 * @PredictionPoints10Weighting) AS PredictedPoints10Weighted,
 				TotalGames
 				FROM PlayerPredictions
 				WHERE PlayerKey = @PlayerKey;

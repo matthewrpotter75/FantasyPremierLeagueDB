@@ -812,4 +812,39 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[PlayerAttributeKey]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="3059b448-5063-4101-9847-53fd14ba0b6d" ChangeDateTime="09/15/2017 15:39:39">
+    <Property Name="ElementName" Value="[dbo].[DimPlayerTeamGameweek]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[DimPlayerTeamGameweekFixture]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6cafd7c5-dac3-4597-ab6c-33b615a6c6b9" ChangeDateTime="09/15/2017 15:41:23">
+    <Property Name="ElementName" Value="[dbo].[FK_DimPlayerTeamGameweek_PlayerKey]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[DimPlayerTeamGameweekFixture]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_DimPlayerTeamGameweekFixture_PlayerKey]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5df0aa50-8272-43b6-b435-2bf20839755b" ChangeDateTime="09/15/2017 15:41:44">
+    <Property Name="ElementName" Value="[dbo].[FK_DimPlayerTeamGameweek_SeasonKey]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[DimPlayerTeamGameweekFixture]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_DimPlayerTeamGameweekFixture_SeasonKey]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3946a0e9-c943-4d2b-b420-2a9b24d14e07" ChangeDateTime="09/15/2017 15:42:02">
+    <Property Name="ElementName" Value="[dbo].[FK_DimPlayerTeamGameweek_TeamKey]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[DimPlayerTeamGameweekFixture]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_DimPlayerTeamGameweekFixture_TeamKey]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8bb98e86-2ec6-4210-90c1-a5a433b827a2" ChangeDateTime="09/15/2017 15:42:40">
+    <Property Name="ElementName" Value="[dbo].[PK_DimPlayerTeamGameweek]" />
+    <Property Name="ElementType" Value="SqlPrimaryKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[DimPlayerTeamGameweekFixture]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[PK_DimPlayerTeamGameweekFixture]" />
+  </Operation>
 </Operations>
