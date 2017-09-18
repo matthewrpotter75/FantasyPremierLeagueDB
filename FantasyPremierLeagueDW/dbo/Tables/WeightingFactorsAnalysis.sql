@@ -1,5 +1,6 @@
 CREATE TABLE dbo.WeightingFactorsAnalysis
 (
+	WeightingFactorsAnalysisKey INT IDENTITY(1,1) NOT NULL,
 	SeasonKey INT,
 	GameweekStartKey INT,
 	Gameweeks INT,
@@ -31,5 +32,5 @@ CREATE TABLE dbo.WeightingFactorsAnalysis
 	PredictedPoints DECIMAL(10,6),
 	PredictedPointsWeighted DECIMAL(10,6),
 	ChanceOfPlayingNextRound DECIMAL(6,2),
-	CONSTRAINT [PK_WeightingFactorsAnalysis] PRIMARY KEY CLUSTERED (PlayerKey ASC, SeasonKey ASC, GameweekStartKey ASC, Gameweeks ASC, PredictionPointsAllWeighting ASC, PredictionPoints5Weighting ASC, PredictionPoints10Weighting ASC)
+	CONSTRAINT [PK_WeightingFactorsAnalysis] PRIMARY KEY CLUSTERED (WeightingFactorsAnalysisKey ASC)
 );

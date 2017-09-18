@@ -288,7 +288,7 @@ BEGIN
 		LEFT JOIN PlayerChanceOfPlaying p
 		ON f.TeamKey = p.TeamKey
 		WHERE f.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-		AND f.KickoffDate >= p.StartDate
+		AND (f.KickoffDate >= p.StartDate OR f.KickoffDate IS NULL)
 		GROUP BY p.PlayerKey
 		ORDER BY p.PlayerKey;
 
