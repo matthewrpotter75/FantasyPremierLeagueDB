@@ -3,7 +3,8 @@ CREATE FUNCTION dbo.fnGetFixtures
 	@SeasonKey INT,
 	@PlayerPositionKey INT,
 	@GameweekStart INT,
-	@GameweekEnd INT
+	@GameweekEnd INT,
+	@SeasonEnd INT
 )
 RETURNS TABLE
 AS
@@ -30,6 +31,6 @@ RETURN
 	ON f.OpponentTeamKey = otd.TeamKey
 	AND f.IsHome = otd.IsOpponentHome
 	AND otd.SeasonKey = @SeasonKey
-	WHERE f.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-	AND f.SeasonKey = @SeasonKey
+	WHERE (f.GameweekKey >= @GameweekStart AND f.SeasonKey = @SeasonKey)
+	OR (f.GameweekKey <= @GameweekEnd AND f.SeasonKey = @SeasonEnd)
 );

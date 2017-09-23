@@ -10,6 +10,7 @@ CREATE PROCEDURE dbo.FutureFixturePlayerPointsPredictionsProcessing
 	@PlayerKey INT = NULL,
 	@GameweekStart INT,
 	@GameweekEnd INT,
+	@SeasonEnd INT,
 	@GameweekStartDate SMALLDATETIME,
 	@PredictionPointsAllWeighting INT = 5,
 	@PredictionPoints5Weighting INT = 3,
@@ -68,18 +69,18 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='Pre #Fixtures', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='Pre #Fixtures', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 	
 		--Get list of fixtures in the gameweeks to be analysed
 		SELECT *
 		INTO #Fixtures
-		FROM dbo.fnGetFixtures(@SeasonKey, @PlayerPositionKey, @GameweekStart, @GameweekEnd);
+		FROM dbo.fnGetFixtures(@SeasonKey, @PlayerPositionKey, @GameweekStart, @GameweekEnd, @SeasonEnd);
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#Fixtures', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#Fixtures', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -90,7 +91,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#OverallPPG', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#OverallPPG', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -101,7 +102,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#OverallDifficultyPPG', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#OverallDifficultyPPG', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 	
@@ -112,7 +113,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#OverallTeamPPG', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#OverallTeamPPG', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -133,12 +134,12 @@ BEGIN
 
 		INSERT INTO #PPG
 		(PlayerKey, PlayerPositionKey, OpponentDifficulty, Points, Games, PlayerMinutes, PPG)
-		SELECT *
+		SELECT PlayerKey, PlayerPositionKey, OpponentDifficulty, Points, Games, PlayerMinutes, PPG
 		FROM dbo.fnGetPPGByPlayerPlayerPositionDificulty(@SeasonKey, @PlayerPositionKey, @MinutesLimit);
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PPG', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PPG', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -146,35 +147,35 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PPG Index Creation', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PPG Index Creation', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
 		UPDATE #PPG
 		SET PPG5games = ph5.PPG5
 		FROM #PPG ppg
-		INNER JOIN dbo.fnGetPPGByPlayerPlayerPositionDificulty5Gameweeks(@SeasonKey, @PlayerPositionKey, @MinutesLimit) ph5
+		INNER JOIN dbo.fnGetPPGByPlayerPlayerPositionDificultyGameweeks(@SeasonKey, @PlayerPositionKey, @MinutesLimit, 5) ph5
 		ON ppg.PlayerKey = ph5.PlayerKey
 		AND ppg.PlayerPositionKey = ph5.PlayerPositionKey
 		AND ppg.OpponentDifficulty = ph5.OpponentDifficulty;
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PPG - PPG5', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PPG - PPG5', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 	
 		UPDATE #PPG
 		SET PPG10games = ph10.PPG10
 		FROM #PPG ppg
-		INNER JOIN dbo.fnGetPPGByPlayerPlayerPositionDificulty10Gameweeks(@SeasonKey, @PlayerPositionKey, @MinutesLimit) ph10
+		INNER JOIN dbo.fnGetPPGByPlayerPlayerPositionDificultyGameweeks(@SeasonKey, @PlayerPositionKey, @MinutesLimit, 10) ph10
 		ON ppg.PlayerKey = ph10.PlayerKey
 		AND ppg.PlayerPositionKey = ph10.PlayerPositionKey
 		AND ppg.OpponentDifficulty = ph10.OpponentDifficulty;
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PPG - PPG10', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PPG - PPG10', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -212,7 +213,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PlayerPPG', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PlayerPPG', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -258,7 +259,7 @@ BEGIN
 			pa.TeamKey,
 			lpn.ChanceOfPlayingNextRound,
 			CASE 
-				WHEN ISNULL(lpn.News,'') <> '' AND CHARINDEX('Unknown return date', news) = 0 AND lpn.PlayerStatus IN ('i','s') THEN CAST(REVERSE(LEFT(REVERSE(lpn.News), CHARINDEX(' ', REVERSE(lpn.News), CHARINDEX(' ',REVERSE(lpn.News))+1)-1))+ CAST(YEAR(GETDATE()) AS VARCHAR(4)) AS DATE)
+				WHEN ISNULL(lpn.News,'') <> '' AND CHARINDEX('Unknown return date', News) = 0 AND lpn.PlayerStatus IN ('i','s') THEN CAST(REVERSE(LEFT(REVERSE(lpn.News), CHARINDEX(' ', REVERSE(lpn.News), CHARINDEX(' ',REVERSE(lpn.News))+1)-1))+ CAST(YEAR(GETDATE()) AS VARCHAR(4)) AS DATE)
 				ELSE @GameweekStartDate
 			END AS StartDate
 			FROM dbo.DimPlayer p
@@ -287,14 +288,19 @@ BEGIN
 		FROM #Fixtures f
 		LEFT JOIN PlayerChanceOfPlaying p
 		ON f.TeamKey = p.TeamKey
-		WHERE f.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
+		WHERE 
+		(
+			(f.GameweekKey >= @GameweekStart AND f.SeasonKey = @SeasonKey)
+			OR 
+			(f.GameweekKey <= @GameweekEnd AND f.SeasonKey = @SeasonEnd)
+		)
 		AND (f.KickoffDate >= p.StartDate OR f.KickoffDate IS NULL)
 		GROUP BY p.PlayerKey
 		ORDER BY p.PlayerKey;
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#FixtureDifficulty', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#FixtureDifficulty', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -326,7 +332,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PlayerPredictions', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PlayerPredictions', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -340,7 +346,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#TotalTeamMinutes', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#TotalTeamMinutes', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -408,7 +414,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PlayingPercentagesPrevious5', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PlayingPercentagesPrevious5', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -461,7 +467,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PlayingPercentages', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PlayingPercentages', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -543,8 +549,9 @@ BEGIN
 			pctprv5.Prev5FractionOfMinutesPlayed,
 			CASE
 				WHEN pct.OverallFractionOfMinutesPlayed > 0.7 AND pctprv5.Prev5FractionOfMinutesPlayed > 0.5 THEN 1.00
+				WHEN pctprv5.Prev5FractionOfMinutesPlayed > 0.8 THEN 1.00
 				WHEN pct.OverallFractionOfMinutesPlayed > 0.3 AND pctprv5.Prev5FractionOfMinutesPlayed < 0.5 THEN pct.OverallFractionOfMinutesPlayed
-				WHEN pct.OverallFractionOfMinutesPlayed <= 0.3 AND pctprv5.Prev5FractionOfMinutesPlayed < 0.3 THEN pct.OverallFractionOfMinutesPlayed
+				WHEN pct.OverallFractionOfMinutesPlayed <= 0.3 AND pctprv5.Prev5FractionOfMinutesPlayed > 0.3 THEN pct.OverallFractionOfMinutesPlayed
 				ELSE 0
 			END AS StartingProbability
 			FROM #PlayingPercentages pct
@@ -651,7 +658,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='Final query', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='Final query', @Time=@time OUTPUT;
 		END
 
 		IF @debug = 1

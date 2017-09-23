@@ -21,11 +21,11 @@ BEGIN
 		--TODO: 
 		--Limit PPG calculation to where player hasn't moved clubs or has moved to equal club or better club
 
-		DECLARE @GameweekEnd INT, @GameweekStartDate DATE, @time DATETIME;
+		DECLARE @SeasonEnd INT, @GameweekEnd INT, @Gameweek INT, @GameweekStartDate DATE, @time DATETIME;
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='Starting', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='Starting', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -52,6 +52,7 @@ BEGIN
 
 		--Get end of gameweek range
 		SET @GameweekEnd = @GameweekStart + (@Gameweeks - 1);
+		SET @SeasonEnd = @SeasonKey;
 
 		--Create temp table to hold final results from child stored procedure
 		CREATE TABLE #FinalPrediction
@@ -89,6 +90,36 @@ BEGIN
 			ChanceOfPlayingNextRound DECIMAL(6,2)
 		);
 
+		IF @Debug = 1
+		BEGIN
+
+			SELECT @SeasonKey AS SeasonKey,
+			@Gameweeks AS Gameweeks,
+			@PlayerPositionKey AS PlayerPositionKey,
+			@MinutesLimit AS MintutesLimit,
+			@Debug AS Debug,
+			@TimerDebug AS TimerDebug,
+			@PlayerKey AS PlayerKey,
+			@GameweekStart AS GameweekStart,
+			@GameweekEnd AS GameweekEnd,
+			@SeasonEnd AS SeasonEnd,
+			@GameweekStartDate AS GameweekStartDate;
+			
+			SELECT 'EXEC dbo.FutureFixturePlayerPointsPredictionsProcessing' +
+			CAST(@SeasonKey AS VARCHAR(3)) + ',' +
+			CAST(@Gameweeks AS VARCHAR(3)) + ',' +
+			CAST(@PlayerPositionKey AS VARCHAR(3)) + ',' +
+			CAST(@MinutesLimit AS VARCHAR(3)) + ',' +
+			CAST(@Debug AS VARCHAR(3)) + ',' +
+			CAST(@TimerDebug AS VARCHAR(3)) + ',' +
+			ISNULL(CAST(@PlayerKey AS VARCHAR(3)),NULL) + ',' +
+			CAST(@GameweekStart AS VARCHAR(3)) + ',' +
+			CAST(@GameweekEnd AS VARCHAR(3)) + ',' +
+			CAST(@SeasonEnd AS VARCHAR(3)) + ',
+			''' + ISNULL(CAST(@GameweekStartDate AS VARCHAR(20)),'NULL') + '';
+			
+		END
+
 		EXEC dbo.FutureFixturePlayerPointsPredictionsProcessing
 			@SeasonKey,
 			@Gameweeks,
@@ -99,6 +130,7 @@ BEGIN
 			@PlayerKey,
 			@GameweekStart,
 			@GameweekEnd,
+			@SeasonEnd,
 			@GameweekStartDate;
 	
 			--Output final prediction

@@ -243,3 +243,6 @@ ModelManifest.xml
 
 # Locked jfm file
 *.jfm
+/FantasyPremierLeagueDW/dbo/Tables/PlayerPointsPerGamePrevious5.sql
+/FantasyPremierLeagueDW/dbo/Tables/PlayerPointsPerGamePrevious10.sql
+/FantasyPremierLeagueDW/dbo/Tables/PlayerPointsPerGame.sql

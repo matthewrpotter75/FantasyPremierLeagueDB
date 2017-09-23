@@ -847,4 +847,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[PK_DimPlayerTeamGameweekFixture]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="6af6393a-cb80-4130-a238-21350b4fb22a" ChangeDateTime="09/19/2017 21:28:13">
+    <Property Name="ElementName" Value="[dbo].[OutputStoredProcedure]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="OutputStepAndTimeText" />
+  </Operation>
 </Operations>

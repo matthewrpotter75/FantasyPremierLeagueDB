@@ -1,6 +1,7 @@
 CREATE FUNCTION dbo.fnGetPPGByPlayerPlayerPositionDificultyGameweeks
 (
 	@SeasonKey INT,
+	@GameweekKey INT,
 	@PlayerPositionKey INT,
 	@MinutesLimit INT,
 	@Gameweeks INT
@@ -9,24 +10,43 @@ RETURNS TABLE
 AS
 RETURN
 (
-	--Calculate points per game for each player by difficulty of opposition for previous number gameweeks
+	--Calculate points per game for each player by difficulty of opposition for previous number of gameweeks specified
+	WITH fnGetPlayerHistoryRankedByGameweek AS
+	(
+		SELECT ph.PlayerKey,
+		ph.SeasonKey,
+		ph.GameweekKey,
+		ROW_NUMBER() OVER (PARTITION BY ph.PlayerKey, d.Difficulty ORDER BY ph.SeasonKey DESC, ph.GameweekKey DESC) AS GameweekInc,
+		ph.TotalPoints,
+		ph.[Minutes],
+		ph.WasHome,
+		ph.OpponentTeamKey,
+		pa.PlayerPositionKey,
+		d.Difficulty
+		FROM dbo.FactPlayerHistory ph
+		INNER JOIN dbo.DimPlayerAttribute pa
+		ON ph.PlayerKey = pa.PlayerKey
+		AND pa.SeasonKey = @SeasonKey
+		INNER JOIN dbo.DimTeamDifficulty d
+		ON ph.OpponentTeamKey = d.TeamKey
+		AND ph.WasHome = d.IsOpponentHome
+		AND ph.SeasonKey = d.SeasonKey
+		WHERE [Minutes] > @MinutesLimit
+		AND 
+		(
+			(ph.SeasonKey = @SeasonKey AND ph.GameweekKey < @GameweekKey)
+			OR
+			ph.SeasonKey < @SeasonKey
+		)
+	)
 	SELECT ph.PlayerKey,
 	ph.PlayerPositionKey,
-	d.Difficulty AS OpponentDifficulty,
+	ph.Difficulty AS OpponentDifficulty,
 	SUM(ph.TotalPoints) AS Points,
 	COUNT(ph.PlayerKey) AS Games,
 	SUM(ph.[Minutes]) AS PlayerMinutes,
-	--CASE WHEN SUM(ph.[Minutes]) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/SUM(ph.[Minutes]) * 90 ELSE 0 END AS PPG10
 	CASE WHEN COUNT(ph.GameweekKey) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/COUNT(ph.GameweekKey) ELSE 0 END AS PPG
-	FROM dbo.fnGetPlayerHistoryRankedByGameweek(@SeasonKey,@PlayerPositionKey,@MinutesLimit) ph
-	INNER JOIN dbo.DimPlayer p
-	ON ph.PlayerKey = p.PlayerKey 
-	INNER JOIN dbo.DimTeamDifficulty d
-	ON ph.OpponentTeamKey = d.TeamKey
-	AND ph.WasHome = d.IsOpponentHome
-	AND ph.SeasonKey = d.SeasonKey
-	WHERE ph.[Minutes] > @MinutesLimit
-	--AND ph.GameweekKey BETWEEN (@GameweekStart - 10) AND @GameweekStart
-	AND ph.GameweekInc BETWEEN 1 AND @Gameweeks
-	GROUP BY ph.PlayerKey, ph.PlayerPositionKey, d.Difficulty
+	FROM fnGetPlayerHistoryRankedByGameweek ph
+	WHERE ph.GameweekInc <= @Gameweeks
+	GROUP BY ph.PlayerKey, ph.PlayerPositionKey, ph.Difficulty
 );

@@ -6,7 +6,7 @@ CREATE PROCEDURE dbo.AnalyzingWeightingFactors
 	@MaxPredictionPointsAllWeighting INT = 2,
 	@MaxPredictionPoints5Weighting INT = 2,
 	@MaxPredictionPoints10Weighting INT = 2,
-	@Increment INT = 1,
+	@Increment INT = 0,
 	@IsResume BIT = 0,
 	@ResumePlayerPositionKey INT = NULL,
 	@ResumeGameweek INT = NULL,
@@ -14,6 +14,7 @@ CREATE PROCEDURE dbo.AnalyzingWeightingFactors
 	@ResumePredictionPoints5Weighting INT = NULL,
 	@ResumePredictionPoints10Weighting INT = NULL,
 	@IsExtend BIT = 0,
+	@IsRestart BIT = 0,
 	@Debug BIT = 0,
 	@DebugExec BIT = 0
 )
@@ -24,15 +25,22 @@ BEGIN
 
 		SET NOCOUNT ON;
 
+		IF @IsRestart = 1
+		BEGIN
+			IF OBJECT_ID('dbo.WeightingFactorsAnalysis') IS NOT NULL
+				TRUNCATE TABLE dbo.WeightingFactorsAnalysis;
+		END
+
 		DECLARE @GameweekKey INT, 
 		@SeasonKey INT, 
 		@PlayerPositionKey INT,
 		@PlayerPosition VARCHAR(10),
 		@Gameweek INT, 
 		@GameweekCount INT,
+		@SeasonEnd INT,
 		@GameweekEnd INT,
 		@MaxGameweek INT, 
-		@GameweekStartDate DATE, 
+		@GameweekStartDate SMALLDATETIME, 
 		@PredictionPointsAllWeighting INT, 
 		@PredictionPoints5Weighting INT, 
 		@PredictionPoints10Weighting INT,
@@ -40,14 +48,8 @@ BEGIN
 		@LoopCounter BIGINT,
 		@ProgressPercentage DECIMAL(5,1),
 		@ProgressPercentageString VARCHAR(10),
-		@CurrentTime VARCHAR(20);
-
-		
-		IF @IsResume = 0
-		BEGIN
-			IF OBJECT_ID('dbo.WeightingFactorsAnalysis') IS NOT NULL
-				TRUNCATE TABLE dbo.WeightingFactorsAnalysis;
-		END
+		@CurrentTime VARCHAR(20),
+		@MaxWeightingFactorsAnalysisKey INT;		
 
 		IF OBJECT_ID('tempdb..#Gameweeks') IS NOT NULL
 			DROP TABLE #Gameweeks;
@@ -83,8 +85,9 @@ BEGIN
 
 		END
 
+		SELECT @MaxGameweek = MAX(Id) FROM #Gameweeks;
 		SELECT @GameweekCount = COUNT(1) FROM #Gameweeks;
-		SELECT @TotalLoops = (4.00 * @GameweekCount * @MaxPredictionPointsAllWeighting * @MaxPredictionPoints5Weighting * @MaxPredictionPoints10Weighting)/@Increment;
+		SELECT @TotalLoops = (4.00 * @GameweekCount * (@MaxPredictionPointsAllWeighting/@Increment) * (@MaxPredictionPoints5Weighting/@Increment) * (@MaxPredictionPoints10Weighting/@Increment));
 
 		--Create temp table to hold final results from child stored procedure
 		CREATE TABLE #FinalPrediction
@@ -120,9 +123,7 @@ BEGIN
 			PredictedPoints DECIMAL(10,6),
 			PredictedPointsWeighted DECIMAL(10,6),
 			ChanceOfPlayingNextRound DECIMAL(6,2)
-		);
-
-		SELECT @MaxGameweek = MAX(Id) FROM #Gameweeks;
+		);		
 
 		SELECT @Gameweeks AS Gameweeks, @MaxGameweek AS TotalGameweeks, @MaxPredictionPointsAllWeighting AS MaxPredictionPointsAllWeighting, @MaxPredictionPoints5Weighting AS MaxPredictionPoints5Weighting, @MaxPredictionPoints10Weighting AS MaxPredictionPoints10Weighting, @TotalLoops AS TotalLoops;
 
@@ -130,13 +131,10 @@ BEGIN
 		SET @Gameweek = 1;
 		SET @LoopCounter = 1;
 
-		SELECT @ProgressPercentage = CAST((@LoopCounter * 1.00/@TotalLoops) * 100 AS DECIMAL(5,1));
-		SELECT @ProgressPercentageString = CAST(@ProgressPercentage AS VARCHAR(10));
-
 		IF @IsResume = 1 OR @IsExtend = 1
 		BEGIN
 
-			IF @PredictionPointsAllWeighting IS NOT NULL
+			IF @ResumePredictionPointsAllWeighting IS NOT NULL
 			BEGIN
 
 				SET @PlayerPositionKey = @ResumePlayerPositionKey;
@@ -149,146 +147,33 @@ BEGIN
 			ELSE
 			BEGIN
 
-				;WITH MaxPlayerPosition AS
-				(
-					SELECT MAX(PlayerPositionKey) AS MaxPlayerPositionKey
-					FROM [FantasyPremierLeagueDW].[dbo].[WeightingFactorsAnalysis] WITH (NOLOCK)
-				),
-				MaxSeasonKey AS
-				(	
-					SELECT MAX(SeasonKey) AS MaxSeasonKey
-					FROM [FantasyPremierLeagueDW].[dbo].[WeightingFactorsAnalysis] WITH (NOLOCK)
-					WHERE PlayerPositionKey IN
-					(
-						SELECT MaxPlayerPositionKey
-						FROM MaxPlayerPosition
-					)
-				),
-				MaxGameweekKey AS
-				(
-					SELECT MAX(GameweekStartKey) AS MaxGameweekKey
-					FROM [FantasyPremierLeagueDW].[dbo].[WeightingFactorsAnalysis] WITH (NOLOCK)
-					WHERE SeasonKey IN
-					(
-						SELECT MaxSeasonKey
-						FROM MaxSeasonKey
-					)
-					AND PlayerPositionKey IN
-					(
-						SELECT MaxPlayerPositionKey
-						FROM MaxPlayerPosition
-					)
-				),
-				MaxPredictionPointsAllWeighting AS
-				(
-					SELECT MAX(PredictionPointsAllWeighting) AS MaxPredictionPointsAllWeighting
-					FROM [FantasyPremierLeagueDW].[dbo].[WeightingFactorsAnalysis] WITH (NOLOCK)
-					WHERE SeasonKey IN
-					(
-						SELECT MaxSeasonKey
-						FROM MaxSeasonKey
-					)
-					AND GameweekStartKey IN
-					(
-						SELECT MaxGameweekKey
-						FROM MaxGameweekKey
-					)
-					AND PlayerPositionKey IN
-					(
-						SELECT MaxPlayerPositionKey
-						FROM MaxPlayerPosition
-					)
-				),
-				MaxPredictionPoints5Weighting AS
-				(
-					SELECT MAX(PredictionPoints5Weighting) AS MaxPredictionPoints5Weighting
-					FROM [FantasyPremierLeagueDW].[dbo].[WeightingFactorsAnalysis] WITH (NOLOCK)
-					WHERE PredictionPointsAllWeighting IN
-					(
-						SELECT MaxPredictionPointsAllWeighting
-						FROM MaxPredictionPointsAllWeighting
-					)
-					AND SeasonKey IN
-					(
-						SELECT MaxSeasonKey
-						FROM MaxSeasonKey
-					)
-					AND GameweekStartKey IN
-					(
-						SELECT MaxGameweekKey
-						FROM MaxGameweekKey
-					)
-					AND PlayerPositionKey IN
-					(
-						SELECT MaxPlayerPositionKey
-						FROM MaxPlayerPosition
-					)
-				),
-				MaxPredictionPoints10Weighting AS
-				(
-					SELECT MAX(PredictionPoints10Weighting) AS MaxPredictionPoints10Weighting
-					FROM [FantasyPremierLeagueDW].[dbo].[WeightingFactorsAnalysis] WITH (NOLOCK)
-					WHERE PredictionPoints5Weighting IN
-					(
-						SELECT MaxPredictionPoints5Weighting
-						FROM MaxPredictionPoints5Weighting
-					)
-					AND PredictionPointsAllWeighting IN
-					(
-						SELECT MaxPredictionPointsAllWeighting
-						FROM MaxPredictionPointsAllWeighting
-					)
-					AND SeasonKey IN
-					(
-						SELECT MaxSeasonKey
-						FROM MaxSeasonKey
-					)
-					AND GameweekStartKey IN
-					(
-						SELECT MaxGameweekKey
-						FROM MaxGameweekKey
-					)
-					AND PlayerPositionKey IN
-					(
-						SELECT MaxPlayerPositionKey
-						FROM MaxPlayerPosition
-					)
-				)
-				SELECT 'MaxPlayerPositionKey' AS [Key], MaxPlayerPositionKey AS MaxKeyValue
-				INTO #AllMaxKeys
-				FROM MaxPlayerPosition
+				SELECT @MaxWeightingFactorsAnalysisKey = MAX(WeightingFactorsAnalysisKey) FROM dbo.WeightingFactorsAnalysis;
 
-				UNION ALL
+				SELECT @PlayerPositionKey = PlayerPositionKey,
+				@SeasonKey = SeasonKey,
+				@GameweekKey = GameweekStartKey,
+				@PredictionPointsAllWeighting = PredictionPointsAllWeighting,
+				@PredictionPoints5Weighting = PredictionPoints5Weighting,
+				@PredictionPoints10Weighting = PredictionPoints10Weighting
+				FROM dbo.WeightingFactorsAnalysis
+				WHERE WeightingFactorsAnalysisKey = @MaxWeightingFactorsAnalysisKey;
 
-				SELECT 'MaxSeasonKey' AS [Key], MaxSeasonKey
-				FROM MaxSeasonKey
+				SELECT @Gameweek = Id FROM #Gameweeks WHERE SeasonKey = @SeasonKey AND GameweekKey = @GameweekKey;
 
-				UNION ALL
+				SELECT 'Current max values';
 
-				SELECT 'MaxGameweekKey' AS [Key], MaxGameweekKey
-				FROM MaxGameweekKey
+				SELECT @IsResume AS IsResume,
+				@IsExtend AS IsExtend,
+				@PlayerPositionKey AS PlayerPositionKey,
+				@SeasonKey AS SeasonKey,
+				@GameweekKey AS GameweekKey,
+				@Gameweek AS Gameweek,
+				@PredictionPointsAllWeighting AS PredictionPointsAllWeighting,
+				@PredictionPoints5Weighting AS PredictionPoints5Weighting,
+				@PredictionPoints10Weighting AS PredictionPoints10Weighting;
 
-				UNION ALL
-
-				SELECT 'MaxPredictionPointsAllWeighting' AS [Key], MaxPredictionPointsAllWeighting
-				FROM MaxPredictionPointsAllWeighting
-
-				UNION ALL
-
-				SELECT 'MaxPredictionPoints5Weighting' AS [Key], MaxPredictionPoints5Weighting
-				FROM MaxPredictionPoints5Weighting
-
-				UNION ALL
-
-				SELECT 'MaxPredictionPoints10Weighting' AS [Key], MaxPredictionPoints10Weighting
-				FROM MaxPredictionPoints10Weighting;
-
-				SELECT @PlayerPositionKey = MaxKeyValue FROM #AllMaxKeys WHERE [Key] = 'MaxPlayerPositionKey';
-				SELECT @SeasonKey = MaxKeyValue FROM #AllMaxKeys WHERE [Key] = 'MaxSeasonKey';
-				SELECT @GameweekKey = MaxKeyValue FROM #AllMaxKeys WHERE [Key] = 'MaxGameweekKey';
-				SELECT @PredictionPointsAllWeighting = MaxKeyValue FROM #AllMaxKeys WHERE [Key] = 'MaxPredictionPointsAllWeighting';
-				SELECT @PredictionPoints5Weighting = MaxKeyValue FROM #AllMaxKeys WHERE [Key] = 'MaxPredictionPoints5Weighting';
-				SELECT @PredictionPoints10Weighting = MaxKeyValue FROM #AllMaxKeys WHERE [Key] = 'MaxPredictionPoints10Weighting';
+				SELECT @Gameweek = @Gameweek + 1;
+				SELECT @SeasonKey = SeasonKey, @GameweekKey = GameweekKey FROM #Gameweeks WHERE Id = @Gameweek;
 
 				--Calculate what the next combination to be run to pass into the looping code
 				IF @PredictionPoints10Weighting = @MaxPredictionPoints10Weighting
@@ -309,26 +194,18 @@ BEGIN
 							IF @Gameweek = @MaxGameweek
 							BEGIN
 
-								SET @Gameweek = 1;
-
 								IF @PlayerPositionKey = 4
 								BEGIN
 
 									PRINT 'Processing has already completed!!!';
 
 								END
-								ELSE
+								ELSE 
 								BEGIN
 
 									SET @PlayerPositionKey = @PlayerPositionKey + 1;
 
 								END
-
-							END
-							ELSE
-							BEGIN
-
-								SET @Gameweek = @Gameweek + 1;
 
 							END
 
@@ -356,7 +233,7 @@ BEGIN
 
 				END
 
-				SELECT @Gameweek = Id FROM #Gameweeks WHERE SeasonKey = @SeasonKey AND GameweekKey = @GameweekKey;
+				--SELECT @Gameweek = Id FROM #Gameweeks WHERE SeasonKey = @SeasonKey AND GameweekKey = @GameweekKey;
 
 			END
 
@@ -367,25 +244,64 @@ BEGIN
 
 			SET @PlayerPositionKey = 1;
 			SET @Gameweek = 1;
-			SET @PredictionPointsAllWeighting = @PredictionPoints5Weighting + 1;
-			SET @PredictionPoints5Weighting = 1;
-			SET @PredictionPoints10Weighting = 1;
+
+			SELECT @PredictionPointsAllWeighting = MAX(PredictionPointsAllWeighting)
+			FROM dbo.WeightingFactorsAnalysis
+			WHERE PredictionPointsAllWeighting % @Increment = 0
+
+			SET @PredictionPointsAllWeighting = @PredictionPointsAllWeighting + @Increment;
+			SET @PredictionPoints5Weighting = @PredictionPointsAllWeighting;
+			SET @PredictionPoints10Weighting = @PredictionPointsAllWeighting;
 
 		END
 
-		IF @Debug = 1
+		IF @IsResume = 1
 		BEGIN
 
-				SELECT @IsResume AS IsResume,
-				@PlayerPositionKey AS PlayerPositionKey,
-				@PredictionPointsAllWeighting AS PredictionPointsAllWeighting,
-				@PredictionPoints5Weighting AS PredictionPoints5Weighting,
-				@PredictionPoints10Weighting AS PredictionPoints10Weighting,
-				@SeasonKey AS SeasonKey,
-				@GameweekKey AS GameweekKey,
-				@Gameweek AS Gameweek;
+			SET @LoopCounter = 
+					(SELECT COUNT(*)
+					 FROM
+						(
+							SELECT PlayerPositionKey, SeasonKey, GameweekStartKey, PredictionPointsAllWeighting, PredictionPoints5Weighting, PredictionPoints10Weighting
+							FROM dbo.WeightingFactorsAnalysis
+							WHERE PredictionPointsAllWeighting % @Increment = 0
+							GROUP BY PlayerPositionKey, SeasonKey, GameweekStartKey, PredictionPointsAllWeighting, PredictionPoints5Weighting, PredictionPoints10Weighting
+						 ) t
+					);
+
+			SELECT @LoopCounter = @LoopCounter/@Increment;
 
 		END
+
+		SELECT 'Initial Loop Conditions';
+
+		SELECT @IsResume AS IsResume,
+		@IsExtend AS IsExtend,
+		@PlayerPositionKey AS PlayerPositionKey,
+		@SeasonKey AS SeasonKey,
+		@GameweekKey AS GameweekKey,
+		@Gameweek AS Gameweek,
+		@PredictionPointsAllWeighting AS PredictionPointsAllWeighting,
+		@PredictionPoints5Weighting AS PredictionPoints5Weighting,
+		@PredictionPoints10Weighting AS PredictionPoints10Weighting;
+
+		SELECT @ProgressPercentage = CAST((@LoopCounter * 1.00/@TotalLoops) * 100 AS DECIMAL(5,1));
+		SELECT @ProgressPercentageString = CAST(@ProgressPercentage AS VARCHAR(10));
+
+		DECLARE @sTotalLoops VARCHAR(10);
+
+		IF @TotalLoops > 1000
+			SELECT @sTotalLoops = CAST(@TotalLoops/1000 AS VARCHAR(10)) + ',' + RIGHT('000' + CAST(@TotalLoops - ((@TotalLoops/1000) * 1000) AS VARCHAR(10)), 3);
+		ELSE
+			SELECT @sTotalLoops = CAST(@TotalLoops AS VARCHAR(10));
+		
+		RAISERROR('Total number of weighting factors to calculate: %s ', 0, 1, @sTotalLoops) WITH NOWAIT;
+
+		DECLARE @sLoopCounter VARCHAR(10);
+
+		SET @PredictionPointsAllWeighting = @Increment;
+		SET @PredictionPoints5Weighting = @Increment;
+		SET @PredictionPoints10Weighting = @Increment;
 
 		--Start looping through PlayerPositions, Gameweeks, and all the combinations of the 3 weighting factors
 		WHILE @PlayerPositionKey <= 4
@@ -400,23 +316,22 @@ BEGIN
 				IF @IsResume = 0 AND @IsExtend = 0
 				BEGIN
 
-					SET @PredictionPointsAllWeighting = 1;
-					SET @PredictionPoints5Weighting = 1;
-					SET @PredictionPoints10Weighting = 1;
+					SET @PredictionPointsAllWeighting = @Increment;
+					SET @PredictionPoints5Weighting = @Increment;
+					SET @PredictionPoints10Weighting = @Increment;
 
 				END
 
 				IF @Debug = 1
 					SELECT 'SELECT @GameweekStartDate = CAST(DeadlineTime AS DATE) FROM dbo.DimGameweek WHERE SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(2)) + ' AND GameweekKey = ' + CAST(@GameweekKey AS VARCHAR(2)) + ';'
 
-				SELECT @GameweekKey = GameweekKey, @SeasonKey = SeasonKey FROM #Gameweeks WHERE Id = @GameweekKey;
-				SELECT @GameweekStartDate = CAST(DeadlineTime AS DATE) FROM dbo.DimGameweek WHERE SeasonKey = @SeasonKey AND GameweekKey = @Gameweek;
-				SELECT @GameweekEnd = (SELECT GameweekKey FROM #Gameweeks WHERE Id = @Gameweek + (@Increment - 1));
-				--what happens if gameweek end is in the next season? - need to change FutureFixturePlayerPointsPredictionsProcessing
+				SELECT @GameweekKey = GameweekKey, @SeasonKey = SeasonKey FROM #Gameweeks WHERE Id = @Gameweek;
+				SELECT @GameweekStartDate = CAST(DeadlineTime AS DATE) FROM dbo.DimGameweek WHERE SeasonKey = @SeasonKey AND GameweekKey = @GameweekKey;
+				SELECT @SeasonEnd = SeasonKey, @GameweekEnd = GameweekKey FROM #Gameweeks WHERE Id = @Gameweek + (@Gameweeks - 1);
 			
 				--RAISERROR('SeasonKey: %d GameweekKey: %d ( %d out of %d )', 0, 1, @SeasonKey, @GameweekKey, @LoopCounter, @TotalLoops) WITH NOWAIT;
 				SET @CurrentTime = CONVERT(VARCHAR(20),GETDATE(),120);
-				RAISERROR('SeasonKey: %d GameweekKey: %d ( %s )', 0, 1, @SeasonKey, @GameweekKey, @CurrentTime) WITH NOWAIT;
+				RAISERROR('SeasonKey: %d GameweekKey: %d (%s)', 0, 1, @SeasonKey, @GameweekKey, @CurrentTime) WITH NOWAIT;
 
 				WHILE @PredictionPointsAllWeighting <= @MaxPredictionPointsAllWeighting
 				BEGIN
@@ -427,33 +342,24 @@ BEGIN
 						WHILE @PredictionPoints10Weighting <= @MaxPredictionPoints10Weighting
 						BEGIN
 
-							RAISERROR('PredictionPointsAllWeighting: %d PredictionPoints5Weighting: %d PredictionPoints10Weighting: %d ( %s )', 0, 1, @PredictionPointsAllWeighting, @PredictionPoints5Weighting, @PredictionPoints10Weighting, @ProgressPercentageString) WITH NOWAIT;
+							IF @LoopCounter < 1000
+								SELECT @sLoopCounter = CAST(@LoopCounter AS VARCHAR(10));
+							ELSE
+								SELECT @sLoopCounter = CAST(@LoopCounter/1000 AS VARCHAR(10)) + ',' + RIGHT('000' + CAST(@LoopCounter - ((@LoopCounter/1000) * 1000) AS VARCHAR(10)), 3);
+
+							RAISERROR('PredictionPointsAllWeighting: %d PredictionPoints5Weighting: %d PredictionPoints10Weighting: %d (%s/%s) (%s)', 0, 1, @PredictionPointsAllWeighting, @PredictionPoints5Weighting, @PredictionPoints10Weighting, @sLoopCounter, @sTotalLoops, @ProgressPercentageString) WITH NOWAIT;
 
 							IF @Debug = 1
 							BEGIN
 
-								SELECT @SeasonKey AS SeasonKey, 
-								@Gameweek AS Gameweek, 
-								@Gameweeks AS Gameweeks, 
-								@GameweekStartDate AS GameweekStartDate, 
-								@GameweekEnd AS GameweekEnd, 
-								@PlayerPositionKey AS PlayerPositionKey, 
-								@MinutesLimit AS MinutesLimit, 
-								@PredictionPointsAllWeighting AS PredictionPointsAllWeighting, 
-								@PredictionPoints5Weighting AS PredictionPoints5Weighting,
-								@PredictionPoints10Weighting AS PredictionPoints10Weighting;
-
-							END
-
-							IF @Debug = 1
-							BEGIN
-
-								SELECT @SeasonKey AS SeasonKey,
-								@Gameweeks AS Gameweeks,
+								SELECT @PlayerPositionKey AS PlayerPositionKey,
+								@SeasonKey AS SeasonKey,
 								@GameweekKey AS GameweekKey,
-								@GameweekStartDate AS GameweekStartDate,
+								@SeasonEnd AS SeasonEnd,
 								@GameweekEnd AS GameweekEnd,
-								@PlayerPositionKey AS PlayerPositionKey,
+								@Gameweek AS Gameweek, 
+								@Gameweeks AS Gameweeks,
+								@GameweekStartDate AS GameweekStartDate,
 								@MinutesLimit AS MinutesLimit,
 								@PredictionPointsAllWeighting AS PredictionPointsAllWeighting,
 								@PredictionPoints5Weighting AS PredictionPoints5Weighting,
@@ -463,7 +369,8 @@ BEGIN
 								@SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + ',
 								@Gameweeks = ' + CAST(@Gameweeks AS VARCHAR(3)) + ',
 								@GameweekStart = ' + CAST(@GameweekKey AS VARCHAR(3)) + ',
-								@GameweekStartDate = ' + ISNULL(CAST(@GameweekStartDate AS VARCHAR(3)),'') + ',
+								@GameweekStartDate = ''' + ISNULL(CAST(@GameweekStartDate AS VARCHAR(20)),'') + ''',
+								@SeasonEnd = ' + CAST(@SeasonEnd AS VARCHAR(3)) + ',
 								@GameweekEnd = ' + CAST(@GameweekEnd AS VARCHAR(3)) + ',
 								@PlayerPositionKey = ' + CAST(@PlayerPositionKey AS VARCHAR(3)) + ',
 								@MinutesLimit = ' + CAST(@MinutesLimit AS VARCHAR(3)) + ',
@@ -481,6 +388,7 @@ BEGIN
 								@Gameweeks = @Gameweeks,
 								@GameweekStart = @GameweekKey,
 								@GameweekStartDate = @GameweekStartDate,
+								@SeasonEnd = @SeasonEnd,
 								@GameweekEnd = @GameweekEnd,
 								@PlayerPositionKey = @PlayerPositionKey,
 								@MinutesLimit = @MinutesLimit,
@@ -500,12 +408,43 @@ BEGIN
 							END
 							
 							INSERT INTO dbo.WeightingFactorsAnalysis
+						   ([SeasonKey]
+						   ,[GameweekStartKey]
+						   ,[Gameweeks]
+						   ,[PlayerPositionKey]
+						   ,[PredictionPointsAllWeighting]
+						   ,[PredictionPoints5Weighting]
+						   ,[PredictionPoints10Weighting]
+						   ,[PlayerKey]
+						   ,[PlayerName]
+						   ,[Cost]
+						   ,[PlayerPosition]
+						   ,[TeamName]
+						   ,[TotalPlayerGames]
+						   ,[TotalPlayerMinutes]
+						   ,[CurrentPoints]
+						   ,[PredictedPointsAll]
+						   ,[PredictedPoints5]
+						   ,[PredictedPoints10]
+						   ,[OverallPPGPredictionPoints]
+						   ,[OverallTeamPPGPredictionPoints]
+						   ,[OverallDifficultyPPGPredictionPoints]
+						   ,[OverallFractionOfMinutesPlayed]
+						   ,[Prev5FractionOfMinutesPlayed]
+						   ,[StartingProbability]
+						   ,[TotalGames]
+						   ,[TeamTotalGames]
+						   ,[DifficultyTotalGames]
+						   ,[PredictedPointsPath]
+						   ,[PredictedPoints]
+						   ,[PredictedPointsWeighted]
+						   ,[ChanceOfPlayingNextRound])
 							SELECT *
 							FROM #FinalPrediction;
 							
 							DELETE FROM #FinalPrediction;		
 
-							SET @LoopCounter = @LoopCounter + @Increment;
+							SET @LoopCounter = @LoopCounter + 1;
 							SELECT @ProgressPercentage = CAST((@LoopCounter * 1.00/@TotalLoops) * 100 AS DECIMAL(5,1));
 							SELECT @ProgressPercentageString = CAST(@ProgressPercentage AS VARCHAR(10));
 							SET @PredictionPoints10Weighting = @PredictionPoints10Weighting + @Increment;
@@ -513,28 +452,28 @@ BEGIN
 						END
 
 						SET @PredictionPoints5Weighting = @PredictionPoints5Weighting + @Increment;
-						SET @PredictionPoints10Weighting = 1;
+						SET @PredictionPoints10Weighting = @Increment;
 
 					END
 
 					SET @PredictionPointsAllWeighting = @PredictionPointsAllWeighting + @Increment;
-					SET @PredictionPoints5Weighting = 1;
-					SET @PredictionPoints10Weighting = 1;
+					SET @PredictionPoints5Weighting = @Increment;
+					SET @PredictionPoints10Weighting = @Increment;
 
 				END
 
 				SET @Gameweek = @Gameweek + 1;
-				SET @PredictionPointsAllWeighting = 1;
-				SET @PredictionPoints5Weighting = 1;
-				SET @PredictionPoints10Weighting = 1;
+				SET @PredictionPointsAllWeighting = @Increment;
+				SET @PredictionPoints5Weighting = @Increment;
+				SET @PredictionPoints10Weighting = @Increment;
 
 			END
 
 			SET @PlayerPositionKey = @PlayerPositionKey + 1;
 			SET @Gameweek = 1;
-			SET @PredictionPointsAllWeighting = 1;
-			SET @PredictionPoints5Weighting = 1;
-			SET @PredictionPoints10Weighting = 1;
+			SET @PredictionPointsAllWeighting = @Increment;
+			SET @PredictionPoints5Weighting = @Increment;
+			SET @PredictionPoints10Weighting = @Increment;
 
 		END
 		RAISERROR('Completed!!!', 0, 1, @ProgressPercentageString) WITH NOWAIT;

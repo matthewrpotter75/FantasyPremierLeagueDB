@@ -22,7 +22,7 @@ RETURN
 	FROM dbo.FactPlayerHistory ph
 	INNER JOIN dbo.DimPlayerAttribute pa
 	ON ph.PlayerKey = pa.PlayerKey
-	WHERE [Minutes] > @MinutesLimit
 	AND pa.SeasonKey = @SeasonKey
+	WHERE [Minutes] > @MinutesLimit
 	AND pa.PlayerPositionKey = @PlayerPositionKey
 );

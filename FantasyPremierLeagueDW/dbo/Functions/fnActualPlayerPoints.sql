@@ -1,9 +1,11 @@
 CREATE FUNCTION dbo.fnActualPlayerPoints
 (
-	@SeasonKey INT,
+	@SeasonStartKey INT,
+	@SeasonEndKey INT,
 	@PlayerPositionKey INT,
 	@GameweekStart INT,
-	@GameweekEnd INT
+	@GameweekEnd INT,
+	@MinutesLimit INT = 0
 )
 RETURNS TABLE
 AS
@@ -18,9 +20,14 @@ RETURN
 	FROM dbo.FactPlayerHistory ph
 	INNER JOIN dbo.DimPlayerAttribute pa
 	ON ph.PlayerKey = pa.PlayerKey
-	AND pa.SeasonKey = @SeasonKey
+	AND pa.SeasonKey = @SeasonEndKey
 	WHERE pa.PlayerPositionKey = @PlayerPositionKey
-	AND ph.SeasonKey = @SeasonKey
-	AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
+	AND 
+	(
+		(ph.SeasonKey = @SeasonStartKey AND ph.GameweekKey >= @GameweekStart)
+		OR 
+		(ph.SeasonKey = @SeasonEndKey AND ph.GameweekKey <= @GameweekEnd)
+	)
+	AND ph.[Minutes] >= @MinutesLimit
 	GROUP BY ph.PlayerKey, pa.PlayerPositionKey
 );

@@ -138,11 +138,15 @@
     <Build Include="dbo\Functions\fnGetOverallTeamPPG.sql" />
     <Build Include="dbo\Stored Procedures\GetMyTeamCurrentGameweek.sql" />
     <Build Include="dbo\Stored Procedures\FutureFixturePlayerPointsPredictionsRefactored.sql" />
-    <Build Include="dbo\Stored Procedures\OutputStoredProcedure.sql" />
+    <Build Include="dbo\Stored Procedures\OutputStepAndTimeText.sql" />
     <Build Include="dbo\Stored Procedures\FutureFixturePlayerPointsPredictionsProcessing.sql" />
     <None Include="PopulateDimPlayerTeamGameweekFixture.sql" />
     <Build Include="dbo\Stored Procedures\AnalyzingWeightingFactors.sql" />
     <Build Include="dbo\Tables\WeightingFactorsAnalysis.sql" />
+    <Build Include="dbo\Stored Procedures\AnalyzingWeightingFactorsInfilling.sql" />
+    <Build Include="dbo\Tables\PlayerPointsPerGame.sql" />
+    <Build Include="dbo\Tables\PlayerPointsPerGamePrevious5.sql" />
+    <Build Include="dbo\Tables\PlayerPointsPerGamePrevious10.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="FantasyPremierLeagueDW.refactorlog" />

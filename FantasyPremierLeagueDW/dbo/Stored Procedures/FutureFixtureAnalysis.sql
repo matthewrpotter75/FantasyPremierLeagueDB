@@ -20,7 +20,7 @@ BEGIN
 		--TODO: 
 		--Limit PPG calculation to where player hasn't moved clubs or has moved to equal club or better club
 
-		DECLARE @GameweekEnd INT, @GameweekStartDate DATE, @CurrentSeasonKey INT, @CurrentGameweekKey INT, @AnalysisDeadlineTime SMALLDATETIME;
+		DECLARE @SeasonEnd INT, @GameweekEnd INT, @GameweekStartDate DATE, @CurrentSeasonKey INT, @CurrentGameweekKey INT, @AnalysisDeadlineTime SMALLDATETIME;
 
 		IF @SeasonKey IS NULL
 		BEGIN
@@ -49,12 +49,13 @@ BEGIN
 
 		--Get end of gameweek range
 		SET @GameweekEnd = @GameweekStart + (@Gameweeks - 1);
+		SET @SeasonEnd = @SeasonKey;
 
 		IF OBJECT_ID('tempdb..#ActualPlayerPoints') IS NOT NULL
 			DROP TABLE #ActualPlayerPoints;
 
-		IF OBJECT_ID('tempdb..#FinalPredictions') IS NOT NULL
-			DROP TABLE #FinalPredictions;
+		IF OBJECT_ID('tempdb..#FinalPrediction') IS NOT NULL
+			DROP TABLE #FinalPrediction;
 
 		--Create temp table with actual points over the prediction period
 		SELECT ph.PlayerKey,
@@ -108,6 +109,36 @@ BEGIN
 			ChanceOfPlayingNextRound DECIMAL(6,2)
 		);
 
+		IF @Debug = 1
+		BEGIN
+
+			SELECT @SeasonKey AS SeasonKey,
+			@Gameweeks AS Gameweeks,
+			@PlayerPositionKey AS PlayerPositionKey,
+			@MinutesLimit AS MintutesLimit,
+			@Debug AS Debug,
+			@TimerDebug AS TimerDebug,
+			@PlayerKey AS PlayerKey,
+			@GameweekStart AS GameweekStart,
+			@GameweekEnd AS GameweekEnd,
+			@SeasonEnd AS SeasonEnd,
+			@GameweekStartDate AS GameweekStartDate;
+			
+			SELECT 'EXEC dbo.FutureFixturePlayerPointsPredictionsProcessing ' +
+			CAST(@SeasonKey AS VARCHAR(3)) + ',' +
+			CAST(@Gameweeks AS VARCHAR(3)) + ',' +
+			CAST(@PlayerPositionKey AS VARCHAR(3)) + ',' +
+			CAST(@MinutesLimit AS VARCHAR(3)) + ',' +
+			CAST(@Debug AS VARCHAR(3)) + ',' +
+			CAST(@TimerDebug AS VARCHAR(3)) + ',' +
+			ISNULL(CAST(@PlayerKey AS VARCHAR(4)),'NULL') + ',' +
+			CAST(@GameweekStart AS VARCHAR(3)) + ',' +
+			CAST(@GameweekEnd AS VARCHAR(3)) + ',' +
+			CAST(@SeasonEnd AS VARCHAR(3)) + ',
+			''' + ISNULL(CAST(@GameweekStartDate AS VARCHAR(24)),'NULL') + '''';
+
+		END
+
 		EXEC dbo.FutureFixturePlayerPointsPredictionsProcessing
 			@SeasonKey,
 			@Gameweeks,
@@ -118,6 +149,7 @@ BEGIN
 			@PlayerKey,
 			@GameweekStart,
 			@GameweekEnd,
+			@SeasonEnd,
 			@GameweekStartDate;
 		
 		SELECT 

@@ -33,4 +33,13 @@ CREATE TABLE dbo.WeightingFactorsAnalysis
 	PredictedPointsWeighted DECIMAL(10,6),
 	ChanceOfPlayingNextRound DECIMAL(6,2),
 	CONSTRAINT [PK_WeightingFactorsAnalysis] PRIMARY KEY CLUSTERED (WeightingFactorsAnalysisKey ASC)
+	--CONSTRAINT [UC_WeightingFactorsAnalysis_PlayerPositionKey_SeasonKey_GameweekStartKey_Gameweeks_PredictionPointsWeightings] 
+		--UNIQUE (PlayerKey, PlayerPositionKey, SeasonKey, GameweekStartKey, Gameweeks, PredictionPointsAllWeighting, PredictionPoints5Weighting, PredictionPoints10Weighting)
 );
+GO
+
+CREATE INDEX IX_WeightingFactorsAnalysis_PlayerPositionKey_SeasonKey_GameweekStartKey_PredictionPointsWeightings ON dbo.WeightingFactorsAnalysis (PlayerPositionKey, SeasonKey, GameweekStartKey, PredictionPointsAllWeighting, PredictionPoints5Weighting, PredictionPoints10Weighting);
+GO
+
+CREATE UNIQUE INDEX UX_WeightingFactorsAnalysis_PlayerKey_PlayerPositionKey_SeasonKey_GameweekStartKey_Gameweeks_PredictionPointsWeightings ON dbo.WeightingFactorsAnalysis (PlayerKey, PlayerPositionKey, SeasonKey, GameweekStartKey, PredictionPointsAllWeighting, PredictionPoints5Weighting, PredictionPoints10Weighting);
+GO

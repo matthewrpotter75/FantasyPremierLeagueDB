@@ -1,4 +1,4 @@
-CREATE PROCEDURE dbo.OutputStoredProcedure
+CREATE PROCEDURE dbo.OutputStepAndTimeText
 (
 	@Step VARCHAR(50),
 	@Time DATETIME = NULL OUTPUT
