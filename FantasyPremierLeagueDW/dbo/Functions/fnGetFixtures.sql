@@ -32,5 +32,5 @@ RETURN
 	AND f.IsHome = otd.IsOpponentHome
 	AND otd.SeasonKey = @SeasonKey
 	WHERE (f.GameweekKey >= @GameweekStart AND f.SeasonKey = @SeasonKey)
-	OR (f.GameweekKey <= @GameweekEnd AND f.SeasonKey = @SeasonEnd)
+	AND (f.GameweekKey <= @GameweekEnd AND f.SeasonKey = @SeasonEnd)
 );

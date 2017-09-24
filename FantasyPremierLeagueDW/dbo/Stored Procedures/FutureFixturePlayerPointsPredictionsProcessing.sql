@@ -38,9 +38,6 @@ BEGIN
 		IF OBJECT_ID('tempdb..#OverallTeamPPG') IS NOT NULL
 			DROP TABLE #OverallTeamPPG;
 
-		IF OBJECT_ID('tempdb..#PPG') IS NOT NULL
-			DROP TABLE #PPG;
-
 		IF OBJECT_ID('tempdb..#PlayerPPG') IS NOT NULL
 			DROP TABLE #PlayerPPG;
 
@@ -106,7 +103,7 @@ BEGIN
 			SET @time = GETDATE();
 		END
 	
-		--Create temp table with overall points per game per team, opponent difficulty, and home/away
+		--Create temp table with overall points per game per team, opponent difficulty, and home/away for the position of the player
 		SELECT *
 		INTO #OverallTeamPPG
 		FROM dbo.fnGetOverallTeamPPG(@SeasonKey, @PlayerPositionKey, @MinutesLimit);
@@ -117,97 +114,46 @@ BEGIN
 			SET @time = GETDATE();
 		END
 
-		--Calculate points per game for each player by difficulty of opposition, and whether at home or away
-		CREATE TABLE #PPG 
+		--Aggregate to get one row per player (there will only be one value per row per difficulty so not really aggregation)
+		;WITH AllPPG AS
 		(
-			PlayerKey INT NOT NULL,
-			PlayerPositionKey INT NOT NULL,
-			OpponentDifficulty TINYINT NOT NULL,
-			--WasHome BIT NOT NULL,
-			Points SMALLINT NOT NULL,
-			Games TINYINT NOT NULL,
-			PlayerMinutes SMALLINT NOT NULL,
-			PPG DECIMAL(4,2) NOT NULL,
-			PPG5games DECIMAL(4,2),
-			PPG10games DECIMAL(4,2)
-		);
-
-		INSERT INTO #PPG
-		(PlayerKey, PlayerPositionKey, OpponentDifficulty, Points, Games, PlayerMinutes, PPG)
-		SELECT PlayerKey, PlayerPositionKey, OpponentDifficulty, Points, Games, PlayerMinutes, PPG
-		FROM dbo.fnGetPPGByPlayerPlayerPositionDificulty(@SeasonKey, @PlayerPositionKey, @MinutesLimit);
-
-		IF @TimerDebug = 1
-		BEGIN
-			EXEC dbo.OutputStepAndTimeText @Step='#PPG', @Time=@time OUTPUT;
-			SET @time = GETDATE();
-		END
-
-		CREATE INDEX IX_PPG_PlayerKey_PlayerPositionKey_OpponentDifficulty ON #PPG (PlayerKey, PlayerPositionKey, OpponentDifficulty);
-
-		IF @TimerDebug = 1
-		BEGIN
-			EXEC dbo.OutputStepAndTimeText @Step='#PPG Index Creation', @Time=@time OUTPUT;
-			SET @time = GETDATE();
-		END
-
-		UPDATE #PPG
-		SET PPG5games = ph5.PPG5
-		FROM #PPG ppg
-		INNER JOIN dbo.fnGetPPGByPlayerPlayerPositionDificultyGameweeks(@SeasonKey, @PlayerPositionKey, @MinutesLimit, 5) ph5
-		ON ppg.PlayerKey = ph5.PlayerKey
-		AND ppg.PlayerPositionKey = ph5.PlayerPositionKey
-		AND ppg.OpponentDifficulty = ph5.OpponentDifficulty;
-
-		IF @TimerDebug = 1
-		BEGIN
-			EXEC dbo.OutputStepAndTimeText @Step='#PPG - PPG5', @Time=@time OUTPUT;
-			SET @time = GETDATE();
-		END
-	
-		UPDATE #PPG
-		SET PPG10games = ph10.PPG10
-		FROM #PPG ppg
-		INNER JOIN dbo.fnGetPPGByPlayerPlayerPositionDificultyGameweeks(@SeasonKey, @PlayerPositionKey, @MinutesLimit, 10) ph10
-		ON ppg.PlayerKey = ph10.PlayerKey
-		AND ppg.PlayerPositionKey = ph10.PlayerPositionKey
-		AND ppg.OpponentDifficulty = ph10.OpponentDifficulty;
-
-		IF @TimerDebug = 1
-		BEGIN
-			EXEC dbo.OutputStepAndTimeText @Step='#PPG - PPG10', @Time=@time OUTPUT;
-			SET @time = GETDATE();
-		END
-
-		UPDATE #PPG
-		SET PPG5games = 0
-		WHERE PPG5games IS NULL;
-
-		UPDATE #PPG
-		SET PPG10games = 0
-		WHERE PPG10games IS NULL;
-
-		--Aggregate to get one row per player (there will only be one row per difficulty so not really aggregation)
+			SELECT ppg.PlayerKey, ppg.PlayerPositionKey, ppg.OpponentDifficulty, ppg.Games, ppg.PPG, ISNULL(prv5.PPG,0) AS PPG5, ISNULL(prv10.PPG,0) AS PPG10
+			FROM dbo.PlayerPointsPerGame ppg
+			LEFT JOIN dbo.PlayerPointsPerGamePrevious5 prv5
+			ON ppg.PlayerKey = prv5.PlayerKey
+			AND ppg.PlayerPositionKey = prv5.PlayerPositionKey
+			AND ppg.OpponentDifficulty = prv5.OpponentDifficulty
+			AND prv5.SeasonKey = @SeasonKey
+			AND prv5.GameweekKey = (@GameweekStart - 1)
+			LEFT JOIN dbo.PlayerPointsPerGamePrevious10 prv10
+			ON prv5.SeasonKey = prv10.SeasonKey
+			AND prv5.GameweekKey = prv10.GameweekKey
+			AND prv5.PlayerKey = prv10.PlayerKey
+			AND prv5.PlayerPositionKey = prv10.PlayerPositionKey
+			AND prv5.OpponentDifficulty = prv10.OpponentDifficulty
+			AND prv10.SeasonKey = @SeasonKey
+			AND prv10.GameweekKey = (@GameweekStart - 1)
+		)
 		SELECT PlayerKey, 
 		PlayerPositionKey,
 		SUM(Games) AS TotalGames,
 		SUM(CASE WHEN OpponentDifficulty = 1 THEN PPG ELSE 0 END) AS PPG_Diff1,
-		SUM(CASE WHEN OpponentDifficulty = 1 THEN PPG5games ELSE 0 END) AS PPG5games_Diff1,
-		SUM(CASE WHEN OpponentDifficulty = 1 THEN PPG10games ELSE 0 END) AS PPG10games_Diff1,
+		SUM(CASE WHEN OpponentDifficulty = 1 THEN PPG5 ELSE 0 END) AS PPG5_Diff1,
+		SUM(CASE WHEN OpponentDifficulty = 1 THEN PPG10 ELSE 0 END) AS PPG10_Diff1,
 		SUM(CASE WHEN OpponentDifficulty = 2 THEN PPG ELSE 0 END) AS PPG_Diff2,
-		SUM(CASE WHEN OpponentDifficulty = 2 THEN PPG5games ELSE 0 END) AS PPG5games_Diff2,
-		SUM(CASE WHEN OpponentDifficulty = 2 THEN PPG10games ELSE 0 END) AS PPG10games_Diff2,
+		SUM(CASE WHEN OpponentDifficulty = 2 THEN PPG5 ELSE 0 END) AS PPG5_Diff2,
+		SUM(CASE WHEN OpponentDifficulty = 2 THEN PPG10 ELSE 0 END) AS PPG10_Diff2,
 		SUM(CASE WHEN OpponentDifficulty = 3 THEN PPG ELSE 0 END) AS PPG_Diff3,
-		SUM(CASE WHEN OpponentDifficulty = 3 THEN PPG5games ELSE 0 END) AS PPG5games_Diff3,
-		SUM(CASE WHEN OpponentDifficulty = 3 THEN PPG10games ELSE 0 END) AS PPG10games_Diff3,
+		SUM(CASE WHEN OpponentDifficulty = 3 THEN PPG5 ELSE 0 END) AS PPG5_Diff3,
+		SUM(CASE WHEN OpponentDifficulty = 3 THEN PPG10 ELSE 0 END) AS PPG10_Diff3,
 		SUM(CASE WHEN OpponentDifficulty = 4 THEN PPG ELSE 0 END) AS PPG_Diff4,
-		SUM(CASE WHEN OpponentDifficulty = 4 THEN PPG5games ELSE 0 END) AS PPG5games_Diff4,
-		SUM(CASE WHEN OpponentDifficulty = 4 THEN PPG10games ELSE 0 END) AS PPG10games_Diff4,
+		SUM(CASE WHEN OpponentDifficulty = 4 THEN PPG5 ELSE 0 END) AS PPG5_Diff4,
+		SUM(CASE WHEN OpponentDifficulty = 4 THEN PPG10 ELSE 0 END) AS PPG10_Diff4,
 		SUM(CASE WHEN OpponentDifficulty = 5 THEN PPG ELSE 0 END) AS PPG_Diff5,
-		SUM(CASE WHEN OpponentDifficulty = 5 THEN PPG5games ELSE 0 END) AS PPG5games_Diff5,
-		SUM(CASE WHEN OpponentDifficulty = 5 THEN PPG10games ELSE 0 END) AS PPG10games_Diff5
+		SUM(CASE WHEN OpponentDifficulty = 5 THEN PPG5 ELSE 0 END) AS PPG5_Diff5,
+		SUM(CASE WHEN OpponentDifficulty = 5 THEN PPG10 ELSE 0 END) AS PPG10_Diff5
 		INTO #PlayerPPG
-		FROM #PPG
+		FROM AllPPG
 		GROUP BY PlayerKey, PlayerPositionKey
 		ORDER BY PlayerKey, PlayerPositionKey;
 
@@ -235,6 +181,7 @@ BEGIN
 			TotalGames INT NOT NULL
 		);
 	
+		--If player is injured, banned, or suspended then these games can be excluded from fixtures
 		;WITH LatestPlayerNews AS
 		(
 			SELECT ca.*, fpgs.PlayerStatus, fpgs.ChanceOfPlayingNextRound
@@ -273,7 +220,7 @@ BEGIN
 		INSERT INTO #FixtureDifficulty
 		(PlayerKey, ChanceOfPlayingNextRound, Diff1GamesHome, Diff2GamesHome, Diff3GamesHome, Diff4GamesHome, Diff5GamesHome, Diff1GamesAway, Diff2GamesAway, Diff3GamesAway, Diff4GamesAway, Diff5GamesAway, TotalGames)
 		SELECT p.PlayerKey,
-		MIN(p.ChanceOfPlayingNextRound) AS ChanceOfPlayingNextRound,
+		MIN(ch.ChanceOfPlayingNextRound) AS ChanceOfPlayingNextRound,
 		SUM(CASE WHEN f.OpponentDifficulty = 1 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff1GamesHome,
 		SUM(CASE WHEN f.OpponentDifficulty = 2 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff2GamesHome,
 		SUM(CASE WHEN f.OpponentDifficulty = 3 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff3GamesHome,
@@ -285,16 +232,15 @@ BEGIN
 		SUM(CASE WHEN f.OpponentDifficulty = 4 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff4GamesAway,
 		SUM(CASE WHEN f.OpponentDifficulty = 5 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff5GamesAway,
 		COUNT(1) AS TotalGames
-		FROM #Fixtures f
-		LEFT JOIN PlayerChanceOfPlaying p
-		ON f.TeamKey = p.TeamKey
-		WHERE 
-		(
-			(f.GameweekKey >= @GameweekStart AND f.SeasonKey = @SeasonKey)
-			OR 
-			(f.GameweekKey <= @GameweekEnd AND f.SeasonKey = @SeasonEnd)
-		)
-		AND (f.KickoffDate >= p.StartDate OR f.KickoffDate IS NULL)
+		FROM dbo.DimPlayer p
+		INNER JOIN dbo.DimPlayerAttribute pa
+		ON p.PlayerKey = pa.PlayerKey
+		AND pa.SeasonKey = @SeasonKey
+		INNER JOIN #Fixtures f
+		ON pa.TeamKey = f.TeamKey
+		LEFT JOIN PlayerChanceOfPlaying ch
+		ON p.PlayerKey = ch.PlayerKey
+		WHERE f.KickoffDate >= ch.StartDate OR f.KickoffDate IS NULL OR ch.StartDate IS NULL
 		GROUP BY p.PlayerKey
 		ORDER BY p.PlayerKey;
 
@@ -314,17 +260,17 @@ BEGIN
 		(fd.Diff4GamesHome + fd.Diff4GamesAway) * ppg.PPG_Diff4 AS Diff4Points,
 		(fd.Diff5GamesHome + fd.Diff5GamesAway) * ppg.PPG_Diff5 AS Diff5Points,
 
-		(fd.Diff1GamesHome + fd.Diff1GamesAway) * ppg.PPG5games_Diff1 AS Diff1Points5,
-		(fd.Diff2GamesHome + fd.Diff2GamesAway) * ppg.PPG5games_Diff2 AS Diff2Points5,
-		(fd.Diff3GamesHome + fd.Diff3GamesAway) * ppg.PPG5games_Diff3 AS Diff3Points5,
-		(fd.Diff4GamesHome + fd.Diff4GamesAway) * ppg.PPG5games_Diff4 AS Diff4Points5,
-		(fd.Diff5GamesHome + fd.Diff5GamesAway) * ppg.PPG5games_Diff5 AS Diff5Points5,
+		(fd.Diff1GamesHome + fd.Diff1GamesAway) * ppg.PPG5_Diff1 AS Diff1Points5,
+		(fd.Diff2GamesHome + fd.Diff2GamesAway) * ppg.PPG5_Diff2 AS Diff2Points5,
+		(fd.Diff3GamesHome + fd.Diff3GamesAway) * ppg.PPG5_Diff3 AS Diff3Points5,
+		(fd.Diff4GamesHome + fd.Diff4GamesAway) * ppg.PPG5_Diff4 AS Diff4Points5,
+		(fd.Diff5GamesHome + fd.Diff5GamesAway) * ppg.PPG5_Diff5 AS Diff5Points5,
 
-		(fd.Diff1GamesHome + fd.Diff1GamesAway) * ppg.PPG10games_Diff1 AS Diff1Points10,
-		(fd.Diff2GamesHome + fd.Diff2GamesAway) * ppg.PPG10games_Diff2 AS Diff2Points10,
-		(fd.Diff3GamesHome + fd.Diff3GamesAway) * ppg.PPG10games_Diff3 AS Diff3Points10,
-		(fd.Diff4GamesHome + fd.Diff4GamesAway) * ppg.PPG10games_Diff4 AS Diff4Points10,
-		(fd.Diff5GamesHome + fd.Diff5GamesAway) * ppg.PPG10games_Diff5 AS Diff5Points10
+		(fd.Diff1GamesHome + fd.Diff1GamesAway) * ppg.PPG10_Diff1 AS Diff1Points10,
+		(fd.Diff2GamesHome + fd.Diff2GamesAway) * ppg.PPG10_Diff2 AS Diff2Points10,
+		(fd.Diff3GamesHome + fd.Diff3GamesAway) * ppg.PPG10_Diff3 AS Diff3Points10,
+		(fd.Diff4GamesHome + fd.Diff4GamesAway) * ppg.PPG10_Diff4 AS Diff4Points10,
+		(fd.Diff5GamesHome + fd.Diff5GamesAway) * ppg.PPG10_Diff5 AS Diff5Points10
 		INTO #PlayerPredictions
 		FROM #PlayerPPG ppg
 		INNER JOIN #FixtureDifficulty fd
@@ -333,20 +279,6 @@ BEGIN
 		IF @TimerDebug = 1
 		BEGIN
 			EXEC dbo.OutputStepAndTimeText @Step='#PlayerPredictions', @Time=@time OUTPUT;
-			SET @time = GETDATE();
-		END
-
-		SELECT TeamKey,
-		COUNT(DISTINCT GameweekFixtureKey) AS TotalGames
-		INTO #TotalTeamMinutes
-		FROM dbo.DimTeamGameweekFixture
-		WHERE SeasonKey = @SeasonKey
-		AND GameweekKey < @GameweekStart
-		GROUP BY TeamKey;
-
-		IF @TimerDebug = 1
-		BEGIN
-			EXEC dbo.OutputStepAndTimeText @Step='#TotalTeamMinutes', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -505,8 +437,8 @@ BEGIN
 		OverallDifficultyPPG AS
 		(
 			SELECT p.PlayerKey,
-			SUM(od.PPG) AS OverallDifficultyPPGPredictionPoints,
-			SUM(od.PPG) * 100 AS OverallDifficultyPPGPredictionPointsWeighted,
+			(SUM(od.Points) * 1.00/SUM(od.Games)) AS OverallDifficultyPPGPredictionPoints,
+			(SUM(od.Points) * 1.00/SUM(od.Games)) * 100 AS OverallDifficultyPPGPredictionPointsWeighted,
 			SUM(od.Games) AS TotalGames
 			FROM dbo.DimPlayer p
 			INNER JOIN dbo.DimPlayerAttribute pa
@@ -523,8 +455,8 @@ BEGIN
 		OverallTeamPPG AS
 		(
 			SELECT p.PlayerKey,
-			SUM(ot.PPG) AS OverallTeamPPGPredictionPoints,
-			SUM(ot.PPG) * 100 AS OverallTeamPPGPredictionPointsWeighted,
+			((SUM(ot.Points) * 1.00)/SUM(ot.Games)) AS OverallTeamPPGPredictionPoints,
+			((SUM(ot.Points) * 1.00)/SUM(ot.Games)) * 100 AS OverallTeamPPGPredictionPointsWeighted,
 			SUM(ot.Games) AS TotalGames
 			FROM dbo.DimPlayer p
 			INNER JOIN dbo.DimPlayerAttribute pa
@@ -674,11 +606,24 @@ BEGIN
 				SELECT *
 				FROM #Fixtures;
 
-				SELECT '#PPG';
+				SELECT 'CTE AllPPG (used to create #PlayerPPG)';
 
-				SELECT *
-				FROM #PPG
-				ORDER BY PlayerKey, OpponentDifficulty;
+				SELECT ppg.PlayerKey, ppg.PlayerPositionKey, ppg.OpponentDifficulty, ppg.Games, ppg.PPG, ISNULL(prv5.PPG,0) AS PPG5, ISNULL(prv10.PPG,0) AS PPG10
+				FROM dbo.PlayerPointsPerGame ppg
+				LEFT JOIN dbo.PlayerPointsPerGamePrevious5 prv5
+				ON ppg.PlayerKey = prv5.PlayerKey
+				AND ppg.PlayerPositionKey = prv5.PlayerPositionKey
+				AND ppg.OpponentDifficulty = prv5.OpponentDifficulty
+				AND prv5.SeasonKey = @SeasonKey
+				AND prv5.GameweekKey = (@GameweekStart - 1)
+				LEFT JOIN dbo.PlayerPointsPerGamePrevious10 prv10
+				ON prv5.SeasonKey = prv10.SeasonKey
+				AND prv5.GameweekKey = prv10.GameweekKey
+				AND prv5.PlayerKey = prv10.PlayerKey
+				AND prv5.PlayerPositionKey = prv10.PlayerPositionKey
+				AND prv5.OpponentDifficulty = prv10.OpponentDifficulty
+				AND prv10.SeasonKey = @SeasonKey
+				AND prv10.GameweekKey = (@GameweekStart - 1);
 
 				SELECT '#PlayerPPG';
 
@@ -688,6 +633,61 @@ BEGIN
 				ON ppg.PlayerKey = p.PlayerKey
 				ORDER BY ppg.PlayerKey;
 
+				SELECT '#FixtureDifficulty CTE LatestPlayerNews';
+
+				SELECT ca.*, fpgs.PlayerStatus, fpgs.ChanceOfPlayingNextRound
+				FROM
+				(
+					SELECT DISTINCT PlayerKey 
+					FROM dbo.FactPlayerGameweekNews 
+				) fpgn1
+				CROSS APPLY
+				(
+					SELECT TOP (1) fpgn2.*
+					FROM dbo.FactPlayerGameweekNews fpgn2
+					WHERE fpgn1.PlayerKey = fpgn2.PlayerKey
+					ORDER BY fpgn2.FactPlayerGameweekStatusKey DESC
+				) ca
+				INNER JOIN dbo.FactPlayerGameweekStatus fpgs
+				ON ca.FactPlayerGameweekStatusKey = fpgs.FactPlayerGameweekStatusKey
+				ORDER BY ca.PlayerKey;
+
+				SELECT '#FixtureDifficulty CTE PlayerChanceOfPlaying';
+			
+				;WITH LatestPlayerNews AS
+				(
+					SELECT ca.*, fpgs.PlayerStatus, fpgs.ChanceOfPlayingNextRound
+					FROM
+					(
+						SELECT DISTINCT PlayerKey 
+						FROM dbo.FactPlayerGameweekNews 
+					) fpgn1
+					CROSS APPLY
+					(
+						SELECT TOP (1) fpgn2.*
+						FROM dbo.FactPlayerGameweekNews fpgn2
+						WHERE fpgn1.PlayerKey = fpgn2.PlayerKey
+						ORDER BY fpgn2.FactPlayerGameweekStatusKey DESC
+					) ca
+					INNER JOIN dbo.FactPlayerGameweekStatus fpgs
+					ON ca.FactPlayerGameweekStatusKey = fpgs.FactPlayerGameweekStatusKey
+				)
+				SELECT p.PlayerKey, 
+				pa.TeamKey,
+				lpn.ChanceOfPlayingNextRound,
+				CASE 
+					WHEN ISNULL(lpn.News,'') <> '' AND CHARINDEX('Unknown return date', News) = 0 AND lpn.PlayerStatus IN ('i','s') THEN CAST(REVERSE(LEFT(REVERSE(lpn.News), CHARINDEX(' ', REVERSE(lpn.News), CHARINDEX(' ',REVERSE(lpn.News))+1)-1))+ CAST(YEAR(GETDATE()) AS VARCHAR(4)) AS DATE)
+					ELSE @GameweekStartDate
+				END AS StartDate
+				FROM dbo.DimPlayer p
+				INNER JOIN dbo.DimPlayerAttribute pa
+				ON p.PlayerKey = pa.PlayerKey
+				AND pa.SeasonKey = @SeasonKey
+				LEFT JOIN LatestPlayerNews lpn
+				ON p.PlayerKey = lpn.PlayerKey
+				WHERE pa.PlayerPositionKey = @PlayerPositionKey
+				ORDER BY p.PlayerKey;
+
 				SELECT '#FixtureDifficulty';
 
 				SELECT p.PlayerName, fd.*
@@ -695,6 +695,86 @@ BEGIN
 				INNER JOIN dbo.DimPlayer p
 				ON fd.PlayerKey = p.PlayerKey
 				ORDER BY fd.PlayerKey;
+
+		SELECT p.PlayerKey,
+		SUM(CASE WHEN f.OpponentDifficulty = 1 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff1GamesHome,
+		SUM(CASE WHEN f.OpponentDifficulty = 2 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff2GamesHome,
+		SUM(CASE WHEN f.OpponentDifficulty = 3 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff3GamesHome,
+		SUM(CASE WHEN f.OpponentDifficulty = 4 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff4GamesHome,
+		SUM(CASE WHEN f.OpponentDifficulty = 5 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff5GamesHome,
+		SUM(CASE WHEN f.OpponentDifficulty = 1 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff1GamesAway,
+		SUM(CASE WHEN f.OpponentDifficulty = 2 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff2GamesAway,
+		SUM(CASE WHEN f.OpponentDifficulty = 3 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff3GamesAway,
+		SUM(CASE WHEN f.OpponentDifficulty = 4 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff4GamesAway,
+		SUM(CASE WHEN f.OpponentDifficulty = 5 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff5GamesAway,
+		COUNT(1) AS TotalGames
+		FROM dbo.DimPlayer p
+		INNER JOIN dbo.DimPlayerAttribute pa
+		ON p.PlayerKey = pa.PlayerKey
+		AND pa.SeasonKey = @SeasonKey
+		INNER JOIN #Fixtures f
+		ON pa.TeamKey = f.TeamKey
+		GROUP BY p.PlayerKey
+		ORDER BY p.PlayerKey;
+
+		;WITH LatestPlayerNews AS
+		(
+			SELECT ca.*, fpgs.PlayerStatus, fpgs.ChanceOfPlayingNextRound
+			FROM
+			(
+				SELECT DISTINCT PlayerKey 
+				FROM dbo.FactPlayerGameweekNews 
+			) fpgn1
+			CROSS APPLY
+			(
+				SELECT TOP (1) fpgn2.*
+				FROM dbo.FactPlayerGameweekNews fpgn2
+				WHERE fpgn1.PlayerKey = fpgn2.PlayerKey
+				ORDER BY fpgn2.FactPlayerGameweekStatusKey DESC
+			) ca
+			INNER JOIN dbo.FactPlayerGameweekStatus fpgs
+			ON ca.FactPlayerGameweekStatusKey = fpgs.FactPlayerGameweekStatusKey
+		),
+		PlayerChanceOfPlaying AS
+		(
+			SELECT p.PlayerKey, 
+			pa.TeamKey,
+			lpn.ChanceOfPlayingNextRound,
+			CASE 
+				WHEN ISNULL(lpn.News,'') <> '' AND CHARINDEX('Unknown return date', News) = 0 AND lpn.PlayerStatus IN ('i','s') THEN CAST(REVERSE(LEFT(REVERSE(lpn.News), CHARINDEX(' ', REVERSE(lpn.News), CHARINDEX(' ',REVERSE(lpn.News))+1)-1))+ CAST(YEAR(GETDATE()) AS VARCHAR(4)) AS DATE)
+				ELSE @GameweekStartDate
+			END AS StartDate
+			FROM dbo.DimPlayer p
+			INNER JOIN dbo.DimPlayerAttribute pa
+			ON p.PlayerKey = pa.PlayerKey
+			AND pa.SeasonKey = @SeasonKey
+			LEFT JOIN LatestPlayerNews lpn
+			ON p.PlayerKey = lpn.PlayerKey
+			WHERE pa.PlayerPositionKey = @PlayerPositionKey
+		)
+		SELECT p.PlayerKey,
+		f.KickoffDate,
+		ch.StartDate,
+		ch.ChanceOfPlayingNextRound,
+		CASE WHEN f.OpponentDifficulty = 1 AND f.IsHome = 1 THEN 1 ELSE 0 END AS Diff1GamesHome,
+		CASE WHEN f.OpponentDifficulty = 2 AND f.IsHome = 1 THEN 1 ELSE 0 END AS Diff2GamesHome,
+		CASE WHEN f.OpponentDifficulty = 3 AND f.IsHome = 1 THEN 1 ELSE 0 END AS Diff3GamesHome,
+		CASE WHEN f.OpponentDifficulty = 4 AND f.IsHome = 1 THEN 1 ELSE 0 END AS Diff4GamesHome,
+		CASE WHEN f.OpponentDifficulty = 5 AND f.IsHome = 1 THEN 1 ELSE 0 END AS Diff5GamesHome,
+		CASE WHEN f.OpponentDifficulty = 1 AND f.IsHome = 0 THEN 1 ELSE 0 END AS Diff1GamesAway,
+		CASE WHEN f.OpponentDifficulty = 2 AND f.IsHome = 0 THEN 1 ELSE 0 END AS Diff2GamesAway,
+		CASE WHEN f.OpponentDifficulty = 3 AND f.IsHome = 0 THEN 1 ELSE 0 END AS Diff3GamesAway,
+		CASE WHEN f.OpponentDifficulty = 4 AND f.IsHome = 0 THEN 1 ELSE 0 END AS Diff4GamesAway,
+		CASE WHEN f.OpponentDifficulty = 5 AND f.IsHome = 0 THEN 1 ELSE 0 END AS Diff5GamesAway
+		FROM dbo.DimPlayer p
+		INNER JOIN dbo.DimPlayerAttribute pa
+		ON p.PlayerKey = pa.PlayerKey
+		AND pa.SeasonKey = @SeasonKey
+		INNER JOIN #Fixtures f
+		ON pa.TeamKey = f.TeamKey
+		LEFT JOIN PlayerChanceOfPlaying ch
+		ON p.PlayerKey = ch.PlayerKey
+		ORDER BY p.PlayerKey, f.GameweekFixtureKey;
 
 				SELECT '#PlayerPredictions';
 
@@ -740,8 +820,8 @@ BEGIN
 				SELECT 'CTE OverallDifficultyPPG';
 
 				SELECT p.PlayerKey,
-				SUM(od.PPG) AS OverallDifficultyPPGPredictionPoints,
-				SUM(od.PPG) * 100 AS OverallDifficultyPPGPredictionPointsWeighted,
+				(SUM(od.Points) * 1.00/SUM(od.Games)) AS OverallDifficultyPPGPredictionPoints,
+				(SUM(od.Points) * 1.00/SUM(od.Games)) * 100 AS OverallDifficultyPPGPredictionPointsWeighted,
 				SUM(od.Games) AS TotalGames
 				FROM dbo.DimPlayer p
 				INNER JOIN dbo.DimPlayerAttribute pa
@@ -758,8 +838,8 @@ BEGIN
 				SELECT 'CTE OverallTeamPPG';
 
 				SELECT p.PlayerKey,
-				SUM(ot.PPG) AS OverallTeamPPGPredictionPoints,
-				SUM(ot.PPG) * 100 AS OverallTeamPPGPredictionPointsWeighted,
+				((SUM(ot.Points) * 1.00)/SUM(ot.Games)) AS OverallTeamPPGPredictionPoints,
+				((SUM(ot.Points) * 1.00)/SUM(ot.Games)) * 100 AS OverallTeamPPGPredictionPointsWeighted,
 				SUM(ot.Games) AS TotalGames
 				FROM dbo.DimPlayer p
 				INNER JOIN dbo.DimPlayerAttribute pa
@@ -795,12 +875,25 @@ BEGIN
 				)
 				ORDER BY f.GameweekFixtureKey, f.SeasonKey, f.GameweekKey, f.TeamKey, f.OpponentTeamKey;
 
-				SELECT '#PPG';
-			
-				SELECT *
-				FROM #PPG
-				WHERE PlayerKey = @PlayerKey
-				ORDER BY OpponentDifficulty;
+				SELECT 'CTE AllPPG (used to create #PlayerPPG)';
+
+				SELECT ppg.PlayerKey, ppg.PlayerPositionKey, ppg.OpponentDifficulty, ppg.Games, ppg.PPG, ISNULL(prv5.PPG,0) AS PPG5, ISNULL(prv10.PPG,0) AS PPG10
+				FROM dbo.PlayerPointsPerGame ppg
+				LEFT JOIN dbo.PlayerPointsPerGamePrevious5 prv5
+				ON ppg.PlayerKey = prv5.PlayerKey
+				AND ppg.PlayerPositionKey = prv5.PlayerPositionKey
+				AND ppg.OpponentDifficulty = prv5.OpponentDifficulty
+				AND prv5.SeasonKey = @SeasonKey
+				AND prv5.GameweekKey = (@GameweekStart - 1)
+				LEFT JOIN dbo.PlayerPointsPerGamePrevious10 prv10
+				ON prv5.SeasonKey = prv10.SeasonKey
+				AND prv5.GameweekKey = prv10.GameweekKey
+				AND prv5.PlayerKey = prv10.PlayerKey
+				AND prv5.PlayerPositionKey = prv10.PlayerPositionKey
+				AND prv5.OpponentDifficulty = prv10.OpponentDifficulty
+				AND prv10.SeasonKey = @SeasonKey
+				AND prv10.GameweekKey = (@GameweekStart - 1)
+				WHERE ppg.PlayerKey = @PlayerKey;
 
 				SELECT '#PlayerPPG';
 			
@@ -808,11 +901,147 @@ BEGIN
 				FROM #PlayerPPG
 				WHERE PlayerKey = @PlayerKey;
 
+				SELECT '#FixtureDifficulty CTE LatestPlayerNews';
+
+				SELECT ca.*, fpgs.PlayerStatus, fpgs.ChanceOfPlayingNextRound
+				FROM
+				(
+					SELECT DISTINCT PlayerKey 
+					FROM dbo.FactPlayerGameweekNews 
+				) fpgn1
+				CROSS APPLY
+				(
+					SELECT TOP (1) fpgn2.*
+					FROM dbo.FactPlayerGameweekNews fpgn2
+					WHERE fpgn1.PlayerKey = fpgn2.PlayerKey
+					ORDER BY fpgn2.FactPlayerGameweekStatusKey DESC
+				) ca
+				INNER JOIN dbo.FactPlayerGameweekStatus fpgs
+				ON ca.FactPlayerGameweekStatusKey = fpgs.FactPlayerGameweekStatusKey
+				WHERE ca.PlayerKey = @PlayerKey;
+
+				SELECT '#FixtureDifficulty CTE PlayerChanceOfPlaying';
+			
+				;WITH LatestPlayerNews AS
+				(
+					SELECT ca.*, fpgs.PlayerStatus, fpgs.ChanceOfPlayingNextRound
+					FROM
+					(
+						SELECT DISTINCT PlayerKey 
+						FROM dbo.FactPlayerGameweekNews 
+					) fpgn1
+					CROSS APPLY
+					(
+						SELECT TOP (1) fpgn2.*
+						FROM dbo.FactPlayerGameweekNews fpgn2
+						WHERE fpgn1.PlayerKey = fpgn2.PlayerKey
+						ORDER BY fpgn2.FactPlayerGameweekStatusKey DESC
+					) ca
+					INNER JOIN dbo.FactPlayerGameweekStatus fpgs
+					ON ca.FactPlayerGameweekStatusKey = fpgs.FactPlayerGameweekStatusKey
+				)
+				SELECT p.PlayerKey, 
+				pa.TeamKey,
+				lpn.ChanceOfPlayingNextRound,
+				CASE 
+					WHEN ISNULL(lpn.News,'') <> '' AND CHARINDEX('Unknown return date', News) = 0 AND lpn.PlayerStatus IN ('i','s') THEN CAST(REVERSE(LEFT(REVERSE(lpn.News), CHARINDEX(' ', REVERSE(lpn.News), CHARINDEX(' ',REVERSE(lpn.News))+1)-1))+ CAST(YEAR(GETDATE()) AS VARCHAR(4)) AS DATE)
+					ELSE @GameweekStartDate
+				END AS StartDate
+				FROM dbo.DimPlayer p
+				INNER JOIN dbo.DimPlayerAttribute pa
+				ON p.PlayerKey = pa.PlayerKey
+				AND pa.SeasonKey = @SeasonKey
+				LEFT JOIN LatestPlayerNews lpn
+				ON p.PlayerKey = lpn.PlayerKey
+				WHERE pa.PlayerPositionKey = @PlayerPositionKey
+				AND p.PlayerKey = @PlayerKey;
+
 				SELECT '#FixtureDifficulty';
 			
 				SELECT *
 				FROM #FixtureDifficulty
 				WHERE PlayerKey = @PlayerKey;
+
+		SELECT p.PlayerKey,
+		SUM(CASE WHEN f.OpponentDifficulty = 1 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff1GamesHome,
+		SUM(CASE WHEN f.OpponentDifficulty = 2 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff2GamesHome,
+		SUM(CASE WHEN f.OpponentDifficulty = 3 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff3GamesHome,
+		SUM(CASE WHEN f.OpponentDifficulty = 4 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff4GamesHome,
+		SUM(CASE WHEN f.OpponentDifficulty = 5 AND f.IsHome = 1 THEN 1 ELSE 0 END) AS Diff5GamesHome,
+		SUM(CASE WHEN f.OpponentDifficulty = 1 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff1GamesAway,
+		SUM(CASE WHEN f.OpponentDifficulty = 2 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff2GamesAway,
+		SUM(CASE WHEN f.OpponentDifficulty = 3 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff3GamesAway,
+		SUM(CASE WHEN f.OpponentDifficulty = 4 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff4GamesAway,
+		SUM(CASE WHEN f.OpponentDifficulty = 5 AND f.IsHome = 0 THEN 1 ELSE 0 END) AS Diff5GamesAway,
+		COUNT(1) AS TotalGames
+		FROM dbo.DimPlayer p
+		INNER JOIN dbo.DimPlayerAttribute pa
+		ON p.PlayerKey = pa.PlayerKey
+		AND pa.SeasonKey = @SeasonKey
+		INNER JOIN #Fixtures f
+		ON pa.TeamKey = f.TeamKey
+		WHERE p.PlayerKey = @PlayerKey
+		GROUP BY p.PlayerKey
+		ORDER BY p.PlayerKey;
+
+		;WITH LatestPlayerNews AS
+		(
+			SELECT ca.*, fpgs.PlayerStatus, fpgs.ChanceOfPlayingNextRound
+			FROM
+			(
+				SELECT DISTINCT PlayerKey 
+				FROM dbo.FactPlayerGameweekNews 
+			) fpgn1
+			CROSS APPLY
+			(
+				SELECT TOP (1) fpgn2.*
+				FROM dbo.FactPlayerGameweekNews fpgn2
+				WHERE fpgn1.PlayerKey = fpgn2.PlayerKey
+				ORDER BY fpgn2.FactPlayerGameweekStatusKey DESC
+			) ca
+			INNER JOIN dbo.FactPlayerGameweekStatus fpgs
+			ON ca.FactPlayerGameweekStatusKey = fpgs.FactPlayerGameweekStatusKey
+		),
+		PlayerChanceOfPlaying AS
+		(
+			SELECT p.PlayerKey, 
+			pa.TeamKey,
+			lpn.ChanceOfPlayingNextRound,
+			CASE 
+				WHEN ISNULL(lpn.News,'') <> '' AND CHARINDEX('Unknown return date', News) = 0 AND lpn.PlayerStatus IN ('i','s') THEN CAST(REVERSE(LEFT(REVERSE(lpn.News), CHARINDEX(' ', REVERSE(lpn.News), CHARINDEX(' ',REVERSE(lpn.News))+1)-1))+ CAST(YEAR(GETDATE()) AS VARCHAR(4)) AS DATE)
+				ELSE @GameweekStartDate
+			END AS StartDate
+			FROM dbo.DimPlayer p
+			INNER JOIN dbo.DimPlayerAttribute pa
+			ON p.PlayerKey = pa.PlayerKey
+			AND pa.SeasonKey = @SeasonKey
+			LEFT JOIN LatestPlayerNews lpn
+			ON p.PlayerKey = lpn.PlayerKey
+			WHERE pa.PlayerPositionKey = @PlayerPositionKey
+		)
+		SELECT p.PlayerKey,
+		f.KickoffDate,
+		ch.StartDate,
+		ch.ChanceOfPlayingNextRound,
+		CASE WHEN f.OpponentDifficulty = 1 AND f.IsHome = 1 THEN 1 ELSE 0 END AS Diff1GamesHome,
+		CASE WHEN f.OpponentDifficulty = 2 AND f.IsHome = 1 THEN 1 ELSE 0 END AS Diff2GamesHome,
+		CASE WHEN f.OpponentDifficulty = 3 AND f.IsHome = 1 THEN 1 ELSE 0 END AS Diff3GamesHome,
+		CASE WHEN f.OpponentDifficulty = 4 AND f.IsHome = 1 THEN 1 ELSE 0 END AS Diff4GamesHome,
+		CASE WHEN f.OpponentDifficulty = 5 AND f.IsHome = 1 THEN 1 ELSE 0 END AS Diff5GamesHome,
+		CASE WHEN f.OpponentDifficulty = 1 AND f.IsHome = 0 THEN 1 ELSE 0 END AS Diff1GamesAway,
+		CASE WHEN f.OpponentDifficulty = 2 AND f.IsHome = 0 THEN 1 ELSE 0 END AS Diff2GamesAway,
+		CASE WHEN f.OpponentDifficulty = 3 AND f.IsHome = 0 THEN 1 ELSE 0 END AS Diff3GamesAway,
+		CASE WHEN f.OpponentDifficulty = 4 AND f.IsHome = 0 THEN 1 ELSE 0 END AS Diff4GamesAway,
+		CASE WHEN f.OpponentDifficulty = 5 AND f.IsHome = 0 THEN 1 ELSE 0 END AS Diff5GamesAway
+		FROM dbo.DimPlayer p
+		INNER JOIN dbo.DimPlayerAttribute pa
+		ON p.PlayerKey = pa.PlayerKey
+		AND pa.SeasonKey = @SeasonKey
+		INNER JOIN #Fixtures f
+		ON pa.TeamKey = f.TeamKey
+		LEFT JOIN PlayerChanceOfPlaying ch
+		ON p.PlayerKey = ch.PlayerKey
+		WHERE p.PlayerKey = @PlayerKey;
 
 				SELECT '#PlayerPredictions';
 			
@@ -871,8 +1100,8 @@ BEGIN
 				SELECT 'CTE OverallDifficultyPPG';
 
 				SELECT p.PlayerKey,
-				SUM(od.PPG) AS OverallDifficultyPPGPredictionPoints,
-				SUM(od.PPG) * 100 AS OverallDifficultyPPGPredictionPointsWeighted,
+				(SUM(od.Points) * 1.00/SUM(od.Games)) AS OverallDifficultyPPGPredictionPoints,
+				(SUM(od.Points) * 1.00/SUM(od.Games)) * 100 AS OverallDifficultyPPGPredictionPointsWeighted,
 				SUM(od.Games) AS TotalGames
 				FROM dbo.DimPlayer p
 				INNER JOIN dbo.DimPlayerAttribute pa
@@ -889,8 +1118,8 @@ BEGIN
 				SELECT 'CTE OverallTeamPPG';
 
 				SELECT p.PlayerKey,
-				SUM(ot.PPG) AS OverallTeamPPGPredictionPoints,
-				SUM(ot.PPG) * 100 AS OverallTeamPPGPredictionPointsWeighted,
+				((SUM(ot.Points) * 1.00)/SUM(ot.Games)) AS OverallTeamPPGPredictionPoints,
+				((SUM(ot.Points) * 1.00)/SUM(ot.Games)) * 100 AS OverallTeamPPGPredictionPointsWeighted,
 				SUM(ot.Games) AS TotalGames
 				FROM dbo.DimPlayer p
 				INNER JOIN dbo.DimPlayerAttribute pa

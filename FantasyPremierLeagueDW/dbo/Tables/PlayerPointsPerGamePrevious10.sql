@@ -10,7 +10,5 @@
 	Games TINYINT NOT NULL,
 	PlayerMinutes SMALLINT NOT NULL,
 	PPG DECIMAL(4,2) NOT NULL,
-	PPG5games DECIMAL(4,2),
-	PPG10games DECIMAL(4,2),
 	CONSTRAINT [PK_PlayerPointsPerGamePrevious10] PRIMARY KEY CLUSTERED ([SeasonKey] ASC, [GameweekKey] ASC, [PlayerKey] ASC, [PlayerPositionKey] ASC, [OpponentDifficulty] ASC)
 );
