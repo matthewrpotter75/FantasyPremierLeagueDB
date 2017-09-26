@@ -1,18 +1,18 @@
 CREATE PROCEDURE dbo.GetTotalPointsByPlayerPositionAndGameweekRangePivoted
 (
 	@SeasonKey INT,
-	@StartGameweekKey INT = 1,
-	@EndGameweekKey INT = NULL,
-	@MinMinutesPlayed INT = 30
+	@GameweekStart INT = 1,
+	@GameweekEnd INT = NULL,
+	@MinutesLimit INT = 30
 )
 AS
 BEGIN
 
 	SET NOCOUNT ON;
 
-	IF @EndGameweekKey IS NULL
+	IF @GameweekEnd IS NULL
 	BEGIN
-		SELECT @EndGameweekKey = MAX(GameweekKey) FROM dbo.DimGameweek WHERE SeasonKey = @SeasonKey AND DeadlineTime < GETDATE() 
+		SELECT @GameweekEnd = MAX(GameweekKey) FROM dbo.DimGameweek WHERE SeasonKey = @SeasonKey AND DeadlineTime < GETDATE() 
 	END
 
 	;WITH TeamAvgPoints AS
@@ -31,9 +31,9 @@ BEGIN
 		INNER JOIN dbo.DimPlayerPosition dpp
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		WHERE fph.SeasonKey = @SeasonKey
-		AND fph.GameweekKey BETWEEN @StartGameweekKey AND @EndGameweekKey
-		AND fph.[Minutes] > @MinMinutesPlayed
-		GROUP BY dt.TeamShortName, dpp.PlayerPositionKey, dpp.SingularNameShort
+		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
+		AND fph.[Minutes] > @MinutesLimit
+		GROUP BY dt.TeamShortName, dpp.PlayerPositionKey, dpp.PlayerPositionShort
 	),
 	TeamPlayerAvgPoints AS
 	(
@@ -52,9 +52,9 @@ BEGIN
 		INNER JOIN dbo.DimPlayerPosition dpp
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		WHERE fph.SeasonKey = @SeasonKey
-		AND fph.GameweekKey BETWEEN @StartGameweekKey AND @EndGameweekKey
-		AND fph.[Minutes] > @MinMinutesPlayed
-		GROUP BY fph.PlayerKey, dt.TeamShortName, dpp.PlayerPositionKey, dpp.SingularNameShort
+		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
+		AND fph.[Minutes] > @MinutesLimit
+		GROUP BY fph.PlayerKey, dt.TeamShortName, dpp.PlayerPositionKey, dpp.PlayerPositionShort
 	),
 	AvgPlayerPoints AS
 	(

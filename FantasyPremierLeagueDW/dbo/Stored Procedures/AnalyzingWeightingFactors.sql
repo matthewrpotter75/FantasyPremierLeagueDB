@@ -307,7 +307,7 @@ BEGIN
 		WHILE @PlayerPositionKey <= 4
 		BEGIN
 
-			SELECT @PlayerPosition = SingularNameShort FROM dbo.DimPlayerPosition WHERE PlayerPositionKey = @PlayerPositionKey
+			SELECT @PlayerPosition = PlayerPositionShort FROM dbo.DimPlayerPosition WHERE PlayerPositionKey = @PlayerPositionKey
 			RAISERROR('PlayerPosition: %s', 0, 1, @PlayerPosition) WITH NOWAIT;
 
 			WHILE @Gameweek <= @MaxGameweek

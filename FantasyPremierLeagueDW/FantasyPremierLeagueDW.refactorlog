@@ -854,4 +854,32 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="OutputStepAndTimeText" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="b5ebc71c-ddb2-4cfa-bd1a-76fecdd3a5b9" ChangeDateTime="09/26/2017 01:17:11">
+    <Property Name="ElementName" Value="[dbo].[DimPlayerPosition].[SingularName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DimPlayerPosition]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PlayerPosition" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d3512cba-f36d-441c-a25b-b1558cbcbf1e" ChangeDateTime="09/26/2017 01:17:58">
+    <Property Name="ElementName" Value="[dbo].[DimPlayerPosition].[SingularNameShort]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DimPlayerPosition]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PlayerPositionShort" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="47ec1993-907b-47d2-8958-3e88f92e59fa" ChangeDateTime="09/26/2017 01:18:43">
+    <Property Name="ElementName" Value="[dbo].[DimPlayerPosition].[PluralName]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DimPlayerPosition]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PlayerPositionPlural" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="553c7c56-589e-4430-ac98-66d6641bd2e4" ChangeDateTime="09/26/2017 01:19:11">
+    <Property Name="ElementName" Value="[dbo].[DimPlayerPosition].[PluralNameShort]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DimPlayerPosition]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PlayerPositionPluralShort" />
+  </Operation>
 </Operations>

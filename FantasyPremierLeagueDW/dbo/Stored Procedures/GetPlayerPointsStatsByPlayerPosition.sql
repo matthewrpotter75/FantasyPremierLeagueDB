@@ -13,7 +13,7 @@ BEGIN
 	(
 		SELECT ph.PlayerKey,
 		t.TeamShortName AS TeamName,
-		pp.SingularNameShort AS PlayerPosition,
+		pp.PlayerPositionShort AS PlayerPosition,
 		SUM(ph.TotalPoints) AS PlayerPoints,
 		SUM(CASE WHEN ph.[Minutes] >= 60 THEN ph.TotalPoints ELSE 0 END) AS PlayerPointsOver60,
 		SUM(ph.[Minutes]) AS PlayerMinutes,
@@ -55,8 +55,8 @@ BEGIN
 		ON pa.PlayerPositionKey = pp.PlayerPositionKey
 		INNER JOIN dbo.DimTeam t
 		ON pa.TeamKey = t.TeamKey
-		WHERE pp.SingularNameShort = @PlayerPositionShortName
-		GROUP BY ph.PlayerKey, t.TeamShortName, pp.SingularNameShort
+		WHERE pp.PlayerPositionShort = @PlayerPositionShortName
+		GROUP BY ph.PlayerKey, t.TeamShortName, pp.PlayerPositionShort
 	)
 	SELECT p.PlayerKey,
 	p.PlayerName,

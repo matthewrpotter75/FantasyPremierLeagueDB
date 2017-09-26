@@ -10,7 +10,7 @@ BEGIN
 	(
 		SELECT ph.PlayerKey,
 		t.TeamShortName AS TeamName,
-		pp.SingularNameShort AS PlayerPosition,
+		pp.PlayerPositionShort AS PlayerPosition,
 		SUM(ph.TotalPoints) AS PlayerPoints,
 		SUM(CASE WHEN ph.[Minutes] >= 60 THEN ph.TotalPoints ELSE 0 END) AS PlayerPointsOver60,
 		SUM(ph.[Minutes]) AS PlayerMinutes,
@@ -52,7 +52,7 @@ BEGIN
 		ON pa.PlayerPositionKey = pp.PlayerPositionKey
 		INNER JOIN dbo.DimTeam t
 		ON pa.TeamKey = t.TeamKey
-		GROUP BY ph.PlayerKey, t.TeamShortName, pp.SingularNameShort
+		GROUP BY ph.PlayerKey, t.TeamShortName, pp.PlayerPositionShort
 	)
 	SELECT p.PlayerKey,
 	p.PlayerName,
@@ -66,8 +66,8 @@ BEGIN
 	points.PlayerBonusPoints,
 	points.PlayerMinutes,
 	points.PlayerGames,
-	CAST(ROUND(((points.PlayerGames * 1.00)/38) * 100, 2) AS DECIMAL(6,2)) AS PercGamesPlayed,
-	CAST(ROUND(((points.PlayerMinutes * 1.00)/3420) * 100, 2) AS DECIMAL(6,2)) AS PercMinutesPlayed,
+	CAST(ROUND(((points.PlayerGames * 1.00)/38) * 100, 2) AS DECIMAL(6,2)) AS PercGamesPlayed, ----NEED TO CHANGE AS TOTAL GAMES ISN'T 38
+	CAST(ROUND(((points.PlayerMinutes * 1.00)/3420) * 100, 2) AS DECIMAL(6,2)) AS PercMinutesPlayed, ----NEED TO CHANGE SO TOTAL MINUTES ISN'T HARDCODED
 	points.PlayerGamesSeasonPart1,
 	points.PlayerGamesSeasonPart2,
 	points.PlayerGamesSeasonPart3,

@@ -147,6 +147,13 @@
     <Build Include="dbo\Tables\PlayerPointsPerGame.sql" />
     <Build Include="dbo\Tables\PlayerPointsPerGamePrevious5.sql" />
     <Build Include="dbo\Tables\PlayerPointsPerGamePrevious10.sql" />
+    <Build Include="dbo\Stored Procedures\UpdateMyTeamIsPlayForGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerGameweekHistoryStatsByDifficultyWasHome.sql" />
+    <Build Include="dbo\Stored Procedures\GetTeamAndPositionGameweekHistoryStatsByDifficultyWasHome.sql" />
+    <Build Include="dbo\Stored Procedures\GetTeamDifficultyAndPositionGameweekHistoryStatsByDifficultyWasHome.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPPGByOpponentDificultyForGameweeks.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPPGForGameweeks.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPPGForSeasonPrevious5Previous10AndAllGameweeks.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="FantasyPremierLeagueDW.refactorlog" />

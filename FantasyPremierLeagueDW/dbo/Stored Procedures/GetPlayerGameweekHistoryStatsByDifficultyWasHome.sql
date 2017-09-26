@@ -1,8 +1,9 @@
-CREATE PROCEDURE dbo.GetPlayerGameweekHistory
+﻿CREATE PROCEDURE dbo.GetPlayerGameweekHistoryStatsByDifficultyWasHome
 (
 	@PlayerKey INT = NULL,
 	@FirstName VARCHAR(50) = NULL,
-	@SecondName VARCHAR(50) = NULL
+	@SecondName VARCHAR(50) = NULL,
+	@MinutesLimit INT = 30
 )
 AS
 BEGIN
@@ -16,20 +17,17 @@ BEGIN
 
 	END
 
-	SELECT PlayerKey, PlayerName
+	SELECT PlayerName
 	FROM dbo.DimPlayer
 	WHERE PlayerKey = @PlayerKey;
 
-	SELECT fph.SeasonKey, 
-	fph.GameweekFixtureKey, 
-	fph.GameweekKey, 
-	dht.TeamShortName As HomeTeam, 
-	dat.TeamShortName AS AwayTeam, 
+	SELECT 
 	fph.WasHome,
-	fph.OpponentTeamKey, 
-	dtd.Difficulty,
-	fph.[Minutes], 
-	fph.TotalPoints
+	dtd.Difficulty AS OpponentDifficulty,
+	COUNT(fph.PlayerHistoryKey) AS TotalGames,
+	SUM(fph.[Minutes]) AS TotalMinutes, 
+	SUM(fph.TotalPoints) AS TotalPoints,
+	(SUM(fph.TotalPoints) * 1.00)/COUNT(fph.PlayerHistoryKey) AS PointPerGame
 	FROM dbo.FactPlayerHistory fph
 	INNER JOIN dbo.FactGameweekFixture dgf
 	ON fph.GameweekFixtureKey = dgf.GameweekFixtureKey
@@ -44,6 +42,8 @@ BEGIN
 	AND fph.WasHome = dtd.IsOpponentHome
 	AND fph.SeasonKey = dtd.SeasonKey
 	WHERE fph.PlayerKey = @PlayerKey
-	ORDER BY fph.SeasonKey, fph.GameweekKey;
+	AND fph.[Minutes] >= @MinutesLimit
+	GROUP BY dtd.Difficulty, fph.WasHome
+	ORDER BY dtd.Difficulty, fph.WasHome
 
 END

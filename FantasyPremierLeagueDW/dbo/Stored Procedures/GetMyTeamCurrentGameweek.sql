@@ -26,7 +26,7 @@ BEGIN
 		WHERE SeasonKey = @SeasonKey
 		GROUP BY PlayerKey
 	)
-	SELECT dpp.SingularNameShort AS PlayerPosition, mt.PlayerKey, dp.PlayerName, dp.WebName, pp.TotalPoints
+	SELECT dpp.PlayerPositionShort AS PlayerPosition, mt.PlayerKey, dp.PlayerName, dp.WebName, pp.TotalPoints
 	FROM dbo.MyTeam mt
 	INNER JOIN dbo.DimPlayer dp
 	ON mt.PlayerKey = dp.PlayerKey

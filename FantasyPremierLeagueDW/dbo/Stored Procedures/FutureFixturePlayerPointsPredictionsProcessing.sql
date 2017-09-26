@@ -15,7 +15,7 @@ CREATE PROCEDURE dbo.FutureFixturePlayerPointsPredictionsProcessing
 	@PredictionPointsAllWeighting INT = 5,
 	@PredictionPoints5Weighting INT = 3,
 	@PredictionPoints10Weighting INT = 2,
-	@NumOfRowsToReturn INT = 20
+	@NumOfRowsToReturn INT = 200
 )
 AS
 BEGIN
@@ -520,7 +520,7 @@ BEGIN
 			ppw.PlayerKey,
 			p.PlayerName,
 			cost.Cost,
-			pp.SingularNameShort AS PlayerPosition,
+			pp.PlayerPositionShort AS PlayerPosition,
 			t.TeamName,
 			pct.TotalPlayerGames,
 			pct.TotalPlayerMinutes,
@@ -593,7 +593,7 @@ BEGIN
 			EXEC dbo.OutputStepAndTimeText @Step='Final query', @Time=@time OUTPUT;
 		END
 
-		IF @debug = 1
+		IF @Debug = 1
 		BEGIN
 
 			SELECT @SeasonKey AS SeasonKey, @GameweekStart AS GameweekStart, @GameweekEnd AS GameweekEnd, @GameweekStartDate AS GameweekStartDate, @Gameweeks AS Gameweeks;
