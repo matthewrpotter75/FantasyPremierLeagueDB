@@ -59,7 +59,7 @@ BEGIN
 	AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 	AND pt.IsPlay = 1
 	GROUP BY dp.PlayerKey, dp.PlayerName, dpa.PlayerPositionKey, dpp.PlayerPositionShort
-	ORDER BY PlayerPositionKey, PlayerKey, TotalPoints DESC;
+	ORDER BY dpa.PlayerPositionKey, dp.PlayerKey, TotalPoints DESC;
 
 	--Player Points by Player Position
 	SELECT 'Player Points by Player Position';

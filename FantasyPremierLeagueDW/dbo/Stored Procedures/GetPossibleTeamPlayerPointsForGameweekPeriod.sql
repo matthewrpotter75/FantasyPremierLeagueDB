@@ -1,7 +1,8 @@
-CREATE PROCEDURE dbo.GetPossibleTeamPlayerPointsForGameweek
+CREATE PROCEDURE dbo.GetPossibleTeamPlayerPointsForGameweekPeriod
 (
 	@SeasonKey INT = NULL,
-	@GameweekKey INT,
+	@GameweekStart INT,
+	@GameweekEnd INT,
 	@Debug BIT = 0
 )
 AS
@@ -9,147 +10,82 @@ BEGIN
 
 	SET NOCOUNT ON;
 
-	DECLARE @MinDefenders INT = 3,
-	@MinMidfielders INT = 3,
-	@MinForwards INT = 1;
-
 	IF @SeasonKey IS NULL
 	BEGIN
 		SELECT @SeasonKey = SeasonKey FROM dbo.DimSeason WHERE GETDATE() BETWEEN SeasonStartDate AND SeasonEndDate;
 	END
 
-	IF @Debug=1
+	DECLARE @Gameweeks TABLE (Id INT IDENTITY(1,1), GameweekKey INT);
+
+	INSERT INTO @Gameweeks (GameweekKey)
+	SELECT DISTINCT GameweekKey
+	FROM dbo.DimGameweek
+	WHERE GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
+	ORDER BY GameweekKey;
+
+	IF @Debug = 1
 	BEGIN
-
-		--PlayersRanked
-		;WITH PlayersRanked AS
-		(
-			SELECT p.PlayerKey,
-			p.PlayerName, 
-			ph.GameweekKey, 
-			pa.PlayerPositionKey,
-			pp.PlayerPositionShort,
-			ph.TotalPoints,
-			ROW_NUMBER() OVER (PARTITION BY pa.PlayerPositionKey ORDER BY ph.TotalPoints DESC) AS PlayerPositionRank
-			--ROW_NUMBER() OVER (ORDER BY ph.TotalPoints DESC) AS PlayerRank
-			FROM dbo.PossibleTeam pt
-			INNER JOIN dbo.DimPlayer p
-			ON pt.PlayerKey = p.PlayerKey
-			INNER JOIN dbo.DimPlayerAttribute pa
-			ON pt.PlayerKey = pa.PlayerKey
-			AND pa.SeasonKey = @SeasonKey
-			INNER JOIN dbo.DimPlayerPosition pp
-			ON pa.PlayerPositionKey = pp.PlayerPositionKey
-			INNER JOIN dbo.FactPlayerHistory ph
-			ON p.PlayerKey = ph.PlayerKey
-			AND pt.GameweekKey = ph.GameweekKey
-			WHERE ph.SeasonKey = @SeasonKey
-			AND ph.GameweekKey = @GameweekKey
-		)
-		SELECT *,
-		ROW_NUMBER() OVER (ORDER BY TotalPoints DESC) AS PlayerRank
-		FROM PlayersRanked
-		WHERE PlayerPositionKey <> 1
-		ORDER BY PlayerPositionKey, PlayerPositionRank;
-
+		SELECT *
+		FROM @Gameweeks;
 	END
 
-	--Top 11 Players
-	;WITH PlayersRanked AS
+	DECLARE @colHeaders VARCHAR(25);
+	SELECT @colHeaders = STUFF((SELECT  '],[' + CAST(GameweekKey AS VARCHAR(2))
+    FROM @Gameweeks
+    ORDER BY GameweekKey
+    FOR XML PATH('')), 1, 2, '') + ']';
+
+	IF @Debug = 1
+		SELECT @colHeaders;
+
+	DECLARE @sql NVARCHAR(2000);
+	
+	--SET @sql = 'DECLARE @CurrentGameweekKey INT;
+	--SELECT @CurrentGameweekKey = MAX(GameweekKey) FROM dbo.DimGameweek WHERE SeasonKey = @SeasonKey AND DeadlineTime < GETDATE();
+
+	SET @sql = '	
+	;WITH PlayerGameweekPoints AS
 	(
-		SELECT p.PlayerKey,
+		SELECT pt.PlayerKey,
 		p.PlayerName, 
-		ph.GameweekKey, 
-		pa.PlayerPositionKey,
+		pt.GameweekKey, 
+		pp.PlayerPositionKey,
 		pp.PlayerPositionShort,
-		ph.TotalPoints,
-		ROW_NUMBER() OVER (PARTITION BY pa.PlayerPositionKey ORDER BY ph.TotalPoints DESC) AS PlayerPositionRank
-		--ROW_NUMBER() OVER (ORDER BY ph.TotalPoints DESC) AS PlayerRank
+		pt.Cost,
+		ph.TotalPoints
 		FROM dbo.PossibleTeam pt
 		INNER JOIN dbo.DimPlayer p
 		ON pt.PlayerKey = p.PlayerKey
 		INNER JOIN dbo.DimPlayerAttribute pa
-		ON pt.PlayerKey = pa.PlayerKey
+		ON p.PlayerKey = pa.PlayerKey
 		AND pa.SeasonKey = @SeasonKey
 		INNER JOIN dbo.DimPlayerPosition pp
 		ON pa.PlayerPositionKey = pp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory ph
-		ON p.PlayerKey = ph.PlayerKey
+		ON pt.PlayerKey = ph.PlayerKey
+		AND pt.SeasonKey = ph.SeasonKey
 		AND pt.GameweekKey = ph.GameweekKey
 		WHERE ph.SeasonKey = @SeasonKey
-		AND ph.GameweekKey = @GameweekKey
-	),
-	PlayersRankedExceptGKP AS
-	(
-		SELECT *,
-		ROW_NUMBER() OVER (ORDER BY TotalPoints DESC) AS PlayerRank
-		FROM PlayersRanked
-		WHERE PlayerPositionKey <> 1
-	),
-	TopGKP AS
-	(
-		SELECT *,
-		0 AS BestOthersRank
-		FROM PlayersRanked
-		WHERE PlayerPositionKey = 1
-		AND PlayerPositionRank = 1
-	),
-	Top3DefendersAndMidfielders AS
-	(
-		SELECT *,
-		0 AS BestOthersRank
-		FROM PlayersRankedExceptGKP
-		WHERE PlayerPositionKey IN (2,3)
-		AND PlayerPositionRank <= 3	
-	),
-	TopStriker AS
-	(
-		SELECT *,
-		0 AS BestOthersRank
-		FROM PlayersRankedExceptGKP
-		WHERE PlayerPositionKey = 4
-		AND PlayerPositionRank = 1
-	),
-	TopBestOthers AS
-	(
-		SELECT *,
-		ROW_NUMBER() OVER (ORDER BY TotalPoints DESC) AS BestOthersRank
-		FROM PlayersRankedExceptGKP pr
-		WHERE NOT EXISTS
-		(
-			SELECT 1
-			FROM Top3DefendersAndMidfielders
-			WHERE PlayerKey = pr.PlayerKey
-		)
-		AND NOT EXISTS
-		(
-			SELECT 1
-			FROM TopStriker
-			WHERE PlayerKey = pr.PlayerKey
-		)
-	),
-	Best11Players AS
-	(
-		SELECT PlayerKey, PlayerName, PlayerPositionKey, PlayerPositionShort, TotalPoints, PlayerPositionRank, 12 AS PlayerRank
-		FROM TopGKP
-		UNION
-		SELECT PlayerKey, PlayerName, PlayerPositionKey, PlayerPositionShort, TotalPoints, PlayerPositionRank, PlayerRank
-		FROM Top3DefendersAndMidfielders
-		UNION
-		SELECT PlayerKey, PlayerName, PlayerPositionKey, PlayerPositionShort, TotalPoints, PlayerPositionRank, PlayerRank
-		FROM TopStriker
-		UNION
-		SELECT PlayerKey, PlayerName, PlayerPositionKey, PlayerPositionShort, TotalPoints, PlayerPositionRank, PlayerRank
-		FROM TopBestOthers
-		WHERE BestOthersRank <= 3
+		AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 	)
-	SELECT PlayerKey, 
-	PlayerName, PlayerPositionShort, 
-	TotalPoints, 
-	PlayerPositionRank, 
-	PlayerRank AS PlayerRankExcGKP,
-	ROW_NUMBER() OVER (ORDER BY TotalPoints DESC) AS PlayerRank
-	FROM Best11Players
-	ORDER BY PlayerPositionKey, TotalPoints DESC;
+	SELECT PlayerName, PlayerPositionShort, Cost, ' + @colHeaders + '
+	FROM
+	(
+		SELECT DISTINCT PlayerName, PlayerKey, PlayerPositionShort, Cost, PlayerPositionKey, GameweekKey, TotalPoints
+		FROM PlayerGameweekPoints pgp
+	) src
+	PIVOT
+	(
+		SUM(TotalPoints)
+		FOR GameweekKey IN (' + @colHeaders + ')
+	) piv
+	ORDER BY PlayerPositionKey, PlayerKey;';
+
+	IF @Debug = 1
+		PRINT @sql;
+
+	DECLARE @ParmDefinition NVARCHAR(500);
+	SET @ParmDefinition = N'@SeasonKey INT, @GameweekStart INT, @GameweekEnd INT';
+	EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey, @GameweekStart = @GameweekStart, @GameweekEnd = @GameweekEnd;
 
 END

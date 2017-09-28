@@ -1,6 +1,8 @@
-CREATE PROCEDURE dbo.GetPossibleTeamPlayerPointsByGameweek
+CREATE PROCEDURE dbo.GetBestTeamPlayerPointsForEachGameweekInRange
 (
 	@SeasonKey INT = NULL,
+	@GameweekStart INT,
+	@GameweekEnd INT,
 	@Debug BIT = 0
 )
 AS
@@ -13,15 +15,12 @@ BEGIN
 		SELECT @SeasonKey = SeasonKey FROM dbo.DimSeason WHERE GETDATE() BETWEEN SeasonStartDate AND SeasonEndDate;
 	END
 
-	DECLARE @LastGameweekKey INT;
-	SET @LastGameweekKey = (SELECT MAX(GameweekKey) FROM dbo.FactPlayerHistory WHERE SeasonKey = @SeasonKey);
-
 	DECLARE @Gameweeks TABLE (Id INT IDENTITY(1,1), GameweekKey INT);
 
 	INSERT INTO @Gameweeks (GameweekKey)
 	SELECT DISTINCT GameweekKey
 	FROM dbo.DimGameweek
-	WHERE GameweekKey BETWEEN 1 AND @LastGameweekKey
+	WHERE GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 	ORDER BY GameweekKey;
 
 	IF @Debug = 1
@@ -47,29 +46,25 @@ BEGIN
 	SET @sql = '	
 	;WITH PlayerGameweekPoints AS
 	(
-		SELECT dp.PlayerKey,
-		dp.PlayerName, 
-		fph.GameweekKey, 
-		dpa.PlayerPositionKey,
-		dpp.PlayerPositionShort,
-		fph.TotalPoints
-		FROM dbo.PossibleTeam pt
-		INNER JOIN dbo.DimPlayer dp
-		ON pt.PlayerKey = dp.PlayerKey
-		INNER JOIN dbo.DimPlayerAttribute dpa
-		ON pt.PlayerKey = dpa.PlayerKey
-		AND dpa.SeasonKey = @SeasonKey
-		INNER JOIN dbo.DimPlayerPosition dpp
-		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
-		INNER JOIN dbo.FactPlayerHistory fph
-		ON dp.PlayerKey = fph.PlayerKey
-		AND pt.GameweekKey = fph.GameweekKey
-		WHERE fph.SeasonKey = @SeasonKey
+		SELECT bt.PlayerKey,
+		p.PlayerName, 
+		bt.GameweekKey, 
+		bt.PlayerPositionKey,
+		pp.PlayerPositionShort,
+		bt.Cost,
+		bt.TotalPoints
+		FROM dbo.BestTeam bt
+		INNER JOIN dbo.DimPlayer p
+		ON bt.PlayerKey = p.PlayerKey
+		INNER JOIN dbo.DimPlayerPosition pp
+		ON bt.PlayerPositionKey = pp.PlayerPositionKey
+		WHERE bt.SeasonKey = @SeasonKey
+		AND bt.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 	)
-	SELECT PlayerKey, PlayerName, PlayerPositionShort, ' + @colHeaders + '
+	SELECT PlayerName, PlayerPositionShort, Cost, ' + @colHeaders + '
 	FROM
 	(
-		SELECT DISTINCT PlayerName, PlayerKey, PlayerPositionShort, PlayerPositionKey, GameweekKey, TotalPoints
+		SELECT DISTINCT PlayerName, PlayerKey, PlayerPositionShort, PlayerPositionKey, Cost, GameweekKey, TotalPoints
 		FROM PlayerGameweekPoints pgp
 	) src
 	PIVOT
@@ -77,13 +72,13 @@ BEGIN
 		SUM(TotalPoints)
 		FOR GameweekKey IN (' + @colHeaders + ')
 	) piv
-	ORDER BY PlayerPositionKey, PlayerKey;';
+	ORDER BY PlayerPositionKey, ' + @colHeaders + ', PlayerKey;';
 
 	IF @Debug = 1
 		PRINT @sql;
 
 	DECLARE @ParmDefinition NVARCHAR(500);
-	SET @ParmDefinition = N'@SeasonKey INT';
-	EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey;
+	SET @ParmDefinition = N'@SeasonKey INT, @GameweekStart INT, @GameweekEnd INT';
+	EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey, @GameweekStart = @GameweekStart, @GameweekEnd = @GameweekEnd;
 
-END;
+END

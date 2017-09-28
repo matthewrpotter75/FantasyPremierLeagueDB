@@ -1,4 +1,4 @@
-CREATE PROCEDURE dbo.GetMyTeamPlayerPoints
+CREATE PROCEDURE dbo.GetMyTeamActualPlayerPointsForEachGameweekInRange
 (
 	@SeasonKey INT = NULL,
 	@Debug BIT = 0

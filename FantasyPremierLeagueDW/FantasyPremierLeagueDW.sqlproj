@@ -118,7 +118,7 @@
     <Build Include="dbo\Stored Procedures\GetTotalPointsByPlayerPositionAndGameweekRange.sql" />
     <Build Include="dbo\Stored Procedures\GetTotalPointsByTeamAndPlayerPositionAndGameweekRange.sql" />
     <Build Include="dbo\Stored Procedures\GetTotalPointsByPlayerPositionAndGameweekRangePivoted.sql" />
-    <Build Include="dbo\Stored Procedures\GetMyTeamPlayerPoints.sql" />
+    <Build Include="dbo\Stored Procedures\GetMyTeamActualPlayerPointsForEachGameweekInRange.sql" />
     <Build Include="Storage\FT_FantasyPremierLeagueDW.sql" />
     <Build Include="FullTextIndexes.sql" />
     <Build Include="dbo\Stored Procedures\CopyMyTeamPreviousGameweekToNext.sql" />
@@ -163,12 +163,22 @@
     <Build Include="dbo\Stored Procedures\GetMyTeamPlayerPointsPlayingAndBenchPlayers.sql" />
     <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPoints.sql" />
     <Build Include="dbo\Stored Procedures\GetMyTeamTotalPlayerPointsForGameweekPeriod.sql" />
-    <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsForGameweekPeriod.sql" />
+    <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsForGameweek.sql" />
     <Build Include="dbo\Stored Procedures\GetPossibleTeamTotalPointsForGameweekPeriod.sql" />
     <Build Include="dbo\Stored Procedures\UpdatePossibleTeamIsPlayUsingGetPossibleTeamPlayerPointsForGameweek.sql" />
     <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsPlayingAndBenchPlayers.sql" />
     <Build Include="dbo\Stored Procedures\GetPossibleTeamFixturesAndDifficulty.sql" />
     <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsByGameweek.sql" />
+    <Build Include="dbo\Tables\BestTeam.sql" />
+    <Build Include="dbo\Stored Procedures\GetBestTeamPlayerPointsForGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsForGameweekPeriod.sql" />
+    <Build Include="dbo\Stored Procedures\InsertBestTeamPlayerPointsForGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\GetBestTeamPlayerPointsForEachGameweekInRange.sql" />
+    <Build Include="dbo\Stored Procedures\GetBestSquadPlayerPointsForGameweekPeriod.sql" />
+    <Build Include="dbo\Stored Procedures\GetBestTeamPlayerPointsForGameweekPeriod.sql" />
+    <Build Include="dbo\Stored Procedures\GetMyTeamBestPlayerPointsForEachGameweekInRange.sql" />
+    <Build Include="dbo\Tables\BestTeamSquad.sql" />
+    <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsForEachGameweekInRange.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="FantasyPremierLeagueDW.refactorlog" />

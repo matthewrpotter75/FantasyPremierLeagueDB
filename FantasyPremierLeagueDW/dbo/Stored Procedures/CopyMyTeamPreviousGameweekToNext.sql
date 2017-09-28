@@ -25,20 +25,25 @@ BEGIN
 	IF @Debug = 1
 	BEGIN
 
-		SELECT @SeasonKey AS SeasonKey, @NextGameweekKey AS GameweekKey, PlayerKey
-		FROM dbo.MyTeam
-		WHERE SeasonKey = @SeasonKey
-		AND GameweekKey = @NextGameweekKey - 1;
+		SELECT @SeasonKey, @NextGameweekKey, mt.PlayerKey, pgs.Cost, mt.IsPlay, mt.IsCaptain
+		FROM dbo.MyTeam mt
+		INNER JOIN dbo.FactPlayerGameweekStatus pgs
+		ON mt.PlayerKey = pgs.PlayerKey
+		WHERE mt.SeasonKey = @SeasonKey
+		AND mt.GameweekKey = @NextGameweekKey - 1;
 
 	END
 	ELSE
 	BEGIN
 
 		INSERT INTO dbo.MyTeam
-		SELECT @SeasonKey, @NextGameweekKey, PlayerKey
-		FROM dbo.MyTeam
-		WHERE SeasonKey = @SeasonKey
-		AND GameweekKey = @NextGameweekKey - 1;
+		(SeasonKey, GameweekKey, PlayerKey, Cost, IsPlay, IsCaptain)
+		SELECT @SeasonKey, @NextGameweekKey, mt.PlayerKey, pgs.Cost, mt.IsPlay, mt.IsCaptain
+		FROM dbo.MyTeam mt
+		INNER JOIN dbo.FactPlayerGameweekStatus pgs
+		ON mt.PlayerKey = pgs.PlayerKey
+		WHERE mt.SeasonKey = @SeasonKey
+		AND mt.GameweekKey = @NextGameweekKey - 1;
 
 	END
 

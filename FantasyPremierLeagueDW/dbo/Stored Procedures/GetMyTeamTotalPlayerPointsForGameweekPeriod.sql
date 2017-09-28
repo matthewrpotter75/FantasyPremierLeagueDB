@@ -54,12 +54,13 @@ BEGIN
 	ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 	INNER JOIN dbo.FactPlayerHistory fph
 	ON dp.PlayerKey = fph.PlayerKey
+	AND my.SeasonKey = fph.SeasonKey
 	AND my.GameweekKey = fph.GameweekKey
 	WHERE fph.SeasonKey = @SeasonKey
 	AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 	AND my.IsPlay = 1
 	GROUP BY dp.PlayerKey, dp.PlayerName, dpa.PlayerPositionKey, dpp.PlayerPositionShort
-	ORDER BY PlayerPositionKey, PlayerKey, TotalPoints DESC;
+	ORDER BY dpa.PlayerPositionKey, dp.PlayerKey, TotalPoints DESC;
 
 	--Player Points by Player Position
 	SELECT 'Player Points by Player Position';
@@ -82,6 +83,7 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND my.SeasonKey = fph.SeasonKey
 		AND my.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
@@ -118,6 +120,7 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND my.SeasonKey = fph.SeasonKey
 		AND my.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
@@ -163,6 +166,7 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND my.SeasonKey = fph.SeasonKey
 		AND my.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
@@ -208,6 +212,7 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND my.SeasonKey = fph.SeasonKey
 		AND my.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
@@ -250,6 +255,7 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND my.SeasonKey = fph.SeasonKey
 		AND my.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
@@ -278,6 +284,7 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND my.SeasonKey = fph.SeasonKey
 		AND my.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd

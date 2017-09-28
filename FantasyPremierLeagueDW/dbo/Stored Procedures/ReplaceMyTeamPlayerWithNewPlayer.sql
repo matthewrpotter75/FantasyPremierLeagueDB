@@ -50,15 +50,19 @@ BEGIN
 	IF @PlayerKey IS NOT NULL AND @NewPlayerKey IS NOT NULL
 	BEGIN
 
-		UPDATE dbo.MyTeam
-		SET PlayerKey = @NewPlayerKey
-		WHERE SeasonKey = @SeasonKey
-		AND GameweekKey = @NextGameweekKey
-		AND PlayerKey = @PlayerKey;
+		UPDATE mt
+		SET PlayerKey = @NewPlayerKey, Cost = pgs.Cost
+		FROM dbo.MyTeam mt
+		INNER JOIN dbo.FactPlayerGameweekStatus pgs
+		ON mt.PlayerKey = pgs.PlayerKey
+		WHERE mt.SeasonKey = @SeasonKey
+		AND mt.GameweekKey = @NextGameweekKey
+		AND mt.PlayerKey = @PlayerKey;
 
 		IF @@ROWCOUNT > 0
-			
 			PRINT 'Transfer completed: ' + @PlayerName + ' out, ' + @NewPlayerName + ' in';
+		ELSE
+			PRINT 'No update performed';
 
 	END
 	ELSE
