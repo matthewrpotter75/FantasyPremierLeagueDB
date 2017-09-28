@@ -507,6 +507,12 @@ BEGIN
 			ON pgs.PlayerKey = maxkey.PlayerKey
 			AND pgs.FactPlayerGameweekStatusKey = maxkey.MaxPlayerGameweekStatusKey
 			--ORDER BY pgs.PlayerKey, SeasonKey, GameweekKey
+		),
+		CurrentSeasonPoints AS
+		(
+			SELECT PlayerKey,
+			TotalPoints AS CurrentSeasonPoints
+			FROM dbo.FactPlayerCurrentStats
 		)
 		INSERT INTO #FinalPrediction
 		SELECT
@@ -524,7 +530,8 @@ BEGIN
 			t.TeamName,
 			pct.TotalPlayerGames,
 			pct.TotalPlayerMinutes,
-			pct.CurrentPoints,
+			--pct.CurrentPoints,
+			csp.CurrentSeasonPoints AS CurrentPoints,
 			ppw.PredictedPointsAll,
 			ppw.PredictedPoints5,
 			ppw.PredictedPoints10,
@@ -584,7 +591,9 @@ BEGIN
 		INNER JOIN OverallDifficultyPPG odppg
 		ON ppw.PlayerKey = odppg.PlayerKey
 		INNER JOIN OverallTeamPPG otppg
-		ON ppw.PlayerKey = otppg.PlayerKey;
+		ON ppw.PlayerKey = otppg.PlayerKey
+		INNER JOIN CurrentSeasonPoints csp
+		ON ppw.PlayerKey = csp.PlayerKey;
 		--WHERE ISNULL(ppw.ChanceOfPlayingNextRound, 100) > 0
 		--ORDER BY PredictedPoints DESC;
 

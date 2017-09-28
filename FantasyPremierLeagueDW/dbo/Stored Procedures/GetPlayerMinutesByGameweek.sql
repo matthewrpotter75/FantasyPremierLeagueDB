@@ -1,6 +1,7 @@
-CREATE PROCEDURE dbo.GetMyTeamPlayerPoints
+﻿CREATE PROCEDURE dbo.GetPlayerMinutesByGameweek
 (
 	@SeasonKey INT = NULL,
+	@PlayerKeys VARCHAR(200),
 	@Debug BIT = 0
 )
 AS
@@ -45,36 +46,34 @@ BEGIN
 	--SELECT @CurrentGameweekKey = MAX(GameweekKey) FROM dbo.DimGameweek WHERE SeasonKey = @SeasonKey AND DeadlineTime < GETDATE();
 
 	SET @sql = '	
-	;WITH PlayerGameweekPoints AS
+	;WITH PlayerGameweekMinutes AS
 	(
 		SELECT dp.PlayerKey,
 		dp.PlayerName, 
 		fph.GameweekKey, 
 		dpa.PlayerPositionKey,
 		dpp.PlayerPositionShort,
-		fph.TotalPoints
-		FROM dbo.MyTeam my
-		INNER JOIN dbo.DimPlayer dp
-		ON my.PlayerKey = dp.PlayerKey
+		fph.[Minutes] AS PlayerMinutes
+		FROM dbo.DimPlayer dp
 		INNER JOIN dbo.DimPlayerAttribute dpa
-		ON my.PlayerKey = dpa.PlayerKey
+		ON dp.PlayerKey = dpa.PlayerKey
 		AND dpa.SeasonKey = @SeasonKey
 		INNER JOIN dbo.DimPlayerPosition dpp
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
-		AND my.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
+		AND fph.PlayerKey IN (' + @PlayerKeys + ')
 	)
 	SELECT PlayerName, PlayerPositionShort, ' + @colHeaders + '
 	FROM
 	(
-		SELECT DISTINCT PlayerName, PlayerKey, PlayerPositionShort, PlayerPositionKey, GameweekKey, TotalPoints
-		FROM PlayerGameweekPoints pgp
+		SELECT DISTINCT PlayerName, PlayerKey, PlayerPositionShort, PlayerPositionKey, GameweekKey, PlayerMinutes
+		FROM PlayerGameweekMinutes pgp
 	) src
 	PIVOT
 	(
-		SUM(TotalPoints)
+		SUM(PlayerMinutes)
 		FOR GameweekKey IN (' + @colHeaders + ')
 	) piv
 	ORDER BY PlayerPositionKey, PlayerKey;';

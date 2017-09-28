@@ -4,6 +4,7 @@ CREATE TABLE dbo.MyTeam
 	GameweekKey INT NOT NULL,
 	PlayerKey INT NOT NULL,
 	IsPlay BIT NULL,
+	IsCaptain BIT NULL,
 	CONSTRAINT [PK_MyTeam] PRIMARY KEY CLUSTERED (SeasonKey ASC, GameweekKey ASC, PlayerKey ASC),
 	CONSTRAINT [FK_MyTeam_PlayerKey] FOREIGN KEY (PlayerKey) REFERENCES [dbo].[DimPlayer] (PlayerKey),
 	CONSTRAINT [FK_MyTeam_GameweekKey] FOREIGN KEY (GameweekKey, SeasonKey) REFERENCES [dbo].[DimGameweek] (GameweekKey, SeasonKey)

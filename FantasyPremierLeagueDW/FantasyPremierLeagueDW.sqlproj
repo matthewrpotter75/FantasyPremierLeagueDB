@@ -154,6 +154,21 @@
     <Build Include="dbo\Stored Procedures\GetPlayerPPGByOpponentDificultyForGameweeks.sql" />
     <Build Include="dbo\Stored Procedures\GetPlayerPPGForGameweeks.sql" />
     <Build Include="dbo\Stored Procedures\GetPlayerPPGForSeasonPrevious5Previous10AndAllGameweeks.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerTotalPointsForSeason.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPointsByGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerMinutesByGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerTotalPointsForSeasonMultiplePlayers.sql" />
+    <Build Include="dbo\Functions\fnSplit.sql" />
+    <Build Include="dbo\Tables\PossibleTeam.sql" />
+    <Build Include="dbo\Stored Procedures\GetMyTeamPlayerPointsPlayingAndBenchPlayers.sql" />
+    <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPoints.sql" />
+    <Build Include="dbo\Stored Procedures\GetMyTeamTotalPlayerPointsForGameweekPeriod.sql" />
+    <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsForGameweekPeriod.sql" />
+    <Build Include="dbo\Stored Procedures\GetPossibleTeamTotalPointsForGameweekPeriod.sql" />
+    <Build Include="dbo\Stored Procedures\UpdatePossibleTeamIsPlayUsingGetPossibleTeamPlayerPointsForGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsPlayingAndBenchPlayers.sql" />
+    <Build Include="dbo\Stored Procedures\GetPossibleTeamFixturesAndDifficulty.sql" />
+    <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsByGameweek.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="FantasyPremierLeagueDW.refactorlog" />

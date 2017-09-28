@@ -8,7 +8,5 @@
 	Games TINYINT NOT NULL,
 	PlayerMinutes SMALLINT NOT NULL,
 	PPG DECIMAL(4,2) NOT NULL,
-	PPG5games DECIMAL(4,2),
-	PPG10games DECIMAL(4,2),
-	CONSTRAINT [PK_PlayerPointsPerGame] PRIMARY KEY CLUSTERED ([PlayerKey] ASC, [PlayerPositionKey] ASC, [OpponentDifficulty] ASC)
+	CONSTRAINT [PK_PlayerPointsPerGame] PRIMARY KEY CLUSTERED ([PlayerKey] ASC, [PlayerPositionKey] ASC, [OpponentDifficulty] ASC, [MinutesLimit] ASC)
 );
