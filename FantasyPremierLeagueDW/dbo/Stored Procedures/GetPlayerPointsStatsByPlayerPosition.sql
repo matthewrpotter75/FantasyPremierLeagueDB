@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE dbo.GetPlayerPointsStatsByPlayerPosition
 (
-	@PlayerPositionShortName VARCHAR(3) = NULL
+	@PlayerPositionShortName VARCHAR(3) = NULL,
+	@PlayerAttributeSeasonKey INT
 )
 --Examples
 --EXEC [dbo].[GetPlayerPointsByPlayerPosition] @playerPositionShortName = 'DEF';
@@ -12,7 +13,6 @@ BEGIN
 	;WITH PlayerPoints AS
 	(
 		SELECT ph.PlayerKey,
-		t.TeamShortName AS TeamName,
 		pp.PlayerPositionShort AS PlayerPosition,
 		SUM(ph.TotalPoints) AS PlayerPoints,
 		SUM(CASE WHEN ph.[Minutes] >= 60 THEN ph.TotalPoints ELSE 0 END) AS PlayerPointsOver60,
@@ -53,15 +53,13 @@ BEGIN
 		AND ph.SeasonKey = pa.SeasonKey
 		INNER JOIN dbo.DimPlayerPosition pp
 		ON pa.PlayerPositionKey = pp.PlayerPositionKey
-		INNER JOIN dbo.DimTeam t
-		ON pa.TeamKey = t.TeamKey
 		WHERE pp.PlayerPositionShort = @PlayerPositionShortName
-		GROUP BY ph.PlayerKey, t.TeamShortName, pp.PlayerPositionShort
+		GROUP BY ph.PlayerKey, pp.PlayerPositionShort
 	)
 	SELECT p.PlayerKey,
 	p.PlayerName,
 	points.PlayerPosition,
-	points.TeamName,
+	t.TeamShortName AS TeamName,
 	points.PlayerPoints,
 	points.PlayerAssists,
 	points.PlayerGoalsScored,
@@ -95,6 +93,11 @@ BEGIN
 	FROM PlayerPoints points
 	INNER JOIN dbo.DimPlayer p
 	ON p.PlayerKey = points.PlayerKey
+	INNER JOIN dbo.DimPlayerAttribute pa
+	ON p.PlayerKey = pa.PlayerKey
+	AND pa.SeasonKey = @PlayerAttributeSeasonKey
+	INNER JOIN dbo.DimTeam t
+	ON pa.TeamKey = t.TeamKey
 	ORDER BY points.PlayerPoints DESC;
 
 END;

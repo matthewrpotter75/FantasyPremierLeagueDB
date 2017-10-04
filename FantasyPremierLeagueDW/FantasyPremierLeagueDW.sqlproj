@@ -65,6 +65,7 @@
     <Folder Include="dbo\Views" />
     <Folder Include="Storage\" />
     <Folder Include="dbo\Functions" />
+    <Folder Include="dbo\Types" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PopulateDimSeason.sql" />
@@ -179,6 +180,17 @@
     <Build Include="dbo\Stored Procedures\GetMyTeamBestPlayerPointsForEachGameweekInRange.sql" />
     <Build Include="dbo\Tables\BestTeamSquad.sql" />
     <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsForEachGameweekInRange.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerCostSelectedExpectedPointsFormPoints.sql" />
+    <Build Include="dbo\Stored Procedures\TransferInSpecifiedPlayers.sql" />
+    <Build Include="dbo\Stored Procedures\SpecifiedPlayerTransferIn.sql" />
+    <Build Include="dbo\Stored Procedures\TransferInASpecifiedPlayer.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPointsByPlayerPosition.sql" />
+    <Build Include="dbo\Stored Procedures\GetBestSquadPlayerDetails.sql" />
+    <Build Include="dbo\Functions\fnGetPlayerPointsByPlayerPosition.sql" />
+    <Build Include="dbo\Functions\fnGetBestSquadPlayerDetails.sql" />
+    <Build Include="dbo\Functions\fnGetPlayerPPGByTeamDificultyOpponentDificultyWasHome.sql" />
+    <Build Include="dbo\Functions\fnGetPPGByPlayerPlayerPositionDificultyWasHome.sql" />
+    <Build Include="dbo\Types\UDTPlayersToChangeTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="FantasyPremierLeagueDW.refactorlog" />

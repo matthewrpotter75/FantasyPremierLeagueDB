@@ -27,7 +27,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='Starting', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='Starting', @Time=@time OUTPUT;
 		END
 
 		IF @SeasonKey IS NULL
@@ -83,7 +83,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='Pre #Fixtures', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='Pre #Fixtures', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -106,7 +106,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#Fixtures', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#Fixtures', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -126,7 +126,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PlayerHistoryRankedByPoints', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PlayerHistoryRankedByPoints', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 	
@@ -152,7 +152,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#OverallPPG', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#OverallPPG', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 	
@@ -183,7 +183,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#OverallDifficultyPPG', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#OverallDifficultyPPG', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 	
@@ -214,7 +214,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#OverallTeamPPG', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#OverallTeamPPG', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -267,7 +267,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PPG', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PPG', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -275,7 +275,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PPG Index Creation', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PPG Index Creation', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -328,7 +328,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PPG - PPG5', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PPG - PPG5', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -382,7 +382,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PPG - PPG10', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PPG - PPG10', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -420,7 +420,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PlayerPPG', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PlayerPPG', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -502,7 +502,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#FixtureDifficulty', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#FixtureDifficulty', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -534,7 +534,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PlayerPredictions', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PlayerPredictions', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 
@@ -566,7 +566,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='#PlayingPercentages', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='#PlayingPercentages', @Time=@time OUTPUT;
 			SET @time = GETDATE();
 		END
 	
@@ -701,7 +701,7 @@ BEGIN
 
 		IF @TimerDebug = 1
 		BEGIN
-			EXEC dbo.OutputStoredProcedure @Step='Final query', @Time=@time OUTPUT;
+			EXEC dbo.OutputStepAndTimeText @Step='Final query', @Time=@time OUTPUT;
 		END
 
 		IF @debug = 1
