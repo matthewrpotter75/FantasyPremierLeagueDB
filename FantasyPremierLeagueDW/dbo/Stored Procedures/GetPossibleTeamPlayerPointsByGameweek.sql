@@ -30,7 +30,8 @@ BEGIN
 		FROM @Gameweeks;
 	END
 
-	DECLARE @colHeaders VARCHAR(25);
+	DECLARE @colHeaders VARCHAR(200);
+
 	SELECT @colHeaders = STUFF((SELECT  '],[' + CAST(GameweekKey AS VARCHAR(2))
     FROM @Gameweeks
     ORDER BY GameweekKey

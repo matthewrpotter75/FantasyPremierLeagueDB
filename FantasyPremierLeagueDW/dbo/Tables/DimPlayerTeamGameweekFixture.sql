@@ -12,3 +12,8 @@
 	CONSTRAINT [FK_DimPlayerTeamGameweekFixture_SeasonKey] FOREIGN KEY ([SeasonKey]) REFERENCES [dbo].[DimSeason] ([SeasonKey]),
 	CONSTRAINT [FK_DimPlayerTeamGameweekFixture_GameweekFixtureKey] FOREIGN KEY([GameweekFixtureKey]) REFERENCES [dbo].[FactGameweekFixture] ([GameweekFixtureKey])
 );
+GO
+
+CREATE NONCLUSTERED INDEX IX_DimPlayerTeamGameweekFixture_SeasonKey_GameweekFixtureKey_Inc_PlayerKey_TeamKey_GameweekKey_IsHome
+ON [dbo].[DimPlayerTeamGameweekFixture] ([SeasonKey],[GameweekFixtureKey])
+INCLUDE ([PlayerKey],[TeamKey],[GameweekKey],[IsHome])

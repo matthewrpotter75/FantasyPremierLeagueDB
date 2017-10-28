@@ -24,13 +24,17 @@ BEGIN
 	WHERE GameweekKey BETWEEN 1 AND @LastGameweekKey
 	ORDER BY GameweekKey;
 
+	DECLARE @NumGameweeks INT;
+	SELECT @NumGameweeks = MAX(GameweekKey) FROM @Gameweeks;
+
 	IF @Debug = 1
 	BEGIN
 		SELECT *
 		FROM @Gameweeks;
 	END
 
-	DECLARE @colHeaders VARCHAR(25);
+	DECLARE @colHeaders VARCHAR(200);
+
 	SELECT @colHeaders = STUFF((SELECT  '],[' + CAST(GameweekKey AS VARCHAR(2))
     FROM @Gameweeks
     ORDER BY GameweekKey
@@ -122,13 +126,21 @@ BEGIN
 			SELECT ISNULL(pp.PlayerName,bp.PlayerName) AS PlayerName, 
 			ISNULL(pp.PlayerPositionShort,bp.PlayerPositionShort) AS PlayerPositionShort,
 			ISNULL(pp.PlayerPositionKey,bp.PlayerPositionKey) AS PlayerPositionKey,
-			ISNULL(pp.PlayerKey,bp.PlayerKey) AS PlayerKey,
-			ISNULL(CAST(pp.[1] AS VARCHAR(2)),''-'') + '' ('' + ISNULL(CAST(bp.[1] AS VARCHAR(2)),''-'') + '')'',
-			ISNULL(CAST(pp.[2] AS VARCHAR(2)),''-'') + '' ('' + ISNULL(CAST(bp.[2] AS VARCHAR(2)),''-'') + '')'',
-			ISNULL(CAST(pp.[3] AS VARCHAR(2)),''-'') + '' ('' + ISNULL(CAST(bp.[3] AS VARCHAR(2)),''-'') + '')'',
-			ISNULL(CAST(pp.[4] AS VARCHAR(2)),''-'') + '' ('' + ISNULL(CAST(bp.[4] AS VARCHAR(2)),''-'') + '')'',
-			ISNULL(CAST(pp.[5] AS VARCHAR(2)),''-'') + '' ('' + ISNULL(CAST(bp.[5] AS VARCHAR(2)),''-'') + '')'',
-			ISNULL(CAST(pp.[6] AS VARCHAR(2)),''-'') + '' ('' + ISNULL(CAST(bp.[6] AS VARCHAR(2)),''-'') + '')''
+			ISNULL(pp.PlayerKey,bp.PlayerKey) AS PlayerKey,';
+
+	DECLARE @i INT = 1;
+	
+	WHILE @i <= @NumGameweeks
+	BEGIN
+
+		SET @sql = @sql + 'ISNULL(CAST(pp.[' + CAST(@i AS VARCHAR(2)) + '] AS VARCHAR(2)),''-'') + '' ('' + ISNULL(CAST(bp.[' + CAST(@i AS VARCHAR(2)) + '] AS VARCHAR(2)),''-'') + '')'','
+		SET @i = @i + 1;
+
+	END
+
+	SET @sql = LEFT(@sql,LEN(@sql)-1);
+
+	SET @sql = @sql + '
 			FROM PlayerPoints pp
 			FULL JOIN BenchPoints bp
 			ON pp.PlayerKey = bp.PlayerKey

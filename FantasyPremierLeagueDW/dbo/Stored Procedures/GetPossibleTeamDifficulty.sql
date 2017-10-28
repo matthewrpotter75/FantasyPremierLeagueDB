@@ -1,4 +1,4 @@
-CREATE PROCEDURE dbo.GetPossibleTeamFixturesAndDifficulty
+CREATE PROCEDURE dbo.GetPossibleTeamDifficulty
 (
 	@SeasonKey INT = NULL,
 	@NextGameweekKey INT = NULL,
@@ -29,14 +29,13 @@ BEGIN
 	WHERE [GameweekKey] BETWEEN @NextGameweekKey AND @LastGameweekKey
 	ORDER BY [GameweekKey];
 
-	DECLARE @colHeaders VARCHAR(200);
-
+	DECLARE @colHeaders VARCHAR(25);
 	SELECT @colHeaders = STUFF((SELECT  '],[' + CAST(GameweekKey AS VARCHAR(2))
     FROM @Gameweeks
     ORDER BY GameweekKey
     FOR XML PATH('')), 1, 2, '') + ']';
 
-	DECLARE @sql NVARCHAR(2000);
+	DECLARE @sql NVARCHAR(4000);
 	
 	SET @sql = 'DECLARE @CurrentGameweekKey INT;
 	SELECT @CurrentGameweekKey = MAX(GameweekKey) FROM dbo.DimGameweek WHERE SeasonKey = @SeasonKey AND DeadlineTime < GETDATE();
@@ -46,15 +45,19 @@ BEGIN
 		SELECT dp.PlayerKey,
 		dp.PlayerName, 
 		dtgwf.GameweekKey, 
+		pgs.Cost,
+		hdt.TeamName,
 		dpa.PlayerPositionKey,
 		dpp.PlayerPositionShort AS PlayerPosition,
-		dt.TeamShortName + '' ('' + CASE WHEN IsHome = 1 THEN ''H'' ELSE ''A'' END + '') D'' + CAST(dtd.Difficulty AS VARCHAR(1)) AS Opponent
+		dtd.Difficulty
 		FROM dbo.PossibleTeam pt
 		INNER JOIN dbo.DimPlayer dp
 		ON pt.PlayerKey = dp.PlayerKey
 		INNER JOIN dbo.DimPlayerAttribute dpa
 		ON pt.PlayerKey = dpa.PlayerKey
 		AND dpa.SeasonKey = @SeasonKey
+		INNER JOIN dbo.DimTeam hdt
+		ON dpa.TeamKey = hdt.TeamKey
 		INNER JOIN dbo.DimPlayerPosition dpp
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.DimTeamGameweekFixture dtgwf
@@ -66,27 +69,31 @@ BEGIN
 		ON dtgwf.OpponentTeamKey = dtd.TeamKey
 		AND dtgwf.IsHome = dtd.IsOpponentHome
 		AND dtd.SeasonKey = @SeasonKey
+		INNER JOIN dbo.FactPlayerGameweekStatus pgs
+		ON pt.PlayerKey = pgs.PlayerKey
+		AND pt.SeasonKey = pgs.SeasonKey
+		AND pt.GameweekKey = pgs.GameweekKey
 		WHERE dtgwf.SeasonKey = @SeasonKey
 		AND pt.GameweekKey = @CurrentGameweekKey
 		AND pt.SeasonKey = @SeasonKey
 	)
-	SELECT PlayerName, PlayerPosition, ' + @colHeaders + '
+	SELECT PlayerName, PlayerPosition, Cost, TeamName, ' + @colHeaders + '
 	FROM
 	(
-		SELECT DISTINCT PlayerName, PlayerKey, PlayerPosition, PlayerPositionKey, GameweekKey, LEFT(r.Opponent , LEN(r.Opponent)-1) Opponent
+		SELECT DISTINCT PlayerName, PlayerKey, PlayerPosition, PlayerPositionKey, GameweekKey, TeamName, Cost, CAST(LEFT(r.Difficulty , LEN(r.Difficulty)-1) AS INT) AS Difficulty
 		FROM PlayerOpponentDifficulty pod
 		CROSS APPLY
 		(
-			SELECT r.Opponent + '', ''
+			SELECT CAST(r.Difficulty AS VARCHAR(2)) + '', ''
 			FROM PlayerOpponentDifficulty r
 			WHERE pod.PlayerKey = r.PlayerKey
 			  and pod.GameweekKey = r.GameweekKey
 			FOR XML PATH('''')
-		) r (Opponent)
+		) r (Difficulty)
 	) src
 	PIVOT
 	(
-		MIN(Opponent)
+		MIN(Difficulty)
 		FOR GameweekKey IN (' + @colHeaders + ')
 	) piv
 	ORDER BY PlayerPositionKey, PlayerKey;';

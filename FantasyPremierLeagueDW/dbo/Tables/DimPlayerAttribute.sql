@@ -10,7 +10,7 @@
     [EA_Index] SMALLINT NOT NULL,
     [PlayerPositionKey] INT NOT NULL,
     [TeamKey] INT NOT NULL,
-	CONSTRAINT [PK_DimPlayerAttribute] PRIMARY KEY CLUSTERED ([PlayerAttributeKey] ASC),
+	CONSTRAINT [PK_DimPlayerAttribute] PRIMARY KEY CLUSTERED ([PlayerKey] ASC, [SeasonKey] ASC),
 	CONSTRAINT [FK_DimPlayerAttribute_PlayerKey] FOREIGN KEY ([PlayerKey]) REFERENCES [dbo].[DimPlayer] ([PlayerKey]),
 	CONSTRAINT [FK_DimPlayerAttribute_SeasonKey] FOREIGN KEY ([SeasonKey]) REFERENCES [dbo].[DimSeason] ([SeasonKey])
 );

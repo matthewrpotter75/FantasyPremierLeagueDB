@@ -191,6 +191,14 @@
     <Build Include="dbo\Functions\fnGetPlayerPPGByTeamDificultyOpponentDificultyWasHome.sql" />
     <Build Include="dbo\Functions\fnGetPPGByPlayerPlayerPositionDificultyWasHome.sql" />
     <Build Include="dbo\Types\UDTPlayersToChangeTable.sql" />
+    <Build Include="dbo\Functions\fnGetPlayersRanked.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerStatsDifficultyAndIsHomeByPlayerKeyOrName.sql" />
+    <Build Include="dbo\Functions\fnGetPlayersRankedAll.sql" />
+    <Build Include="dbo\Stored Procedures\GetTeamPlayerPointsAndMinutesForGameweeksInSeason.sql" />
+    <Build Include="dbo\Stored Procedures\FutureFixturePlayerPointsPredictionsWithTimer.sql" />
+    <Build Include="dbo\Stored Procedures\GetMyTeamDifficulty.sql" />
+    <Build Include="dbo\Stored Procedures\CopyPossibleTeamPreviousGameweekToNext.sql" />
+    <Build Include="dbo\Stored Procedures\GetPossibleTeamDifficulty.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="FantasyPremierLeagueDW.refactorlog" />

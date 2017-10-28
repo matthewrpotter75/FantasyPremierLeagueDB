@@ -1,4 +1,4 @@
-CREATE FUNCTION dbo.fnGetPlayersRanked
+CREATE FUNCTION dbo.fnGetPlayersRankedAll
 (
 	@SeasonKey INT = NULL,
 	@SpecifiedPlayerKey INT = NULL,
@@ -113,7 +113,7 @@ BEGIN
 			WHERE PlayerKey = pps.PlayerKey
 		)
 	),
-	AnchorPlayer AS
+	AllPlayers AS
 	(
 		SELECT p.Id,
 		CAST(p.CurrentPlayerKey AS VARCHAR(100)) AS CurrentPlayerKeyPath,
@@ -122,24 +122,20 @@ BEGIN
 		p.PlayerPositionKey,
 		p.CurrentPlayerKey,
 		p.CurrentPlayerName,
-		cpcs.Cost AS CurrentPlayerCost,
-		cpcs.TotalPoints AS CurrentPlayerTotalPoints,
+		p.CurrentPlayerCost,
+		p.CurrentPlayerTotalPoints,
 		p.NewPlayerKey,
 		p.NewPlayerName,
-		pcs.Cost AS NewPlayerCost,
-		pcs.TotalPoints AS NewPlayerTotalPoints,
+		p.NewPlayerCost,
+		p.NewPlayerTotalPoints,
 		CAST(p.CurrentPlayerCost AS INT) AS CurrentPlayerCostSummed,
 		CAST(p.NewPlayerCost AS INT) AS NewPlayerCostSummed,
 		p.CurrentPlayerTotalPoints AS CurrentPlayerPointsSummed,
 		p.NewPlayerTotalPoints AS NewPlayerPointsSummed,
 		1 AS RecursionLevel
 		FROM PlayersRanked p
-		INNER JOIN dbo.FactPlayerCurrentStats cpcs
-		ON p.CurrentPlayerKey = cpcs.PlayerKey
-		INNER JOIN dbo.FactPlayerCurrentStats pcs
-		ON p.NewPlayerKey = pcs.PlayerKey
-		WHERE p.Id = 1
-		AND p.PlayerRank <= 20
+		--WHERE p.Id = 1
+		WHERE p.PlayerRank <= 20
 
 		UNION ALL
 
@@ -150,27 +146,23 @@ BEGIN
 		p.PlayerPositionKey,
 		p.CurrentPlayerKey,
 		p.CurrentPlayerName,
-		cpcs.Cost AS CurrentPlayerCost,
-		cpcs.TotalPoints AS CurrentPlayerTotalPoints,
+		p.CurrentPlayerCost,
+		p.CurrentPlayerTotalPoints,
 		p.NewPlayerKey,
 		p.NewPlayerName,
-		pcs.Cost AS NewPlayerCost,
-		pcs.TotalPoints AS NewPlayerTotalPoints,
+		p.NewPlayerCost,
+		p.NewPlayerTotalPoints,
 		(CAST(p.CurrentPlayerCost AS INT) + ap.CurrentPlayerCostSummed)AS CurrentPlayerCostSummed,
 		(CAST(p.NewPlayerCost AS INT) + ap.NewPlayerCostSummed) AS NewPlayerCostSummed,
 		(p.CurrentPlayerTotalPoints + ap.CurrentPlayerPointsSummed) AS NewPlayerPointsSummed,
 		(p.NewPlayerTotalPoints + ap.NewPlayerPointsSummed) AS PointsSummed,
 		(ap.RecursionLevel + 1) AS RecursionLevel
 		FROM PlayersRanked p
-		INNER JOIN dbo.FactPlayerCurrentStats cpcs
-		ON p.CurrentPlayerKey = cpcs.PlayerKey
-		INNER JOIN dbo.FactPlayerCurrentStats pcs
-		ON p.NewPlayerKey = pcs.PlayerKey
-		INNER JOIN AnchorPlayer ap
+		INNER JOIN AllPlayers ap
 		ON p.Id = (ap.RecursionLevel + 1)
 		WHERE p.CurrentPlayerKey <> ap.CurrentPlayerKey
 		AND p.NewPlayerKey <> ap.NewPlayerKey
-		AND (CAST(pcs.Cost AS INT) + ap.NewPlayerCostSummed) <= ISNULL(@PlayersToChangeCost,cpcs.Cost) - @Overspend
+		AND (CAST(p.NewPlayerCost AS INT) + ap.NewPlayerCostSummed) <= (p.CurrentPlayerCost + ap.CurrentPlayerCostSummed) - @Overspend
 		AND (ap.RecursionLevel + 1) <= @MaxNumberOfTransfers
 		AND p.PlayerRank <= 20
 	)
@@ -196,8 +188,10 @@ BEGIN
 	RecursionLevel,
 	(NewPlayerPointsSummed - CurrentPlayerPointsSummed) AS DiffPoints,
 	(CurrentPlayerCostSummed - NewPlayerCostSummed) AS DiffCost,
-	ROW_NUMBER() OVER (PARTITION BY RecursionLevel, CurrentPlayerKey ORDER BY NewPlayerPointsSummed DESC) AS CombinationRank
-	FROM AnchorPlayer;
+	--ROW_NUMBER() OVER (PARTITION BY RecursionLevel, CurrentPlayerKey ORDER BY PointsSummed DESC) AS CombinationRank
+	ROW_NUMBER() OVER (ORDER BY (NewPlayerPointsSummed - CurrentPlayerPointsSummed) DESC) AS CombinationRank
+	FROM AllPlayers
+	WHERE NewPlayerCostSummed <= (CurrentPlayerCostSummed - @Overspend);
 
 	RETURN 
 

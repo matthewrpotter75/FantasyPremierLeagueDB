@@ -664,7 +664,7 @@ BEGIN
 		ppw.PlayerKey,
 		p.PlayerName,
 		cost.Cost,
-		pp.SingularNameShort AS Position,
+		pp.PlayerPositionShort, --AS Position,
 		t.TeamName,
 		pct.CurrentPoints,
 		ppw.TotalGames,

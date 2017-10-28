@@ -24,6 +24,6 @@
     RedCards TINYINT NOT NULL,
     Saves TINYINT NOT NULL,
     Bonus TINYINT NOT NULL,
-	CONSTRAINT [PK_FactPlayerCurrentStats] PRIMARY KEY CLUSTERED (PlayerCurrentStatsKey ASC),
+	CONSTRAINT [PK_FactPlayerCurrentStats] PRIMARY KEY CLUSTERED (PlayerKey ASC),
 	CONSTRAINT [FK_FactPlayerCurrentStats_PlayerKey] FOREIGN KEY (PlayerKey) REFERENCES [dbo].[DimPlayer] ([PlayerKey])
 );

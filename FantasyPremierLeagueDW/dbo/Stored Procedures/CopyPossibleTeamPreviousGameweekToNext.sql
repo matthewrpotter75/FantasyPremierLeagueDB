@@ -1,4 +1,4 @@
-CREATE PROCEDURE dbo.CopyMyTeamPreviousGameweekToNext
+CREATE PROCEDURE dbo.CopyPossibleTeamPreviousGameweekToNext
 (
 	@SeasonKey INT = NULL,
 	@NextGameweekKey INT = NULL,
@@ -23,28 +23,28 @@ BEGIN
 	IF @Debug = 1
 	BEGIN
 
-		SELECT p.PlayerName, @SeasonKey, @NextGameweekKey, mt.PlayerKey, pcs.Cost, mt.IsPlay, mt.IsCaptain
-		FROM dbo.MyTeam mt
+		SELECT p.PlayerName, @SeasonKey, @NextGameweekKey, pt.PlayerKey, pcs.Cost, pt.IsPlay, pt.IsCaptain
+		FROM dbo.PossibleTeam pt
 		INNER JOIN dbo.FactPlayerCurrentStats pcs
-		ON mt.PlayerKey = pcs.PlayerKey
+		ON pt.PlayerKey = pcs.PlayerKey
 		INNER JOIN dbo.DimPlayer p
-		ON mt.PlayerKey = p.PlayerKey
-		WHERE mt.SeasonKey = @SeasonKey
-		AND mt.GameweekKey = @NextGameweekKey - 1
-		ORDER BY mt.PlayerKey;
+		ON pt.PlayerKey = p.PlayerKey
+		WHERE pt.SeasonKey = @SeasonKey
+		AND pt.GameweekKey = @NextGameweekKey - 1
+		ORDER BY pt.PlayerKey;
 
 	END
 	ELSE
 	BEGIN
 
-		INSERT INTO dbo.MyTeam
+		INSERT INTO dbo.PossibleTeam
 		(SeasonKey, GameweekKey, PlayerKey, Cost, IsPlay, IsCaptain)
-		SELECT @SeasonKey, @NextGameweekKey, mt.PlayerKey, pcs.Cost, mt.IsPlay, mt.IsCaptain
-		FROM dbo.MyTeam mt
+		SELECT @SeasonKey, @NextGameweekKey, pt.PlayerKey, pcs.Cost, pt.IsPlay, pt.IsCaptain
+		FROM dbo.PossibleTeam pt
 		INNER JOIN dbo.FactPlayerCurrentStats pcs
-		ON mt.PlayerKey = pcs.PlayerKey
-		WHERE mt.SeasonKey = @SeasonKey
-		AND mt.GameweekKey = @NextGameweekKey - 1;
+		ON pt.PlayerKey = pcs.PlayerKey
+		WHERE pt.SeasonKey = @SeasonKey
+		AND pt.GameweekKey = @NextGameweekKey - 1;
 
 	END
 

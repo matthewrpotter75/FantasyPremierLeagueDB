@@ -60,7 +60,7 @@ BEGIN
 		AND mt.PlayerKey = @PlayerKey;
 
 		IF @@ROWCOUNT > 0
-			PRINT 'Transfer completed: ' + @PlayerName + ' out, ' + @NewPlayerName + ' in';
+			PRINT 'Transfer completed: ' + @PlayerName + ' out, ' + @NewPlayerName + ' in (gameweek: ' + CAST(@NextGameweekKey AS VARCHAR(2)) + ')';
 		ELSE
 			PRINT 'No update performed';
 

@@ -168,7 +168,7 @@ BEGIN
 		FROM @Gameweeks;
 	END
 
-	DECLARE @colHeaders VARCHAR(25),
+	DECLARE @colHeaders VARCHAR(200),
 	@sumHeaders VARCHAR(200);
 
 	SELECT @colHeaders = STUFF((SELECT  '],[' + CAST(GameweekKey AS VARCHAR(2))

@@ -19,14 +19,7 @@ BEGIN
 		SET @CurrentGameweekKey = (SELECT TOP (1) GameweekKey FROM dbo.MyTeam WHERE SeasonKey = @SeasonKey ORDER BY GameweekKey DESC);
 	END
 
-	;WITH PlayerPoints AS
-	(
-		SELECT PlayerKey, SUM(TotalPoints) AS TotalPoints
-		FROM dbo.FactPlayerHistory
-		WHERE SeasonKey = @SeasonKey
-		GROUP BY PlayerKey
-	)
-	SELECT dpp.PlayerPositionShort AS PlayerPosition, mt.PlayerKey, dp.PlayerName, dp.WebName, pp.TotalPoints
+	SELECT dpp.PlayerPositionShort AS PlayerPosition, mt.PlayerKey, dp.PlayerName, dp.WebName, pcs.Cost, pcs.TotalPoints
 	FROM dbo.MyTeam mt
 	INNER JOIN dbo.DimPlayer dp
 	ON mt.PlayerKey = dp.PlayerKey
@@ -35,8 +28,8 @@ BEGIN
 	AND dpa.SeasonKey = @SeasonKey
 	INNER JOIN dbo.DimPlayerPosition dpp
 	ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
-	INNER JOIN PlayerPoints pp
-	ON dp.PlayerKey = pp.PlayerKey
+	INNER JOIN dbo.FactPlayerCurrentStats pcs
+	ON dp.PlayerKey = pcs.PlayerKey
 	WHERE mt.SeasonKey = @SeasonKey
 	AND GameweekKey = @CurrentGameweekKey
 	ORDER BY dpp.PlayerPositionKey, dp.PlayerName;

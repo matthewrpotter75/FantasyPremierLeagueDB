@@ -11,6 +11,7 @@ CREATE PROCEDURE dbo.TransferInSpecifiedPlayers
 	@Debug BIT = 0,
 	@TimerDebug BIT = 0
 )
+WITH RECOMPILE
 AS
 BEGIN
 
@@ -20,29 +21,28 @@ BEGIN
 	@Overspend INT,
 	@PlayerKeyToChange INT,
 	@PlayerToChangeCost INT,
-	--@PlayerToRemoveCost INT,
 	@PlayerKeyToAdd INT,
 	@PlayerToAddCost INT,
 	@PlayerToAddPoints INT,
-	--@SpecifiedPlayerCost INT,
-	--@SpecifiedPlayerTotalPoints INT,
 	@PlayerToAddName VARCHAR(100),
 	@PlayerToChangeName VARCHAR(100),
 	@PlayersToChangeCost INT,
 	@Delimiter NVARCHAR(4) = ',',
 	@SPTIPlayerKeyToChange INT,
 	@Time DATETIME,
-	@StartTime DATETIME;
-
-	DECLARE @MaxGoalkeepers INT = 2,
-	@MaxDefendersAndMidfielders INT = 5,
-	@MaxForwards INT = 3;
+	@StartTime DATETIME,
+	@NewPlayerKeyPath VARCHAR(100),
+	@CurrentPlayerKeyPath VARCHAR(100),
+	@i INT;
 
 	IF OBJECT_ID('tempdb..#CurrentSquad') IS NOT NULL
 		DROP TABLE #CurrentSquad;
 
 	IF OBJECT_ID('tempdb..#PlayersToAdd') IS NOT NULL
 		DROP TABLE #PlayersToAdd;
+
+	IF OBJECT_ID('tempdb..#PlayerPointsCombinations') IS NOT NULL
+		DROP TABLE #PlayerPointsCombinations;
 
 	IF @TimerDebug = 1
 	BEGIN
@@ -68,7 +68,7 @@ BEGIN
 		SELECT @SeasonKey = SeasonKey FROM dbo.DimSeason WHERE GETDATE() BETWEEN SeasonStartDate AND SeasonEndDate;
 	END
 
-	DECLARE @PlayersToChangeTable TABLE (Id INT IDENTITY(1,1), PlayerKey INT, PlayerPositionKey INT, PlayerName VARCHAR(100), Cost INT, TotalPoints INT)
+	DECLARE @PlayersToChangeTable UDTPlayersToChangeTable;
 
 	INSERT INTO @PlayersToChangeTable
 	(PlayerKey, PlayerPositionKey, PlayerName, Cost, TotalPoints)
@@ -119,6 +119,8 @@ BEGIN
 	WHERE my.SeasonKey = @SeasonKey
 	AND my.GameweekKey = @GameweekEnd;
 
+	CREATE INDEX IX_CurrentSquad_PlayerKey ON #CurrentSquad (PlayerKey);
+
 	IF @Debug=1
 	BEGIN
 	
@@ -153,8 +155,7 @@ BEGIN
 		@GameweekEnd = @GameweekEnd,
 		@Overspend = @Overspend,
 		@Debug = @Debug,
-		@TimerDebug = @TimerDebug,
-		@PlayerKeyToChange = @SPTIPlayerKeyToChange OUTPUT;
+		@TimerDebug = @TimerDebug;
 
 		IF @TimerDebug = 1
 		BEGIN
@@ -169,8 +170,6 @@ BEGIN
 
 	IF @Debug=1
 	BEGIN
-
-		--SELECT @SPTIPlayerKeyToChange AS SPTIPlayerKeyToChange;
 
 		SELECT 'Before';
 
@@ -199,7 +198,34 @@ BEGIN
 		SELECT *
 		FROM @PlayersToChangeTable;
 
+		SELECT @PlayersToChangeCost AS PlayersToChangeCost, @Overspend AS Overspend, @PlayersToChangeCost - @Overspend AS TotalAvailableCost;
+
 	END
+
+	CREATE TABLE #PlayerPointsCombinations
+	(
+		Id INT,
+		CurrentPlayerKeyPath VARCHAR(100),
+		NewPlayerKeyPath VARCHAR(100),
+		RowNum INT,
+		PlayerPositionKey INT,
+		CurrentPlayerKey INT,
+		CurrentPlayerName VARCHAR(100),
+		CurrentPlayerCost INT,
+		CurrentPlayerTotalPoints INT,
+		NewPlayerKey INT,
+		NewPlayerName VARCHAR(100),
+		NewPlayerCost INT,
+		NewPlayerTotalPoints INT,		
+		CurrentPlayerCostSummed INT,
+		NewPlayerCostSummed INT,
+		CurrentPlayerPointsSummed INT,
+		NewPlayerPointsSummed INT,
+		RecursionLevel INT,
+		DiffPoints INT,
+		DiffCost INT,
+		CombinationRank INT
+	);
 
 	IF @TimerDebug = 1
 	BEGIN
@@ -209,211 +235,41 @@ BEGIN
 
 	IF @PlayersToChangeKeys = ''
 	BEGIN
+
+		INSERT INTO @PlayersToChangeTable
+		(PlayerKey, PlayerPositionKey, PlayerName, Cost, TotalPoints)
+		SELECT cs.PlayerKey, cs.PlayerPositionKey, p.PlayerName, cs.Cost, cs.TotalPoints
+		FROM #CurrentSquad cs
+		INNER JOIN dbo.DimPlayer p
+		ON cs.PlayerKey = p.PlayerKey
+		ORDER BY PlayerPositionKey, Cost, TotalPoints;
+
 		
 		IF @Debug = 1
 		BEGIN
 
 			SELECT 'CurrentPlayers branch';
 
-			--Get player to move out and player to move into the squad based on cost and points
-			;WITH CurrentTeam AS
-			(
-				SELECT Id, PlayerKey, PlayerPositionKey, Cost, TotalPoints
-				FROM #CurrentSquad cs
-			)
-			,PlayerPointsSummed AS
-			(
-				SELECT ph.PlayerKey,
-				pa.PlayerPositionKey,
-				SUM(ph.TotalPoints) AS TotalPoints
-				FROM dbo.FactPlayerHistory ph
-				INNER JOIN dbo.DimPlayerAttribute pa
-				ON ph.PlayerKey = pa.PlayerKey
-				AND pa.SeasonKey = @SeasonKey
-				WHERE ph.SeasonKey = @SeasonKey
-				AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-				AND ph.PlayerKey <> ISNULL(@SpecifiedPlayerKey, 0)
-				AND ph.PlayerKey <> ISNULL(@PlayerToRemoveKey, 0)
-				GROUP BY ph.PlayerKey, pa.PlayerPositionKey
-				HAVING SUM(ph.TotalPoints) > 0
-			)
-			--PlayersRanked AS
-			--(
-			SELECT ct.Id,
-			ct.PlayerKey AS CurrentPlayerKey,
-			cp.PlayerName AS CurrentPlayerName,
-			p.PlayerKey AS NewPlayerKey,
-			p.PlayerName AS NewPlayerName,  
-			pa.PlayerPositionKey,
-			pp.PlayerPositionShort,
-			ct.Cost AS CurrentPlayerCost,
-			pgs.Cost AS NewPlayerCost,
-			ct.TotalPoints AS CurrentPlayerTotalPoints,
-			pps.TotalPoints AS NewPlayerTotalPoints,
-			(ct.TotalPoints - pps.TotalPoints) AS DiffPoints,
-			(pgs.Cost - ct.Cost) AS DiffCost,
-			--ROW_NUMBER() OVER (PARTITION BY pa.PlayerPositionKey ORDER BY pps.TotalPoints DESC, pps.PlayerKey) AS PlayerPositionRank
-			ROW_NUMBER() OVER (PARTITION BY ct.Id ORDER BY ct.TotalPoints - pps.TotalPoints) AS PlayerRank
-			FROM PlayerPointsSummed pps
-			INNER JOIN dbo.FactPlayerGameweekStatus pgs
-			ON pps.PlayerKey = pgs.PlayerKey
-			AND pgs.SeasonKey = @SeasonKey
-			AND pgs.GameweekKey = @GameweekEnd
-			INNER JOIN dbo.DimPlayer p
-			ON pps.PlayerKey = p.PlayerKey
-			INNER JOIN dbo.DimPlayerAttribute pa
-			ON pps.PlayerKey = pa.PlayerKey
-			AND pa.SeasonKey = @SeasonKey
-			INNER JOIN dbo.DimPlayerPosition pp
-			ON pa.PlayerPositionKey = pp.PlayerPositionKey
-			INNER JOIN CurrentTeam ct
-			ON pps.PlayerPositionKey = ct.PlayerPositionKey
-			INNER JOIN dbo.DimPlayer cp
-			ON ct.PlayerKey = cp.PlayerKey
-			--WHERE pgs.Cost < ct.Cost - @Overspend
-			WHERE pps.TotalPoints >= ct.TotalPoints - @TotalPointsRange
-			AND ct.PlayerKey <> ISNULL(@SpecifiedPlayerKey,0)
-			AND ct.PlayerKey <> ISNULL(@PlayerToRemoveKey,0)
-			AND NOT EXISTS
-			(
-				SELECT 1
-				FROM #CurrentSquad
-				WHERE PlayerKey = pps.PlayerKey
-			);
+			SELECT @SeasonKey AS SeasonKey, 
+			@SpecifiedPlayerKey AS SpecifiedPlayerKey, 
+			@PlayerToRemoveKey AS PlayerToRemoveKey, 
+			@PlayersToChangeKeys AS PlayersToChangeKeys, 
+			@MaxNumberOfTransfers AS MaxNumberOfTransfers, 
+			@GameweekStart AS GameweekStart, 
+			@GameweekEnd AS GameweekEnd, 
+			@TotalPointsRange AS TotalPointsRange, 
+			@PlayersToChangeCost AS PlayersToChangeCost, 
+			@Overspend AS Overspend;
+
+			SELECT *
+			FROM dbo.fnGetPlayersRankedAll(@SeasonKey, @SpecifiedPlayerKey, @PlayerToRemoveKey, @PlayersToChangeKeys, @MaxNumberOfTransfers, @GameweekStart, @GameweekEnd, @TotalPointsRange, @PlayersToChangeCost, @Overspend, @PlayersToChangeTable);
 
 		END
 
-		--Get player to move out and player to move into the squad based on cost and points
-		;WITH CurrentTeam AS
-		(
-			SELECT Id, PlayerKey, PlayerPositionKey, Cost, TotalPoints
-			FROM #CurrentSquad cs
-		)
-		,PlayerPointsSummed AS
-		(
-			SELECT ph.PlayerKey,
-			pa.PlayerPositionKey,
-			SUM(ph.TotalPoints) AS TotalPoints
-			FROM dbo.FactPlayerHistory ph
-			INNER JOIN dbo.DimPlayerAttribute pa
-			ON ph.PlayerKey = pa.PlayerKey
-			AND pa.SeasonKey = @SeasonKey
-			WHERE ph.SeasonKey = @SeasonKey
-			AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-			AND ph.PlayerKey <> ISNULL(@SpecifiedPlayerKey, 0)
-			AND ph.PlayerKey <> ISNULL(@PlayerToRemoveKey, 0)
-			GROUP BY ph.PlayerKey, pa.PlayerPositionKey
-			HAVING SUM(ph.TotalPoints) > 0
-		),
-		PlayersRanked AS
-		(
-			SELECT ct.Id,
-			ct.PlayerKey AS CurrentPlayerKey,
-			cp.PlayerName AS CurrentPlayerName,
-			p.PlayerKey AS NewPlayerKey,
-			p.PlayerName AS NewPlayerName,  
-			pa.PlayerPositionKey,
-			pp.PlayerPositionShort,
-			ct.Cost AS CurrentPlayerCost,
-			pgs.Cost AS NewPlayerCost,
-			ct.TotalPoints AS CurrentPlayerTotalPoints,
-			pps.TotalPoints AS NewPlayerTotalPoints,
-			(ct.TotalPoints - pps.TotalPoints) AS DiffPoints,
-			(pgs.Cost - ct.Cost) AS DiffCost,
-			--ROW_NUMBER() OVER (PARTITION BY pa.PlayerPositionKey ORDER BY pps.TotalPoints DESC, pps.PlayerKey) AS PlayerPositionRank
-			ROW_NUMBER() OVER (PARTITION BY ct.Id ORDER BY ct.TotalPoints - pps.TotalPoints) AS PlayerRank
-			FROM PlayerPointsSummed pps
-			INNER JOIN dbo.FactPlayerGameweekStatus pgs
-			ON pps.PlayerKey = pgs.PlayerKey
-			AND pgs.SeasonKey = @SeasonKey
-			AND pgs.GameweekKey = @GameweekEnd
-			INNER JOIN dbo.DimPlayer p
-			ON pps.PlayerKey = p.PlayerKey
-			INNER JOIN dbo.DimPlayerAttribute pa
-			ON pps.PlayerKey = pa.PlayerKey
-			AND pa.SeasonKey = @SeasonKey
-			INNER JOIN dbo.DimPlayerPosition pp
-			ON pa.PlayerPositionKey = pp.PlayerPositionKey
-			INNER JOIN CurrentTeam ct
-			ON pps.PlayerPositionKey = ct.PlayerPositionKey
-			INNER JOIN dbo.DimPlayer cp
-			ON ct.PlayerKey = cp.PlayerKey
-			--WHERE pgs.Cost < ct.Cost - @Overspend
-			WHERE pps.TotalPoints >= ct.TotalPoints - @TotalPointsRange
-			AND ct.PlayerKey <> ISNULL(@SpecifiedPlayerKey,0)
-			AND ct.PlayerKey <> ISNULL(@PlayerToRemoveKey,0)
-			AND NOT EXISTS
-			(
-				SELECT 1
-				FROM #CurrentSquad
-				WHERE PlayerKey = pps.PlayerKey
-			)
-		),
-		AnchorPlayer AS
-		(
-			SELECT p.Id,
-			ROW_NUMBER() OVER (PARTITION BY p.CurrentPlayerKey ORDER BY PlayerRank) AS RowNum,
-			p.PlayerPositionKey,
-			p.CurrentPlayerKey,
-			p.CurrentPlayerName,
-			cpcs.Cost AS CurrentPlayerCost,
-			cpcs.TotalPoints AS CurrentPlayerTotalPoints,
-			p.NewPlayerKey,
-			p.NewPlayerName,
-			pcs.Cost AS NewPlayerCost,
-			pcs.TotalPoints AS NewPlayerTotalPoints,
-			pcs.Cost AS CostSummed,
-			pcs.TotalPoints AS PointsSummed,
-			1 AS RecursionLevel
-			FROM PlayersRanked p
-			INNER JOIN dbo.FactPlayerCurrentStats cpcs
-			ON p.CurrentPlayerKey = cpcs.PlayerKey
-			INNER JOIN dbo.FactPlayerCurrentStats pcs
-			ON p.NewPlayerKey = pcs.PlayerKey
-			WHERE p.Id = 1
-			AND p.PlayerRank <= 20
-
-			UNION ALL
-
-			SELECT p.Id,
-			ap.RowNum,
-			p.PlayerPositionKey,
-			p.CurrentPlayerKey,
-			p.CurrentPlayerName,
-			cpcs.Cost AS CurrentPlayerCost,
-			cpcs.TotalPoints AS CurrentPlayerTotalPoints,
-			p.NewPlayerKey,
-			p.NewPlayerName,
-			pcs.Cost AS NewPlayerCost,
-			pcs.TotalPoints AS NewPlayerTotalPoints,
-			(pcs.Cost + ap.NewPlayerCost) AS CostSummed,
-			(pcs.TotalPoints + ap.PointsSummed) AS PointsSummed,
-			(ap.RecursionLevel + 1) AS RecursionLevel
-			FROM PlayersRanked p
-			INNER JOIN dbo.FactPlayerCurrentStats cpcs
-			ON p.CurrentPlayerKey = cpcs.PlayerKey
-			INNER JOIN dbo.FactPlayerCurrentStats pcs
-			ON p.NewPlayerKey = pcs.PlayerKey
-			CROSS APPLY AnchorPlayer ap
-			WHERE p.Id = (ap.RecursionLevel + 1)
-			AND p.CurrentPlayerKey <> ap.CurrentPlayerKey
-			AND p.NewPlayerKey <> ap.NewPlayerKey
-			AND (pcs.Cost + ap.NewPlayerCost) <= @PlayersToChangeCost
-			AND (ap.RecursionLevel + 1) <= @MaxNumberOfTransfers
-			AND p.PlayerRank <= 20
-		),
-		BestCombinationsRanked AS
-		(
-			SELECT *,
-			ROW_NUMBER() OVER (PARTITION BY RecursionLevel, CurrentPlayerKey ORDER BY PointsSummed DESC) AS CombinationRank
-			FROM AnchorPlayer
-			WHERE RowNum = 1
-		)
-		INSERT INTO #PlayersToAdd
-		(CurrentPlayerKey, CurrentPlayerCost, CurrentPlayerName, CurrentPlayerTotalPoints, NewPlayerKey, NewPlayerCost, NewPlayerTotalPoints, NewPlayerName)
-		SELECT CurrentPlayerKey, CurrentPlayerCost, CurrentPlayerName, CurrentPlayerTotalPoints, NewPlayerKey, NewPlayerCost, NewPlayerTotalPoints, NewPlayerName
-		FROM BestCombinationsRanked
-		WHERE CombinationRank = 1;
+		--Get players to move out and players to move into the squad based on cost and points
+		INSERT INTO #PlayerPointsCombinations
+		SELECT *
+		FROM dbo.fnGetPlayersRankedAll(@SeasonKey, @SpecifiedPlayerKey, @PlayerToRemoveKey, @PlayersToChangeKeys, @MaxNumberOfTransfers, @GameweekStart, @GameweekEnd, @TotalPointsRange, @PlayersToChangeCost, @Overspend, @PlayersToChangeTable);
 
 	END
 	ELSE
@@ -424,206 +280,27 @@ BEGIN
 
 			SELECT 'PlayersToChangeTable branch';
 
-			--Get player to move out and player to move into the squad based on cost and points
-			;WITH CurrentTeam AS
-			(
-				SELECT PlayerKey, PlayerPositionKey, Cost, TotalPoints
-				FROM #CurrentSquad cs
-			)
-			,PlayerPointsSummed AS
-			(
-				SELECT ph.PlayerKey,
-				pa.PlayerPositionKey,
-				SUM(ph.TotalPoints) AS TotalPoints
-				FROM dbo.FactPlayerHistory ph
-				INNER JOIN dbo.DimPlayerAttribute pa
-				ON ph.PlayerKey = pa.PlayerKey
-				AND pa.SeasonKey = @SeasonKey
-				WHERE ph.SeasonKey = @SeasonKey
-				AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-				AND ph.PlayerKey <> ISNULL(@SpecifiedPlayerKey, 0)
-				AND ph.PlayerKey <> ISNULL(@PlayerToRemoveKey, 0)
-				GROUP BY ph.PlayerKey, pa.PlayerPositionKey
-				HAVING SUM(ph.TotalPoints) > 0
-			)
-			--PlayersRanked AS
-			--(
-			SELECT ct.Id,
-			ct.PlayerKey AS CurrentPlayerKey,
-			cp.PlayerName AS CurrentPlayerName,
-			p.PlayerKey AS NewPlayerKey,
-			p.PlayerName AS NewPlayerName,  
-			pa.PlayerPositionKey,
-			pp.PlayerPositionShort,
-			ct.Cost AS CurrentPlayerCost,
-			pgs.Cost AS NewPlayerCost,
-			ct.TotalPoints AS CurrentPlayerTotalPoints,
-			pps.TotalPoints AS NewPlayerTotalPoints,
-			(ct.TotalPoints - pps.TotalPoints) AS DiffPoints,
-			(pgs.Cost - ct.Cost) AS DiffCost,
-			--ROW_NUMBER() OVER (PARTITION BY pa.PlayerPositionKey ORDER BY pps.TotalPoints DESC, pps.PlayerKey) AS PlayerPositionRank
-			ROW_NUMBER() OVER (PARTITION BY ct.Id ORDER BY ct.TotalPoints - pps.TotalPoints) AS PlayerRank
-			FROM PlayerPointsSummed pps
-			INNER JOIN dbo.FactPlayerGameweekStatus pgs
-			ON pps.PlayerKey = pgs.PlayerKey
-			AND pgs.SeasonKey = @SeasonKey
-			AND pgs.GameweekKey = @GameweekEnd
-			INNER JOIN dbo.DimPlayer p
-			ON pps.PlayerKey = p.PlayerKey
-			INNER JOIN dbo.DimPlayerAttribute pa
-			ON pps.PlayerKey = pa.PlayerKey
-			AND pa.SeasonKey = @SeasonKey
-			INNER JOIN dbo.DimPlayerPosition pp
-			ON pa.PlayerPositionKey = pp.PlayerPositionKey
-			INNER JOIN @PlayersToChangeTable ct
-			ON pps.PlayerPositionKey = ct.PlayerPositionKey
-			INNER JOIN dbo.DimPlayer cp
-			ON ct.PlayerKey = cp.PlayerKey
-			--WHERE pgs.Cost < ct.Cost - @Overspend
-			WHERE pps.TotalPoints >= ct.TotalPoints - @TotalPointsRange
-			AND ct.PlayerKey <> ISNULL(@SpecifiedPlayerKey,0)
-			AND ct.PlayerKey <> ISNULL(@PlayerToRemoveKey,0)
-			AND NOT EXISTS
-			(
-				SELECT 1
-				FROM #CurrentSquad
-				WHERE PlayerKey = pps.PlayerKey
-			);
+			SELECT @SeasonKey AS SeasonKey, 
+			@SpecifiedPlayerKey AS SpecifiedPlayerKey, 
+			@PlayerToRemoveKey AS PlayerToRemoveKey, 
+			@PlayersToChangeKeys AS PlayersToChangeKeys, 
+			@MaxNumberOfTransfers AS MaxNumberOfTransfers, 
+			@GameweekStart AS GameweekStart, 
+			@GameweekEnd AS GameweekEnd, 
+			@TotalPointsRange AS TotalPointsRange, 
+			@PlayersToChangeCost AS PlayersToChangeCost, 
+			@Overspend AS Overspend;
+
+			SELECT *
+			FROM dbo.fnGetPlayersRanked(@SeasonKey, @SpecifiedPlayerKey, @PlayerToRemoveKey, @PlayersToChangeKeys, @MaxNumberOfTransfers, @GameweekStart, @GameweekEnd, @TotalPointsRange, @PlayersToChangeCost, @Overspend, @PlayersToChangeTable);
 
 		END
+
+		--Get players to move out and players to move into the squad based on cost and points
+		INSERT INTO #PlayerPointsCombinations
+		SELECT *
+		FROM dbo.fnGetPlayersRanked(@SeasonKey, @SpecifiedPlayerKey, @PlayerToRemoveKey, @PlayersToChangeKeys, @MaxNumberOfTransfers, @GameweekStart, @GameweekEnd, @TotalPointsRange, @PlayersToChangeCost, @Overspend, @PlayersToChangeTable);
 		
-		--Get player to move out and player to move into the squad based on cost and points
-		;WITH CurrentTeam AS
-		(
-			SELECT PlayerKey, PlayerPositionKey, Cost, TotalPoints
-			FROM #CurrentSquad cs
-		)
-		,PlayerPointsSummed AS
-		(
-			SELECT ph.PlayerKey,
-			pa.PlayerPositionKey,
-			SUM(ph.TotalPoints) AS TotalPoints
-			FROM dbo.FactPlayerHistory ph
-			INNER JOIN dbo.DimPlayerAttribute pa
-			ON ph.PlayerKey = pa.PlayerKey
-			AND pa.SeasonKey = @SeasonKey
-			WHERE ph.SeasonKey = @SeasonKey
-			AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-			AND ph.PlayerKey <> ISNULL(@SpecifiedPlayerKey, 0)
-			AND ph.PlayerKey <> ISNULL(@PlayerToRemoveKey, 0)
-			GROUP BY ph.PlayerKey, pa.PlayerPositionKey
-			HAVING SUM(ph.TotalPoints) > 0
-		),
-		PlayersRanked AS
-		(
-			SELECT ct.Id,
-			ct.PlayerKey AS CurrentPlayerKey,
-			cp.PlayerName AS CurrentPlayerName,
-			p.PlayerKey AS NewPlayerKey,
-			p.PlayerName AS NewPlayerName,  
-			pa.PlayerPositionKey,
-			pp.PlayerPositionShort,
-			ct.Cost AS CurrentPlayerCost,
-			pgs.Cost AS NewPlayerCost,
-			ct.TotalPoints AS CurrentPlayerTotalPoints,
-			pps.TotalPoints AS NewPlayerTotalPoints,
-			(ct.TotalPoints - pps.TotalPoints) AS DiffPoints,
-			(pgs.Cost - ct.Cost) AS DiffCost,
-			--ROW_NUMBER() OVER (PARTITION BY pa.PlayerPositionKey ORDER BY pps.TotalPoints DESC, pps.PlayerKey) AS PlayerPositionRank
-			ROW_NUMBER() OVER (PARTITION BY ct.Id ORDER BY ct.TotalPoints - pps.TotalPoints) AS PlayerRank
-			FROM PlayerPointsSummed pps
-			INNER JOIN dbo.FactPlayerGameweekStatus pgs
-			ON pps.PlayerKey = pgs.PlayerKey
-			AND pgs.SeasonKey = @SeasonKey
-			AND pgs.GameweekKey = @GameweekEnd
-			INNER JOIN dbo.DimPlayer p
-			ON pps.PlayerKey = p.PlayerKey
-			INNER JOIN dbo.DimPlayerAttribute pa
-			ON pps.PlayerKey = pa.PlayerKey
-			AND pa.SeasonKey = @SeasonKey
-			INNER JOIN dbo.DimPlayerPosition pp
-			ON pa.PlayerPositionKey = pp.PlayerPositionKey
-			INNER JOIN @PlayersToChangeTable ct
-			ON pps.PlayerPositionKey = ct.PlayerPositionKey
-			INNER JOIN dbo.DimPlayer cp
-			ON ct.PlayerKey = cp.PlayerKey
-			--WHERE pgs.Cost < ct.Cost - @Overspend
-			WHERE pps.TotalPoints >= ct.TotalPoints - @TotalPointsRange
-			AND ct.PlayerKey <> ISNULL(@SpecifiedPlayerKey,0)
-			AND ct.PlayerKey <> ISNULL(@PlayerToRemoveKey,0)
-			AND NOT EXISTS
-			(
-				SELECT 1
-				FROM #CurrentSquad
-				WHERE PlayerKey = pps.PlayerKey
-			)
-		),
-		AnchorPlayer AS
-		(
-			SELECT p.Id,
-			ROW_NUMBER() OVER (PARTITION BY p.CurrentPlayerKey ORDER BY PlayerRank) AS RowNum,
-			p.PlayerPositionKey,
-			p.CurrentPlayerKey,
-			p.CurrentPlayerName,
-			cpcs.Cost AS CurrentPlayerCost,
-			cpcs.TotalPoints AS CurrentPlayerTotalPoints,
-			p.NewPlayerKey,
-			p.NewPlayerName,
-			pcs.Cost AS NewPlayerCost,
-			pcs.TotalPoints AS NewPlayerTotalPoints,
-			pcs.Cost AS CostSummed,
-			pcs.TotalPoints AS PointsSummed,
-			1 AS RecursionLevel
-			FROM PlayersRanked p
-			INNER JOIN dbo.FactPlayerCurrentStats cpcs
-			ON p.CurrentPlayerKey = cpcs.PlayerKey
-			INNER JOIN dbo.FactPlayerCurrentStats pcs
-			ON p.NewPlayerKey = pcs.PlayerKey
-			WHERE p.Id = 1
-			AND p.PlayerRank <= 20
-
-			UNION ALL
-
-			SELECT p.Id,
-			ap.RowNum,
-			p.PlayerPositionKey,
-			p.CurrentPlayerKey,
-			p.CurrentPlayerName,
-			cpcs.Cost AS CurrentPlayerCost,
-			cpcs.TotalPoints AS CurrentPlayerTotalPoints,
-			p.NewPlayerKey,
-			p.NewPlayerName,
-			pcs.Cost AS NewPlayerCost,
-			pcs.TotalPoints AS NewPlayerTotalPoints,
-			(pcs.Cost + ap.NewPlayerCost) AS CostSummed,
-			(pcs.TotalPoints + ap.PointsSummed) AS PointsSummed,
-			(ap.RecursionLevel + 1) AS RecursionLevel
-			FROM PlayersRanked p
-			INNER JOIN dbo.FactPlayerCurrentStats cpcs
-			ON p.CurrentPlayerKey = cpcs.PlayerKey
-			INNER JOIN dbo.FactPlayerCurrentStats pcs
-			ON p.NewPlayerKey = pcs.PlayerKey
-			CROSS APPLY AnchorPlayer ap
-			WHERE p.Id = (ap.RecursionLevel + 1)
-			AND p.CurrentPlayerKey <> ap.CurrentPlayerKey
-			AND p.NewPlayerKey <> ap.NewPlayerKey
-			AND (pcs.Cost + ap.NewPlayerCost) <= @PlayersToChangeCost
-			AND (ap.RecursionLevel + 1) <= @MaxNumberOfTransfers
-			AND p.PlayerRank <= 20
-		),
-		BestCombinationsRanked AS
-		(
-			SELECT *,
-			ROW_NUMBER() OVER (PARTITION BY RecursionLevel, CurrentPlayerKey ORDER BY PointsSummed DESC) AS CombinationRank
-			FROM AnchorPlayer
-			WHERE RowNum = 1
-		)
-		INSERT INTO #PlayersToAdd
-		(CurrentPlayerKey, CurrentPlayerCost, CurrentPlayerName, CurrentPlayerTotalPoints, NewPlayerKey, NewPlayerCost, NewPlayerTotalPoints, NewPlayerName)
-		SELECT CurrentPlayerKey, CurrentPlayerCost, CurrentPlayerName, CurrentPlayerTotalPoints, NewPlayerKey, NewPlayerCost, NewPlayerTotalPoints, NewPlayerName
-		FROM BestCombinationsRanked
-		WHERE CombinationRank = 1;
-
 	END
 
 	IF @TimerDebug = 1
@@ -631,6 +308,139 @@ BEGIN
 		EXEC dbo.OutputStepAndTimeText @Step='Post CTE', @Time=@time OUTPUT;
 		SET @time = GETDATE();
 	END
+
+
+	IF @Debug=1
+	BEGIN
+		
+		SELECT *
+		FROM #PlayerPointsCombinations
+		WHERE CombinationRank = 1;
+
+	END
+
+	CREATE INDEX IX_PlayerPointsCombinations_RecursionLevel_PlayerKeyPath ON #PlayerPointsCombinations (RecursionLevel, NewPlayerKeyPath);
+
+	SELECT @CurrentPlayerKeyPath = CurrentPlayerKeyPath, @NewPlayerKeyPath = NewPlayerKeyPath
+	FROM #PlayerPointsCombinations
+	WHERE CombinationRank = 1
+	AND RecursionLevel = @MaxNumberOfTransfers;
+
+	;WITH PlayersToTransfer AS
+	(
+		SELECT CurrentPlayer.Ordinal, CurrentPlayerKey, NewPlayerKey
+		FROM
+		(
+			SELECT Ordinal, Term AS CurrentPlayerKey
+			FROM dbo.fnSplit(@CurrentPlayerKeyPath,',')
+		) CurrentPlayer
+		INNER JOIN 
+		(
+			SELECT Ordinal, Term AS NewPlayerKey
+			FROM dbo.fnSplit(@NewPlayerKeyPath,',')
+		) NewPlayer
+		ON CurrentPlayer.Ordinal = NewPlayer.Ordinal
+	)
+	INSERT INTO #PlayersToAdd
+	(CurrentPlayerKey, CurrentPlayerCost, CurrentPlayerName, CurrentPlayerTotalPoints, NewPlayerKey, NewPlayerCost, NewPlayerTotalPoints, NewPlayerName)
+	SELECT DISTINCT ppc.CurrentPlayerKey, ppc.CurrentPlayerCost, ppc.CurrentPlayerName, ppc.CurrentPlayerTotalPoints, ppc.NewPlayerKey, ppc.NewPlayerCost, ppc.NewPlayerTotalPoints, ppc.NewPlayerName
+	FROM #PlayerPointsCombinations ppc
+	INNER JOIN PlayersToTransfer ptt
+	ON ppc.CurrentPlayerKey = ptt.CurrentPlayerKey
+	AND ppc.NewPlayerKey = ptt.NewPlayerKey
+	WHERE CHARINDEX(CAST(ppc.CurrentPlayerKey AS VARCHAR(10)),@CurrentPlayerKeyPath,1) > 0
+	AND CHARINDEX(CAST(ppc.NewPlayerKey AS VARCHAR(10)),@NewPlayerKeyPath,1) > 0;
+
+	IF @Debug=1
+	BEGIN
+		
+		SELECT 'New PlayersToTransfer';
+
+		SELECT CurrentPlayer.Ordinal, CurrentPlayerKey, NewPlayerKey
+		FROM
+		(
+			SELECT Ordinal, Term AS CurrentPlayerKey
+			FROM dbo.fnSplit(@CurrentPlayerKeyPath,',')
+		) CurrentPlayer
+		INNER JOIN 
+		(
+			SELECT Ordinal, Term AS NewPlayerKey
+			FROM dbo.fnSplit(@NewPlayerKeyPath,',')
+		) NewPlayer
+		ON CurrentPlayer.Ordinal = NewPlayer.Ordinal;
+
+		;WITH PlayersToTransfer AS
+		(
+			SELECT CurrentPlayer.Ordinal, CurrentPlayerKey, NewPlayerKey
+			FROM
+			(
+				SELECT Ordinal, Term AS CurrentPlayerKey
+				FROM dbo.fnSplit(@CurrentPlayerKeyPath,',')
+			) CurrentPlayer
+			INNER JOIN 
+			(
+				SELECT Ordinal, Term AS NewPlayerKey
+				FROM dbo.fnSplit(@NewPlayerKeyPath,',')
+			) NewPlayer
+			ON CurrentPlayer.Ordinal = NewPlayer.Ordinal
+		)
+		--SELECT ppc.CurrentPlayerKey, ppc.CurrentPlayerCost, ppc.CurrentPlayerName, ppc.CurrentPlayerTotalPoints, ppc.NewPlayerKey, ppc.NewPlayerCost, ppc.NewPlayerTotalPoints, ppc.NewPlayerName
+		SELECT ppc.*
+		FROM #PlayerPointsCombinations ppc
+		INNER JOIN PlayersToTransfer ptt
+		ON ppc.CurrentPlayerKey = ptt.CurrentPlayerKey
+		AND ppc.NewPlayerKey = ptt.NewPlayerKey
+		WHERE CHARINDEX(CAST(ppc.CurrentPlayerKey AS VARCHAR(10)),@CurrentPlayerKeyPath,1) > 0
+		AND CHARINDEX(CAST(ppc.NewPlayerKey AS VARCHAR(10)),@NewPlayerKeyPath,1) > 0;
+
+	END
+
+	--SET @i = @MaxNumberOfTransfers;
+
+	--WHILE @i > 0
+	--BEGIN
+
+	--	IF @Debug=1
+	--	BEGIN
+
+	--		SELECT @NewPlayerKeyPath AS NewPlayerKeyPath;
+		
+	--		SELECT @i AS i, CurrentPlayerKey, CurrentPlayerCost, CurrentPlayerName, CurrentPlayerTotalPoints, NewPlayerKey, NewPlayerCost, NewPlayerTotalPoints, NewPlayerName
+	--		FROM #PlayerPointsCombinations
+	--		WHERE RecursionLevel = @i
+	--		AND NewPlayerKeyPath = @NewPlayerKeyPath;		
+		
+	--	END
+
+	--	INSERT INTO #PlayersToAdd
+	--	(CurrentPlayerKey, CurrentPlayerCost, CurrentPlayerName, CurrentPlayerTotalPoints, NewPlayerKey, NewPlayerCost, NewPlayerTotalPoints, NewPlayerName)
+	--	SELECT CurrentPlayerKey, CurrentPlayerCost, CurrentPlayerName, CurrentPlayerTotalPoints, NewPlayerKey, NewPlayerCost, NewPlayerTotalPoints, NewPlayerName
+	--	FROM #PlayerPointsCombinations
+	--	WHERE RecursionLevel = @i
+	--	AND NewPlayerKeyPath = @NewPlayerKeyPath;
+
+	--	SET @i = @i - 1;
+
+	--	IF PATINDEX('%,%',REVERSE(@NewPlayerKeyPath)) > 0 AND @i > 0
+	--		SELECT @NewPlayerKeyPath = LEFT(@NewPlayerKeyPath,LEN(@NewPlayerKeyPath) - PATINDEX('%,%',REVERSE(@NewPlayerKeyPath)));
+
+	--END
+
+	IF @TimerDebug = 1
+	BEGIN
+		EXEC dbo.OutputStepAndTimeText @Step='#PlayersToAdd inserts', @Time=@time OUTPUT;
+		SET @time = GETDATE();
+	END
+
+	IF @Debug=1
+	BEGIN
+
+		SELECT 'PlayersToAdd';
+
+	END
+
+	SELECT *
+	FROM #PlayersToAdd;
 
 	--Update Old player with new player in temp table
 	UPDATE cs
@@ -640,16 +450,6 @@ BEGIN
 	FROM #CurrentSquad cs
 	INNER JOIN #PlayersToAdd pta
 	ON cs.PlayerKey = pta.CurrentPlayerKey;	
-
-	IF @Debug=1
-	BEGIN
-
-		SELECT 'PlayersToAdd';
-
-		SELECT *
-		FROM #PlayersToAdd;
-
-	END
 
 	SELECT @PlayerToAddCost = SUM(NewPlayerCost) FROM #PlayersToAdd;
 	SELECT @PlayerToChangeCost = SUM(CurrentPlayerCost) FROM #PlayersToAdd;
@@ -665,10 +465,10 @@ BEGIN
 
 		SELECT 'After';
 
-		SELECT SUM(Cost) AS TotalCost, SUM(TotalPoints) AS TotalPoints
-		FROM #CurrentSquad;
-
 	END
+
+	SELECT SUM(Cost) AS TotalCost, SUM(TotalPoints) AS TotalPoints
+	FROM #CurrentSquad;
 
 	--Final Current Squad
 	SELECT p.PlayerName, cs.*
