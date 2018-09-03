@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[FactPlayerHistoryPastSeasons]
 (
-	[FactPlayerHistoryPastSeasonKey] INT NOT NULL,
+	[FactPlayerHistoryPastSeasonKey] INT IDENTITY(1,1) NOT NULL,
 	[PlayerKey]         INT            NOT NULL,
 	[SeasonKey]         INT			  NOT NULL,
     [ElementCode]      INT            NOT NULL,

@@ -889,4 +889,95 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="GetMyTeamActualPlayerPointsForEachGameweekInRange" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="e84dc3fa-8cc0-4bab-8335-6ea3e87434fb" ChangeDateTime="06/21/2018 10:28:02">
+    <Property Name="ElementName" Value="[dbo].[CopyMyTeamPreviousGameweekToNext]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="CopyUserTeamPlayerPreviousGameweekToNext" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="65886305-d203-41c4-9122-8ce2bba79a76" ChangeDateTime="06/21/2018 10:42:57">
+    <Property Name="ElementName" Value="[dbo].[GetMyTeamActualPlayerPointsForEachGameweekInRange]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="GetUserTeamActualPlayerPointsForEachGameweekInRange" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="635d8392-ca8a-4a2a-9648-531d05abf370" ChangeDateTime="06/21/2018 10:55:05">
+    <Property Name="ElementName" Value="[dbo].[GetMyTeamBestPlayerPointsForEachGameweekInRange]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="GetUserTeamBestPlayerPointsForEachGameweekInRange" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f97d03c6-9591-4616-8e6f-d2102789cbf2" ChangeDateTime="06/21/2018 11:15:06">
+    <Property Name="ElementName" Value="[dbo].[GetMyTeamCurrentGameweek]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="GetUserTeamPlayerCurrentGameweek" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4f0a09e9-65f5-4d1f-992b-bec24f0842ac" ChangeDateTime="06/21/2018 11:16:02">
+    <Property Name="ElementName" Value="[dbo].[GetMyTeamDifficulty]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="GetUserTeamDifficulty" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="14a1370b-7c31-481f-8a74-ceac5c416733" ChangeDateTime="06/21/2018 11:18:41">
+    <Property Name="ElementName" Value="[dbo].[GetMyTeamFixturesAndDifficulty]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="GetUserTeamPlayerFixturesAndDifficulty" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="acf03be6-55e4-445e-92ea-6b1bda3c1d57" ChangeDateTime="06/21/2018 11:25:09">
+    <Property Name="ElementName" Value="[dbo].[GetMyTeamPlayerPointsPlayingAndBenchPlayers]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="GetUserTeamPlayerPointsPlayingAndBenchPlayers" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0ccd8841-0835-4edd-89bb-2bf73996c437" ChangeDateTime="06/21/2018 11:31:17">
+    <Property Name="ElementName" Value="[dbo].[GetMyTeamTotalPlayerPointsForGameweekPeriod]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="GetUserTeamTotalPlayerPointsForGameweekPeriod" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8a9203d2-6695-4d59-9a0c-16d042264537" ChangeDateTime="06/21/2018 11:36:58">
+    <Property Name="ElementName" Value="[dbo].[ReplaceMyTeamPlayerWithNewPlayer]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="ReplaceUserTeamPlayerWithNewPlayer" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f171e181-c292-40a2-8009-e78661abc1e7" ChangeDateTime="06/21/2018 12:00:10">
+    <Property Name="ElementName" Value="[dbo].[UpdateMyTeamIsPlayForGameweek]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="UpdateUserTeamPlayerIsPlayForGameweek" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3c097d8d-b5cd-49bb-a9d6-a25f5253c29f" ChangeDateTime="06/21/2018 13:20:15">
+    <Property Name="ElementName" Value="[dbo].[GetMyTeamPointsForGameweek]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="GetUserTeamPlayerPointsForGameweek" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="afe5225f-c632-44f1-9b66-b9fd0978700d" ChangeDateTime="06/21/2018 13:25:45">
+    <Property Name="ElementName" Value="[dbo].[GetPlayerPoints]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="GetAllPlayerPoints" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e0eba9f6-e2bf-438e-9877-688b0a74cce1" ChangeDateTime="06/21/2018 16:02:01">
+    <Property Name="ElementName" Value="[dbo].[FK_FactPlayerTransfers_SeasonKey_GameweekKey_PlayerTransferredInKey]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[FactPlayerTransfers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FK_FactPlayerTransfers_UserTeamKey_SeasonKey_GameweekKey_PlayerTransferredInKey" />
+  </Operation>
 </Operations>

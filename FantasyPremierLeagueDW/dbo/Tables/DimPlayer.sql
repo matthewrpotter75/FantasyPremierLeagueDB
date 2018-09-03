@@ -4,6 +4,8 @@
     [SecondName] VARCHAR (50)  NOT NULL,
     [WebName]    VARCHAR (100) NOT NULL,
     [PlayerName] VARCHAR (100) NOT NULL,
+	[LatestPlayerId] INT NULL,
+	[LatestTeamId] INT NULL,
     CONSTRAINT [PK_DimPlayer] PRIMARY KEY CLUSTERED ([PlayerKey] ASC)
 );
 

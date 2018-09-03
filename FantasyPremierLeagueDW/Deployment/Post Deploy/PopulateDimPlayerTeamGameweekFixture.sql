@@ -1,3 +1,4 @@
+--One off, not to be added to solution deployment script
 MERGE INTO dbo.DimPlayerTeamGameweekFixture AS Target 
 USING 
 (

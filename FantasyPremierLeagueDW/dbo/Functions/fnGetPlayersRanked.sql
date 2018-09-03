@@ -1,5 +1,6 @@
 CREATE FUNCTION dbo.fnGetPlayersRanked
 (
+	@UserTeamKey INT = NULL,
 	@SeasonKey INT = NULL,
 	@SpecifiedPlayerKey INT = NULL,
 	@PlayerToRemoveKey INT = NULL,
@@ -45,13 +46,14 @@ BEGIN
 	(
 		SELECT ROW_NUMBER() OVER (ORDER BY pa.PlayerPositionKey, my.PlayerKey) AS Id,
 		my.*, pa.PlayerPositionKey, pa.TeamKey, pcs.TotalPoints
-		FROM dbo.MyTeam my
+		FROM dbo.DimUserTeamPlayer my
 		INNER JOIN dbo.DimPlayerAttribute pa
 		ON my.PlayerKey = pa.PlayerKey
 		AND pa.SeasonKey = @SeasonKey
 		INNER JOIN dbo.FactPlayerCurrentStats pcs
 		ON my.PlayerKey = pcs.PlayerKey
-		WHERE my.SeasonKey = @SeasonKey
+		WHERE my.UserTeamKey = @UserTeamKey
+		AND my.SeasonKey = @SeasonKey
 		AND my.GameweekKey = @GameweekEnd
 	)
 	,PlayerPointsSummed AS

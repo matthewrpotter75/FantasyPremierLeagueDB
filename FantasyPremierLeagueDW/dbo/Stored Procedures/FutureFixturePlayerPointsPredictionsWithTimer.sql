@@ -21,7 +21,7 @@ BEGIN
 		--TODO: 
 		--Limit PPG calculation to where player hasn't moved clubs or has moved to equal club or better club
 		--Add team average PPG for where player doesn't have enough games to make a prediction
-		--Add difficulty average PPG for where neither player nor club have enough games to make a prediction
+		--Add Difficulty average PPG for where neither player nor club have enough games to make a prediction
 
 		DECLARE @GameweekEnd INT, @GameweekStartDate DATE, @time DATETIME;
 
@@ -134,10 +134,10 @@ BEGIN
 		SELECT p.PlayerKey,
 		pa.PlayerPositionKey,
 		SUM(ph.TotalPoints) AS Points,
-		COUNT(ph.playerKey) AS Games,
-		SUM(ph.[minutes]) AS PlayerMinutes,
+		COUNT(ph.PlayerKey) AS Games,
+		SUM(ph.[Minutes]) AS PlayerMinutes,
 		--CASE WHEN SUM(ph.[Minutes]) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/SUM(ph.[Minutes]) * 90 ELSE 0 END AS PPG
-		CASE WHEN COUNT(ph.gameweekKey) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/COUNT(ph.GameweekKey) ELSE 0 END AS PPG
+		CASE WHEN COUNT(ph.GameweekKey) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/COUNT(ph.GameweekKey) ELSE 0 END AS PPG
 		INTO #OverallPPG
 		FROM #PlayerHistoryRankedByPoints ph
 		INNER JOIN dbo.DimPlayer p
@@ -156,15 +156,15 @@ BEGIN
 			SET @time = GETDATE();
 		END
 	
-		--Create temp table with overall points per game per team difficulty and opponent difficulty
+		--Create temp table with overall points per game per team Difficulty and opponent Difficulty
 		SELECT htd.Difficulty AS TeamDifficulty, 
 		otd.Difficulty AS OppositionTeamDifficulty,
 		pa.PlayerPositionKey,
 		SUM(ph.TotalPoints) AS Points,
-		COUNT(ph.playerKey) AS Games,
-		SUM(ph.[minutes]) AS PlayerMinutes,
+		COUNT(ph.PlayerKey) AS Games,
+		SUM(ph.[Minutes]) AS PlayerMinutes,
 		--CASE WHEN SUM(ph.[Minutes]) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/SUM(ph.[Minutes]) * 90 ELSE 0 END AS PPG
-		CASE WHEN COUNT(ph.gameweekKey) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/COUNT(ph.GameweekKey) ELSE 0 END AS PPG
+		CASE WHEN COUNT(ph.GameweekKey) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/COUNT(ph.GameweekKey) ELSE 0 END AS PPG
 		INTO #OverallDifficultyPPG
 		FROM dbo.FactPlayerHistory ph
 		INNER JOIN dbo.DimPlayerAttribute pa
@@ -187,16 +187,16 @@ BEGIN
 			SET @time = GETDATE();
 		END
 	
-		--Create temp table with overall points per game per team, opponent difficulty, and home/away
+		--Create temp table with overall points per game per team, opponent Difficulty, and home/away
 		SELECT pa.TeamKey, 
 		pa.PlayerPositionKey,
 		otd.Difficulty AS OppositionTeamDifficulty,
 		ph.WasHome,
 		SUM(ph.TotalPoints) AS Points,
-		COUNT(ph.playerKey) AS Games,
-		SUM(ph.[minutes]) AS PlayerMinutes,
+		COUNT(ph.PlayerKey) AS Games,
+		SUM(ph.[Minutes]) AS PlayerMinutes,
 		--CASE WHEN SUM(ph.[Minutes]) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/SUM(ph.[Minutes]) * 90 ELSE 0 END AS PPG
-		CASE WHEN COUNT(ph.gameweekKey) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/COUNT(ph.GameweekKey) ELSE 0 END AS PPG
+		CASE WHEN COUNT(ph.GameweekKey) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/COUNT(ph.GameweekKey) ELSE 0 END AS PPG
 		INTO #OverallTeamPPG
 		FROM dbo.FactPlayerHistory ph
 		INNER JOIN dbo.DimPlayer p
@@ -218,7 +218,7 @@ BEGIN
 			SET @time = GETDATE();
 		END
 
-		--Calculate points per game for each player by difficulty of opposition, and whether at home or away
+		--Calculate points per game for each player by Difficulty of opposition, and whether at home or away
 		CREATE TABLE #PPG 
 		(
 			PlayerKey INT NOT NULL,
@@ -263,7 +263,7 @@ BEGIN
 			WHERE phr.PlayerHistoryKey = ph.PlayerHistoryKey
 			AND phr.PointsGameweekRank = 1
 		)
-		GROUP BY p.PlayerKey, pa.PlayerPositionKey, d.difficulty;
+		GROUP BY p.PlayerKey, pa.PlayerPositionKey, d.Difficulty;
 
 		IF @TimerDebug = 1
 		BEGIN
@@ -300,8 +300,8 @@ BEGIN
 			d.Difficulty AS OpponentDifficulty,
 			SUM(ph.TotalPoints) AS Points,
 			COUNT(ph.PlayerKey) AS Games,
-			SUM(ph.[minutes]) AS PlayerMinutes,
-			--CASE WHEN SUM(ph.[minutes]) <> 0 THEN SUM(CAST(ph.total_points AS decimal(8,6)))/SUM(ph.[minutes]) * 90 ELSE 0 END AS PPG5
+			SUM(ph.[Minutes]) AS PlayerMinutes,
+			--CASE WHEN SUM(ph.[Minutes]) <> 0 THEN SUM(CAST(ph.total_points AS decimal(8,6)))/SUM(ph.[Minutes]) * 90 ELSE 0 END AS PPG5
 			CASE WHEN COUNT(ph.GameweekKey) <> 0 THEN SUM(CAST(ph.TotalPoints AS DECIMAL(8,6)))/COUNT(ph.GameweekKey) ELSE 0 END AS PPG5
 			FROM PlayerHistoryRankedByGameweek ph
 			INNER JOIN dbo.DimPlayer p
@@ -394,7 +394,7 @@ BEGIN
 		SET PPG10games = 0
 		WHERE PPG10games IS NULL;
 
-		--Aggregate to get one row per player (there will only be one row per difficulty so not really aggregation)
+		--Aggregate to get one row per player (there will only be one row per Difficulty so not really aggregation)
 		SELECT PlayerKey, 
 		PlayerPositionKey,
 		SUM(Games) AS TotalGames,
@@ -424,7 +424,7 @@ BEGIN
 			SET @time = GETDATE();
 		END
 
-		--Get the difficulty of upcoming fixtures for each player
+		--Get the Difficulty of upcoming fixtures for each player
 		CREATE TABLE #FixtureDifficulty 
 		(
 			PlayerKey INT NOT NULL,
@@ -466,7 +466,7 @@ BEGIN
 			pa.TeamKey,
 			lpn.ChanceOfPlayingNextRound,
 			CASE 
-				WHEN ISNULL(lpn.News,'') <> '' AND CHARINDEX('Unknown return date', news) = 0 AND lpn.PlayerStatus IN ('i','s') THEN CAST(REVERSE(LEFT(REVERSE(lpn.News), CHARINDEX(' ', REVERSE(lpn.News), CHARINDEX(' ',REVERSE(lpn.News))+1)-1))+ CAST(YEAR(GETDATE()) AS VARCHAR(4)) AS DATE)
+				WHEN ISNULL(lpn.News,'') <> '' AND CHARINDEX('Unknown return date', News) = 0 AND lpn.PlayerStatus IN ('i','s') THEN CAST(REVERSE(LEFT(REVERSE(lpn.News), CHARINDEX(' ', REVERSE(lpn.News), CHARINDEX(' ',REVERSE(lpn.News))+1)-1))+ CAST(YEAR(GETDATE()) AS VARCHAR(4)) AS DATE)
 				ELSE @GameweekStartDate
 			END AS StartDate
 			FROM dbo.DimPlayer p
@@ -506,7 +506,7 @@ BEGIN
 			SET @time = GETDATE();
 		END
 
-		--Multiply the points per game for each difficulty level by the number of games for that difficulty
+		--Multiply the points per game for each Difficulty level by the number of games for that Difficulty
 		SELECT ppg.PlayerKey,
 		fd.ChanceOfPlayingNextRound,
 		ppg.TotalGames,
@@ -538,7 +538,7 @@ BEGIN
 			SET @time = GETDATE();
 		END
 
-		--Get team stats and fraction of minutes played against total
+		--Get team stats and fraction of Minutes played against total
 		SELECT TeamKey,
 		COUNT(DISTINCT GameweekFixtureKey) AS TotalGames
 		INTO #TotalTeamMinutes
@@ -548,10 +548,10 @@ BEGIN
 		GROUP BY TeamKey;
 
 		SELECT ph.PlayerKey,
-		SUM(ph.[minutes]) AS TotalMinutes,
+		SUM(ph.[Minutes]) AS TotalMinutes,
 		MIN(ttm.TotalGames) AS TotalGames,
 		SUM(ph.TotalPoints) AS CurrentPoints,
-		SUM(ph.[minutes] * 1.00)/(MIN(ttm.TotalGames) * 90) AS FractionOfMinutesPlayed
+		SUM(ph.[Minutes] * 1.00)/(MIN(ttm.TotalGames) * 90) AS FractionOfMinutesPlayed
 		INTO #PlayingPercentages
 		FROM dbo.FactPlayerHistory ph
 		INNER JOIN dbo.DimPlayerAttribute pa
@@ -704,7 +704,7 @@ BEGIN
 			EXEC dbo.OutputStepAndTimeText @Step='Final query', @Time=@time OUTPUT;
 		END
 
-		IF @debug = 1
+		IF @Debug = 1
 		BEGIN
 
 			SELECT @SeasonKey AS SeasonKey, @GameweekStart AS GameweekStart, @GameweekEnd AS GameweekEnd, @GameweekStartDate AS GameweekStartDate, @Gameweeks AS Gameweeks;
@@ -842,20 +842,20 @@ BEGIN
 			
 				SELECT *
 				FROM #PPG
-				WHERE playerKey = @PlayerKey
+				WHERE PlayerKey = @PlayerKey
 				ORDER BY OpponentDifficulty;
 
 				SELECT '#PlayerPPG';
 			
 				SELECT *
 				FROM #PlayerPPG
-				WHERE playerKey = @PlayerKey;
+				WHERE PlayerKey = @PlayerKey;
 
 				SELECT '#FixtureDifficulty';
 			
 				SELECT *
 				FROM #FixtureDifficulty
-				WHERE playerKey = @PlayerKey;
+				WHERE PlayerKey = @PlayerKey;
 
 				SELECT '#PlayerPredictions';
 			
@@ -863,7 +863,7 @@ BEGIN
 				FROM #PlayerPredictions pp
 				INNER JOIN dbo.DimPlayer p
 				ON pp.PlayerKey = p.PlayerKey
-				WHERE pp.playerKey = @PlayerKey;
+				WHERE pp.PlayerKey = @PlayerKey;
 
 				SELECT 'CTE PlayerPredictions';
 			

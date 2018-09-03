@@ -388,7 +388,8 @@ BEGIN
 	USING 
 	(
 		SELECT 
-		@SeasonKey AS SeasonKey,
+		@SeasonKey AS SeasonStartKey,
+		@SeasonKey AS SeasonEndKey,
 		@GameweekStart AS GameweekStart,
 		@GameweekEnd AS GameweekEnd,
 		PlayerKey, 
@@ -398,15 +399,16 @@ BEGIN
 		1 AS IsPlay
 		FROM #Best15Players
 	)
-	AS Source (SeasonKey, GameweekStart, GameweekEnd, PlayerKey, PlayerPositionKey, Cost, TotalPoints, IsPlay)
-	ON Source.SeasonKey = Target.SeasonKey
+	AS Source (SeasonStartKey, SeasonEndKey, GameweekStart, GameweekEnd, PlayerKey, PlayerPositionKey, Cost, TotalPoints, IsPlay)
+	ON Source.SeasonStartKey = Target.SeasonStartKey
+	AND Source.SeasonEndKey = Target.SeasonEndKey
 	AND Source.GameweekStart = Target.GameweekStart
 	AND Source.GameweekEnd = Target.GameweekEnd
 	AND Source.PlayerKey = Target.PlayerKey
 	AND Source.PlayerPositionKey = Target.PlayerPositionKey
 	WHEN NOT MATCHED BY TARGET THEN
-	INSERT (SeasonKey, GameweekStart, GameweekEnd, PlayerKey, PlayerPositionKey, Cost, TotalPoints, IsPlay)
-	VALUES (Source.SeasonKey, Source.GameweekStart, Source.GameweekEnd, Source.PlayerKey, Source.PlayerPositionKey, Source.Cost, Source.TotalPoints, Source.IsPlay)
+	INSERT (SeasonStartKey, SeasonEndKey, GameweekStart, GameweekEnd, PlayerKey, PlayerPositionKey, Cost, TotalPoints, IsPlay)
+	VALUES (Source.SeasonStartKey, Source.SeasonEndKey, Source.GameweekStart, Source.GameweekEnd, Source.PlayerKey, Source.PlayerPositionKey, Source.Cost, Source.TotalPoints, Source.IsPlay)
 	WHEN NOT MATCHED BY SOURCE THEN
 	DELETE;
 
@@ -418,7 +420,7 @@ BEGIN
 		SELECT PlayerKey,
 		ROW_NUMBER() OVER (ORDER BY TotalPoints DESC, PlayerKey) AS PlayerRank
 		FROM dbo.BestTeamSquad
-		WHERE SeasonKey = @SeasonKey
+		WHERE SeasonStartKey = @SeasonKey
 		AND GameweekStart = @GameweekStart
 		AND GameweekEnd = @GameweekEnd
 	) cpt
@@ -428,140 +430,7 @@ BEGIN
 	SELECT 'After';
 
 	SELECT SUM(Cost) AS TotalCost, SUM(TotalPoints) AS TotalPoints
-	FROM #Best15Players;	
-
-	--PointsRank
-	--SELECT p.PlayerName, bp.*,
-	--ROW_NUMBER() OVER (ORDER BY TotalPoints DESC) AS PointsRank
-	--FROM #Best15Players bp
-	--INNER JOIN dbo.DimPlayer p
-	--ON bp.PlayerKey = p.PlayerKey
-	--ORDER BY TotalPoints DESC;
-
-	--PointsPerCostRank
-	--SELECT p.PlayerName, bp.*,
-	--ROW_NUMBER() OVER (ORDER BY PointsPerCost DESC) AS PointsPerCostRank
-	--FROM #Best15Players bp
-	--INNER JOIN dbo.DimPlayer p
-	--ON bp.PlayerKey = p.PlayerKey
-	--ORDER BY PointsPerCost DESC;
-
-	--Combined Rank
-	--;WITH PointsRank AS
-	--(
-	--	SELECT p.PlayerName, bp.*,
-	--	ROW_NUMBER() OVER (ORDER BY TotalPoints DESC) AS PointsRank
-	--	FROM #Best15Players bp
-	--	INNER JOIN dbo.DimPlayer p
-	--	ON bp.PlayerKey = p.PlayerKey
-	--),
-	--PointsPerCostRank AS
-	--(
-	--	SELECT p.PlayerName, bp.*,
-	--	ROW_NUMBER() OVER (ORDER BY PointsPerCost DESC) AS PointsPerCostRank
-	--	FROM #Best15Players bp
-	--	INNER JOIN dbo.DimPlayer p
-	--	ON bp.PlayerKey = p.PlayerKey
-	--)
-	--SELECT pr.*, ppcr.PointsPerCostRank, pr.PointsRank + ppcr.PointsPerCostRank AS CombinedRank
-	--FROM PointsRank pr
-	--INNER JOIN PointsPerCostRank ppcr
-	--ON pr.PlayerKey = ppcr.PlayerKey
-	--ORDER BY CombinedRank DESC;
-
-	--PointAndCostRangeForEachPosition
-	--;WITH PlayerPointsSummed AS
-	--(
-	--	SELECT ph.PlayerKey,
-	--	pa.PlayerPositionKey,
-	--	SUM(ph.TotalPoints) AS TotalPoints
-	--	FROM dbo.FactPlayerHistory ph
-	--	INNER JOIN dbo.DimPlayerAttribute pa
-	--	ON ph.PlayerKey = pa.PlayerKey
-	--	AND pa.SeasonKey = @SeasonKey
-	--	WHERE ph.SeasonKey = @SeasonKey
-	--	AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-	--	GROUP BY ph.PlayerKey, pa.PlayerPositionKey
-	--),
-	--PlayersRanked AS
-	--(
-	--	SELECT p.PlayerKey,
-	--	p.PlayerName, 
-	--	pa.PlayerPositionKey,
-	--	pp.PlayerPositionShort,
-	--	pgs.Cost,
-	--	pps.TotalPoints,
-	--	ROW_NUMBER() OVER (PARTITION BY pa.PlayerPositionKey ORDER BY pps.TotalPoints DESC, pps.PlayerKey) AS PlayerPositionRank
-	--	--ROW_NUMBER() OVER (ORDER BY ph.TotalPoints DESC) AS PlayerRank
-	--	FROM PlayerPointsSummed pps
-	--	LEFT JOIN dbo.FactPlayerGameweekStatus pgs
-	--	ON pps.PlayerKey = pgs.PlayerKey
-	--	AND pgs.SeasonKey = @SeasonKey
-	--	AND pgs.GameweekKey = @GameweekStart
-	--	INNER JOIN dbo.DimPlayer p
-	--	ON pps.PlayerKey = p.PlayerKey
-	--	INNER JOIN dbo.DimPlayerAttribute pa
-	--	ON pps.PlayerKey = pa.PlayerKey
-	--	AND pa.SeasonKey = @SeasonKey
-	--	INNER JOIN dbo.DimPlayerPosition pp
-	--	ON pa.PlayerPositionKey = pp.PlayerPositionKey
-	--),
-	--PointAndCostRangeForEachPosition AS
-	--(
-	--	SELECT PlayerPositionKey, 
-	--	MIN(TotalPoints) AS MinTotalPoints,
-	--	MAX(TotalPoints) AS MaxTotalPoints,
-	--	MIN(Cost) AS MinTotalCost,
-	--	MAX(Cost) AS MaxTotalCost
-	--	FROM PlayersRanked
-	--	WHERE PlayerPositionRank <= 10
-	--	GROUP BY PlayerPositionKey
-	--)
-	--SELECT *
-	--FROM PointAndCostRangeForEachPosition;
-
-	--;WITH PlayerPointsSummed AS
-	--(
-	--	SELECT ph.PlayerKey,
-	--	pa.PlayerPositionKey,
-	--	SUM(ph.TotalPoints) AS TotalPoints
-	--	FROM dbo.FactPlayerHistory ph
-	--	INNER JOIN dbo.DimPlayerAttribute pa
-	--	ON ph.PlayerKey = pa.PlayerKey
-	--	AND pa.SeasonKey = @SeasonKey
-	--	WHERE ph.SeasonKey = @SeasonKey
-	--	AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-	--	GROUP BY ph.PlayerKey, pa.PlayerPositionKey
-	--),
-	--PlayersRanked AS
-	--(
-	--	SELECT p.PlayerKey,
-	--	p.PlayerName, 
-	--	pa.PlayerPositionKey,
-	--	pp.PlayerPositionShort,
-	--	pgs.Cost,
-	--	pps.TotalPoints,
-	--	ROW_NUMBER() OVER (PARTITION BY pa.PlayerPositionKey ORDER BY pps.TotalPoints DESC, pps.PlayerKey) AS PlayerPositionRank
-	--	--ROW_NUMBER() OVER (ORDER BY ph.TotalPoints DESC) AS PlayerRank
-	--	FROM PlayerPointsSummed pps
-	--	LEFT JOIN dbo.FactPlayerGameweekStatus pgs
-	--	ON pps.PlayerKey = pgs.PlayerKey
-	--	AND pgs.SeasonKey = @SeasonKey
-	--	AND pgs.GameweekKey = @GameweekStart
-	--	INNER JOIN dbo.DimPlayer p
-	--	ON pps.PlayerKey = p.PlayerKey
-	--	INNER JOIN dbo.DimPlayerAttribute pa
-	--	ON pps.PlayerKey = pa.PlayerKey
-	--	AND pa.SeasonKey = @SeasonKey
-	--	INNER JOIN dbo.DimPlayerPosition pp
-	--	ON pa.PlayerPositionKey = pp.PlayerPositionKey
-	--)
-	--SELECT *,
-	--(TotalPoints * 1.0)/Cost AS PointsPerCost
-	--FROM PlayersRanked
-	--WHERE PlayerPositionRank <= 15
-	----ORDER BY PlayerPositionKey, TotalPoints DESC;
-	--ORDER BY PlayerPositionKey, PointsPerCost DESC;
+	FROM #Best15Players;
 
 	IF @Debug = 1
 	BEGIN

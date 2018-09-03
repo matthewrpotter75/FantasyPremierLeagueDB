@@ -66,9 +66,11 @@
     <Folder Include="Storage\" />
     <Folder Include="dbo\Functions" />
     <Folder Include="dbo\Types" />
+    <Folder Include="Deployment" />
+    <Folder Include="Deployment\Pre Deploy" />
+    <Folder Include="Deployment\Post Deploy" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PopulateDimSeason.sql" />
     <Build Include="Security\FantasyPremierLeagueDW.sql" />
     <Build Include="Security\FantasyPremierLeagueDW_Login.sql" />
     <Build Include="Security\Permissions.sql" />
@@ -78,6 +80,12 @@
     <Build Include="dbo\Tables\DimPlayer.sql" />
     <Build Include="dbo\Tables\DimPlayerAttribute.sql" />
     <None Include="FantasyPremierLeagueDW_ProjectToDB.scmp" />
+    <None Include="Deployment\Post Deploy\PopulateDimUserTeamGameweekChip.sql" />
+    <None Include="Deployment\Pre Deploy\DimUserTeamPlayer - Copy MyTeam into temp table.sql" />
+    <None Include="Deployment\Post Deploy\DimUserTeamPlayer - Copy from MyTeam temp table.sql" />
+    <Build Include="dbo\Tables\FactPlayerTransfers.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamPlayerPointsForGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\GetAllPlayerPoints.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDW.publish.xml" />
@@ -104,8 +112,8 @@
     <Build Include="dbo\Tables\DimTeamGameweekFixture.sql" />
     <Build Include="dbo\Stored Procedures\GetPlayerGameweekHistoryComparison.sql" />
     <Build Include="dbo\Stored Procedures\GetPlayerGameweekHistoryComparisonClub2Club.sql" />
-    <Build Include="dbo\Tables\MyTeam.sql" />
-    <Build Include="dbo\Stored Procedures\GetMyTeamFixturesAndDifficulty.sql" />
+    <Build Include="dbo\Tables\DimUserTeamPlayer.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamPlayerFixturesAndDifficulty.sql" />
     <Build Include="dbo\Stored Procedures\GetAllTeamFixturesAndDifficulty.sql" />
     <Build Include="dbo\Stored Procedures\GetAllTeamsUpcomingAverageDifficulty.sql" />
     <Build Include="dbo\Tables\FactPlayerGameweekNews.sql" />
@@ -119,11 +127,11 @@
     <Build Include="dbo\Stored Procedures\GetTotalPointsByPlayerPositionAndGameweekRange.sql" />
     <Build Include="dbo\Stored Procedures\GetTotalPointsByTeamAndPlayerPositionAndGameweekRange.sql" />
     <Build Include="dbo\Stored Procedures\GetTotalPointsByPlayerPositionAndGameweekRangePivoted.sql" />
-    <Build Include="dbo\Stored Procedures\GetMyTeamActualPlayerPointsForEachGameweekInRange.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamActualPlayerPointsForEachGameweekInRange.sql" />
     <Build Include="Storage\FT_FantasyPremierLeagueDW.sql" />
     <Build Include="FullTextIndexes.sql" />
-    <Build Include="dbo\Stored Procedures\CopyMyTeamPreviousGameweekToNext.sql" />
-    <Build Include="dbo\Stored Procedures\ReplaceMyTeamPlayerWithNewPlayer.sql" />
+    <Build Include="dbo\Stored Procedures\CopyUserTeamPlayerPreviousGameweekToNext.sql" />
+    <Build Include="dbo\Stored Procedures\ReplaceUserTeamPlayerWithNewPlayer.sql" />
     <Build Include="dbo\Stored Procedures\GetBestTeamBasedOnPredictions.sql" />
     <Build Include="dbo\Stored Procedures\FutureFixturePlayerPointsPredictions.sql" />
     <Build Include="dbo\Functions\fnGetOverallPPG.sql" />
@@ -137,18 +145,17 @@
     <Build Include="dbo\Functions\fnActualPlayerPoints.sql" />
     <Build Include="dbo\Functions\fnGetPlayerHistoryRankedByGameweek.sql" />
     <Build Include="dbo\Functions\fnGetOverallTeamPPG.sql" />
-    <Build Include="dbo\Stored Procedures\GetMyTeamCurrentGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamPlayerCurrentGameweek.sql" />
     <Build Include="dbo\Stored Procedures\FutureFixturePlayerPointsPredictionsRefactored.sql" />
     <Build Include="dbo\Stored Procedures\OutputStepAndTimeText.sql" />
     <Build Include="dbo\Stored Procedures\FutureFixturePlayerPointsPredictionsProcessing.sql" />
-    <None Include="PopulateDimPlayerTeamGameweekFixture.sql" />
     <Build Include="dbo\Stored Procedures\AnalyzingWeightingFactors.sql" />
     <Build Include="dbo\Tables\WeightingFactorsAnalysis.sql" />
     <Build Include="dbo\Stored Procedures\AnalyzingWeightingFactorsInfilling.sql" />
     <Build Include="dbo\Tables\PlayerPointsPerGame.sql" />
     <Build Include="dbo\Tables\PlayerPointsPerGamePrevious5.sql" />
     <Build Include="dbo\Tables\PlayerPointsPerGamePrevious10.sql" />
-    <Build Include="dbo\Stored Procedures\UpdateMyTeamIsPlayForGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\UpdateUserTeamPlayerIsPlayForGameweek.sql" />
     <Build Include="dbo\Stored Procedures\GetPlayerGameweekHistoryStatsByDifficultyWasHome.sql" />
     <Build Include="dbo\Stored Procedures\GetTeamAndPositionGameweekHistoryStatsByDifficultyWasHome.sql" />
     <Build Include="dbo\Stored Procedures\GetTeamDifficultyAndPositionGameweekHistoryStatsByDifficultyWasHome.sql" />
@@ -161,9 +168,9 @@
     <Build Include="dbo\Stored Procedures\GetPlayerTotalPointsForSeasonMultiplePlayers.sql" />
     <Build Include="dbo\Functions\fnSplit.sql" />
     <Build Include="dbo\Tables\PossibleTeam.sql" />
-    <Build Include="dbo\Stored Procedures\GetMyTeamPlayerPointsPlayingAndBenchPlayers.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamPlayerPointsPlayingAndBenchPlayers.sql" />
     <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPoints.sql" />
-    <Build Include="dbo\Stored Procedures\GetMyTeamTotalPlayerPointsForGameweekPeriod.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamTotalPlayerPointsForGameweekPeriod.sql" />
     <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsForGameweek.sql" />
     <Build Include="dbo\Stored Procedures\GetPossibleTeamTotalPointsForGameweekPeriod.sql" />
     <Build Include="dbo\Stored Procedures\UpdatePossibleTeamIsPlayUsingGetPossibleTeamPlayerPointsForGameweek.sql" />
@@ -177,7 +184,7 @@
     <Build Include="dbo\Stored Procedures\GetBestTeamPlayerPointsForEachGameweekInRange.sql" />
     <Build Include="dbo\Stored Procedures\GetBestSquadPlayerPointsForGameweekPeriod.sql" />
     <Build Include="dbo\Stored Procedures\GetBestTeamPlayerPointsForGameweekPeriod.sql" />
-    <Build Include="dbo\Stored Procedures\GetMyTeamBestPlayerPointsForEachGameweekInRange.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamBestPlayerPointsForEachGameweekInRange.sql" />
     <Build Include="dbo\Tables\BestTeamSquad.sql" />
     <Build Include="dbo\Stored Procedures\GetPossibleTeamPlayerPointsForEachGameweekInRange.sql" />
     <Build Include="dbo\Stored Procedures\GetPlayerCostSelectedExpectedPointsFormPoints.sql" />
@@ -196,11 +203,25 @@
     <Build Include="dbo\Functions\fnGetPlayersRankedAll.sql" />
     <Build Include="dbo\Stored Procedures\GetTeamPlayerPointsAndMinutesForGameweeksInSeason.sql" />
     <Build Include="dbo\Stored Procedures\FutureFixturePlayerPointsPredictionsWithTimer.sql" />
-    <Build Include="dbo\Stored Procedures\GetMyTeamDifficulty.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamDifficulty.sql" />
     <Build Include="dbo\Stored Procedures\CopyPossibleTeamPreviousGameweekToNext.sql" />
     <Build Include="dbo\Stored Procedures\GetPossibleTeamDifficulty.sql" />
+    <Build Include="dbo\Tables\DimUserTeam.sql" />
+    <Build Include="dbo\Tables\DimUserTeamGameweekChip.sql" />
+    <Build Include="dbo\Tables\DimChip.sql" />
+    <Build Include="dbo\Tables\DimChipSeason.sql" />
+    <Build Include="dbo\Tables\DimUser.sql" />
+    <None Include="Deployment\Post Deploy\PopulateDimChip.sql" />
+    <None Include="Deployment\Post Deploy\PopulateDimChipSeason.sql" />
+    <None Include="Deployment\Post Deploy\PopulateDimPlayerTeamGameweekFixture.sql" />
+    <None Include="Deployment\Post Deploy\PopulateDimSeason.sql" />
+    <None Include="Deployment\Post Deploy\PopulateDimUser.sql" />
+    <None Include="Deployment\Post Deploy\PopulateDimUserTeam.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="FantasyPremierLeagueDW.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Script.PreDeployment.sql" />
   </ItemGroup>
 </Project>

@@ -9,4 +9,10 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-:r .\PopulateDimSeason.sql
+:r ".\Deployment\Post Deploy\PopulateDimSeason.sql"
+:r ".\Deployment\Post Deploy\PopulateDimChip.sql"
+:r ".\Deployment\Post Deploy\PopulateDimChipSeason.sql"
+:r ".\Deployment\Post Deploy\PopulateDimUser.sql"
+:r ".\Deployment\Post Deploy\PopulateDimUserTeam.sql"
+:r ".\Deployment\Post Deploy\PopulateDimUserTeamGameweekChip.sql"
+:r ".\Deployment\Post Deploy\DimUserTeamPlayer - Copy from MyTeam temp table.sql"

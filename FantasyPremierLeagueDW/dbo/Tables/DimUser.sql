@@ -1,0 +1,7 @@
+CREATE TABLE dbo.DimUser
+(
+	UserKey INT NOT NULL,
+	UserName VARCHAR(100) NOT NULL,
+	UserNameDescription VARCHAR(100) NULL
+	CONSTRAINT [PK_DimUser] PRIMARY KEY CLUSTERED (UserKey ASC)
+);
