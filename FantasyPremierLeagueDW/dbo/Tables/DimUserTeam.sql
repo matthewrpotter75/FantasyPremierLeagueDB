@@ -1,6 +1,6 @@
 CREATE TABLE dbo.DimUserTeam
 (
-	UserTeamKey INT NOT NULL,
+	UserTeamKey INT IDENTITY(1,1) NOT NULL,
 	UserKey INT NOT NULL,
 	SeasonKey INT NOT NULL,
 	UserTeamName VARCHAR(100) NOT NULL,

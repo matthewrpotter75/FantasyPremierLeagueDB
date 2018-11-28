@@ -86,6 +86,16 @@
     <Build Include="dbo\Tables\FactPlayerTransfers.sql" />
     <Build Include="dbo\Stored Procedures\GetUserTeamPlayerPointsForGameweek.sql" />
     <Build Include="dbo\Stored Procedures\GetAllPlayerPoints.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPointsForPlayerPositionCostAfterStartGameweek.sql" />
+    <Build Include="dbo\Functions\fnGetPlayerPointsByPlayerPositionAfterSpecifiedGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\AddUserTeam.sql" />
+    <Build Include="dbo\Stored Procedures\AddUser.sql" />
+    <Build Include="dbo\Tables\FactPlayerDailyPrices.sql" />
+    <Build Include="dbo\Tables\DimDate.sql" />
+    <Build Include="dbo\Functions\fnGetEasterHolidays.sql" />
+    <None Include="Deployment\Post Deploy\PopulateDimDate.sql" />
+    <Build Include="dbo\Stored Procedures\GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasons.sql" />
+    <Build Include="dbo\Tables\DimNewPlayer.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDW.publish.xml" />

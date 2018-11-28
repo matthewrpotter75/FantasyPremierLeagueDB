@@ -1,6 +1,6 @@
 CREATE TABLE dbo.DimUserTeamPlayer
 (
-	UserTeamKey INT NOT NULL CONSTRAINT [DF_DimUserTeamPlayer_UserTeamKey] DEFAULT 1,
+	UserTeamKey INT NOT NULL,
 	SeasonKey INT NOT NULL,
 	GameweekKey INT NOT NULL,
 	PlayerKey INT NOT NULL,

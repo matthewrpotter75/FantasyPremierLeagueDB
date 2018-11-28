@@ -62,27 +62,31 @@ BEGIN
 		IF @PlayerKey IS NOT NULL AND @NewPlayerKey IS NOT NULL
 		BEGIN
 
-			UPDATE mt
-			SET PlayerKey = @NewPlayerKey, Cost = pgs.Cost
-			FROM dbo.DimUserTeamPlayer mt
-			INNER JOIN dbo.FactPlayerGameweekStatus pgs
-			ON mt.PlayerKey = pgs.PlayerKey
-			WHERE mt.UserTeamKey = @UserTeamKey
-			AND mt.SeasonKey = @SeasonKey
-			AND mt.GameweekKey = @NextGameweekKey
-			AND mt.PlayerKey = @PlayerKey;
+			SELECT @PlayerTransferredOutCost = Cost FROM dbo.FactPlayerGameweekStatus WHERE PlayerKey = @PlayerKey AND SeasonKey = @SeasonKey AND GameweekKey = @NextGameweekKey;
+			SELECT @PlayerTransferredInCost = Cost FROM dbo.FactPlayerGameweekStatus WHERE PlayerKey = @NewPlayerKey AND SeasonKey = @SeasonKey AND GameweekKey = @NextGameweekKey;
 
-			IF @@ROWCOUNT > 0
+			IF @PlayerTransferredOutCost IS NOT NULL AND @PlayerTransferredInCost IS NOT NULL
 			BEGIN
-				PRINT 'Transfer completed: ' + @PlayerName + ' out, ' + @NewPlayerName + ' in (gameweek: ' + CAST(@NextGameweekKey AS VARCHAR(2)) + ')';
 
-				SELECT @PlayerTransferredOutCost = Cost FROM dbo.FactPlayerGameweekStatus WHERE PlayerKey = @PlayerKey AND SeasonKey = @SeasonKey AND GameweekKey = @NextGameweekKey;
-				SELECT @PlayerTransferredInCost = Cost FROM dbo.FactPlayerGameweekStatus WHERE PlayerKey = @NewPlayerKey AND SeasonKey = @SeasonKey AND GameweekKey = @NextGameweekKey;
+				UPDATE mt
+				SET PlayerKey = @NewPlayerKey, Cost = pgs.Cost
+				FROM dbo.DimUserTeamPlayer mt
+				INNER JOIN dbo.FactPlayerGameweekStatus pgs
+				ON mt.PlayerKey = pgs.PlayerKey
+				WHERE mt.UserTeamKey = @UserTeamKey
+				AND mt.SeasonKey = @SeasonKey
+				AND mt.GameweekKey = @NextGameweekKey
+				AND mt.PlayerKey = @PlayerKey;
 
-				INSERT INTO dbo.FactPlayerTransfers
-				(SeasonKey, GameweekKey, PlayerTransferredOutKey, PlayerTransferredInKey, PlayerTransferredOutCost, PlayerTransferredInCost)
-				VALUES (@SeasonKey, @NextGameweekKey, @PlayerKey, @NewPlayerKey, @PlayerTransferredOutCost, @PlayerTransferredInCost);
+				IF @@ROWCOUNT > 0
+				BEGIN
+					PRINT 'Transfer completed: ' + @PlayerName + ' out, ' + @NewPlayerName + ' in (gameweek: ' + CAST(@NextGameweekKey AS VARCHAR(2)) + ')';
 
+					INSERT INTO dbo.FactPlayerTransfers
+					(UserTeamKey, SeasonKey, GameweekKey, PlayerTransferredOutKey, PlayerTransferredInKey, PlayerTransferredOutCost, PlayerTransferredInCost)
+					VALUES (@UserTeamKey, @SeasonKey, @NextGameweekKey, @PlayerKey, @NewPlayerKey, @PlayerTransferredOutCost, @PlayerTransferredInCost);
+
+				END
 			END
 			ELSE
 			BEGIN

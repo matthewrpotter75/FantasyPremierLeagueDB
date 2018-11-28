@@ -1,0 +1,16 @@
+CREATE TABLE dbo.DimNewPlayer
+(
+	PlayerKey INT IDENTITY(1,1) NOT NULL,
+	FirstName VARCHAR(50) NOT NULL,
+	SecondName VARCHAR(50) NOT NULL,
+	WebName VARCHAR(100) NOT NULL,
+	PlayerName VARCHAR(100) NOT NULL,
+	SeasonAddedKey INT NOT NULL,
+	GameweekKey INT NOT NULL,
+	CONSTRAINT PK_DimNewPlayer PRIMARY KEY CLUSTERED 
+	(
+		PlayerKey ASC
+	)
+);
+
+

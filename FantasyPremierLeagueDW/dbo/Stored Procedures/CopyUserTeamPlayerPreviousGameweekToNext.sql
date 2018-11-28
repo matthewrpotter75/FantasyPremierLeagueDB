@@ -30,7 +30,7 @@ BEGIN
 	IF @Debug = 1
 	BEGIN
 
-		SELECT p.PlayerName, @SeasonKey, @NextGameweekKey, mt.PlayerKey, pcs.Cost, mt.IsPlay, mt.IsCaptain
+		SELECT @UserTeamKey, p.PlayerName, @SeasonKey, @NextGameweekKey, mt.PlayerKey, pcs.Cost, mt.IsPlay, mt.IsCaptain
 		FROM dbo.DimUserTeamPlayer mt
 		INNER JOIN dbo.FactPlayerCurrentStats pcs
 		ON mt.PlayerKey = pcs.PlayerKey
@@ -49,8 +49,8 @@ BEGIN
 		BEGIN
 
 			INSERT INTO dbo.DimUserTeamPlayer
-			(SeasonKey, GameweekKey, PlayerKey, Cost, IsPlay, IsCaptain)
-			SELECT @SeasonKey, @NextGameweekKey, mt.PlayerKey, pcs.Cost, mt.IsPlay, mt.IsCaptain
+			(UserTeamKey, SeasonKey, GameweekKey, PlayerKey, Cost, IsPlay, IsCaptain)
+			SELECT @UserTeamKey, @SeasonKey, @NextGameweekKey, mt.PlayerKey, pcs.Cost, mt.IsPlay, mt.IsCaptain
 			FROM dbo.DimUserTeamPlayer mt
 			INNER JOIN dbo.FactPlayerCurrentStats pcs
 			ON mt.PlayerKey = pcs.PlayerKey

@@ -6,6 +6,8 @@ GO
 SET NOCOUNT ON;
 GO
 
+SET IDENTITY_INSERT dbo.DimUserTeam ON;
+
 MERGE INTO dbo.DimUserTeam AS Target 
 USING 
 (
@@ -26,6 +28,8 @@ VALUES (Source.UserTeamKey, Source.UserKey, Source.SeasonKey, Source.UserTeamNam
 --WHEN NOT MATCHED BY SOURCE THEN 
 --DELETE;
 GO
+
+SET IDENTITY_INSERT dbo.DimUserTeam OFF;
 
 DECLARE @sScriptName VARCHAR(256) = N'PopulateDimUserTeam.sql';
 DECLARE @sExecDate VARCHAR(32) = CONVERT(VARCHAR(32), GETDATE(), 126);                   

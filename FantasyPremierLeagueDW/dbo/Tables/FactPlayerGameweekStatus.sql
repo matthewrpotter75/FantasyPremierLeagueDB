@@ -22,6 +22,7 @@
     ExpectedPointsNext DECIMAL(4,2) NULL,
 	CONSTRAINT PK_FactPlayerGameweekStatus PRIMARY KEY CLUSTERED (FactPlayerGameweekStatusKey ASC),
 	CONSTRAINT FK_FactPlayerGameweekStatus_PlayerKey FOREIGN KEY(PlayerKey) REFERENCES dbo.DimPlayer ([PlayerKey]),
+	CONSTRAINT FK_FactPlayerGameweekStatus_TeamKey FOREIGN KEY(TeamKey) REFERENCES dbo.DimTeam ([TeamKey]),
 	CONSTRAINT FK_FactPlayerGameweekStatus_SeasonKey FOREIGN KEY(SeasonKey) REFERENCES dbo.DimSeason ([SeasonKey]),
 	CONSTRAINT FK_FactPlayerGameweekStatus_GameweekKey FOREIGN KEY(GameweekKey, SeasonKey) REFERENCES dbo.DimGameweek ([GameweekKey], [SeasonKey]),
 	CONSTRAINT UX_FactPlayerGameweekStatus_PlayerKey_SeasonKey_GameweekKey UNIQUE (PlayerKey, SeasonKey, GameweekKey)
