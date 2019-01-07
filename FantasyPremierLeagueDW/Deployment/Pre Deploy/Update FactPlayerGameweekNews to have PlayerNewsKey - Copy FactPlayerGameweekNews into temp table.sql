@@ -13,6 +13,13 @@ IF NOT EXISTS
 	WHERE TABLE_SCHEMA = 'dbo' 
 	AND  TABLE_NAME = 'DimPlayerNews'
 )
+AND EXISTS
+(
+	SELECT * 
+	FROM INFORMATION_SCHEMA.TABLES 
+	WHERE TABLE_SCHEMA = 'dbo' 
+	AND  TABLE_NAME = 'FactPlayerGameweekNews'
+)
 BEGIN
 
 	RAISERROR('*** Processing...' , 0, 1) WITH NOWAIT;
