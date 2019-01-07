@@ -10,3 +10,4 @@
 --------------------------------------------------------------------------------------
 */
 :r ".\Deployment\Pre Deploy\DimUserTeamPlayer - Copy MyTeam into temp table.sql"
+:r ".\Deployment\Pre Deploy\Update FactPlayerGameweekNews to have PlayerNewsKey - Copy FactPlayerGameweekNews into temp table.sql"

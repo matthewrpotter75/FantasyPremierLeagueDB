@@ -16,21 +16,21 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @PlayerTransferredOutCost INT, @PlayerTransferredInCost INT;
+	DECLARE @DateKey INT;
 
 	IF @SeasonKey IS NULL
 	BEGIN
 		SELECT @SeasonKey = SeasonKey FROM dbo.DimSeason WHERE GETDATE() BETWEEN SeasonStartDate AND SeasonEndDate;
 	END
 
-	IF @UserTeamName IS NOT NULL
-	BEGIN
-		SELECT @UserTeamKey = UserTeamKey FROM dbo.DimUserTeam WHERE UserTeamName = @UserTeamName;
-	END
-
-	DECLARE @LastGameweekKey INT;
 	IF @NextGameweekKey IS NULL
 	BEGIN
 		SET @NextGameweekKey = (SELECT TOP (1) GameweekKey FROM dbo.DimGameweek WHERE DeadlineTime > GETDATE() ORDER BY DeadlineTime);
+	END
+
+	IF @UserTeamName IS NOT NULL
+	BEGIN
+		SELECT @UserTeamKey = UserTeamKey FROM dbo.DimUserTeam WHERE UserTeamName = @UserTeamName;
 	END
 
 	IF @UserTeamKey IS NOT NULL
@@ -62,21 +62,30 @@ BEGIN
 		IF @PlayerKey IS NOT NULL AND @NewPlayerKey IS NOT NULL
 		BEGIN
 
-			SELECT @PlayerTransferredOutCost = Cost FROM dbo.FactPlayerGameweekStatus WHERE PlayerKey = @PlayerKey AND SeasonKey = @SeasonKey AND GameweekKey = @NextGameweekKey;
-			SELECT @PlayerTransferredInCost = Cost FROM dbo.FactPlayerGameweekStatus WHERE PlayerKey = @NewPlayerKey AND SeasonKey = @SeasonKey AND GameweekKey = @NextGameweekKey;
+			SELECT @DateKey = MAX(DateKey)
+			FROM dbo.DimDate
+			WHERE SeasonKey = @SeasonKey
+			AND GameweekKey = @NextGameweekKey;
+			
+			SELECT @PlayerTransferredOutCost = Cost FROM dbo.FactPlayerDailyPrices WHERE PlayerKey = @PlayerKey AND DateKey = @DateKey;
+			SELECT @PlayerTransferredInCost = Cost FROM dbo.FactPlayerDailyPrices WHERE PlayerKey = @NewPlayerKey AND DateKey = @DateKey;
 
-			IF @PlayerTransferredOutCost IS NOT NULL AND @PlayerTransferredInCost IS NOT NULL
+			IF @Debug = 1
+				SELECT @SeasonKey AS SeasonKey, @NextGameweekKey AS NextGameweekKey, @DateKey AS DateKey, @PlayerTransferredOutCost AS PlayerTransferredOutCost, @PlayerTransferredInCost AS PlayerTransferredInCost;
+
+			IF @PlayerTransferredOutCost IS NOT NULL AND @PlayerTransferredInCost IS NOT NULL AND @DateKey IS NOT NULL
 			BEGIN
 
-				UPDATE mt
-				SET PlayerKey = @NewPlayerKey, Cost = pgs.Cost
-				FROM dbo.DimUserTeamPlayer mt
-				INNER JOIN dbo.FactPlayerGameweekStatus pgs
-				ON mt.PlayerKey = pgs.PlayerKey
-				WHERE mt.UserTeamKey = @UserTeamKey
-				AND mt.SeasonKey = @SeasonKey
-				AND mt.GameweekKey = @NextGameweekKey
-				AND mt.PlayerKey = @PlayerKey;
+				UPDATE utp
+				SET PlayerKey = @NewPlayerKey, Cost = pdp.Cost
+				FROM dbo.DimUserTeamPlayer utp
+				INNER JOIN dbo.FactPlayerDailyPrices pdp
+				ON utp.PlayerKey = pdp.PlayerKey
+				AND pdp.DateKey = @DateKey
+				WHERE utp.UserTeamKey = @UserTeamKey
+				AND utp.SeasonKey = @SeasonKey
+				AND utp.GameweekKey = @NextGameweekKey
+				AND utp.PlayerKey = @PlayerKey;
 
 				IF @@ROWCOUNT > 0
 				BEGIN

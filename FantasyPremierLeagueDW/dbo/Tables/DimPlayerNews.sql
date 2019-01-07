@@ -1,0 +1,7 @@
+CREATE TABLE dbo.DimPlayerNews
+(
+PlayerNewsKey INT IDENTITY(1,1),
+News VARCHAR(200) NOT NULL,
+CreatedDate DATETIME NOT NULL CONSTRAINT DF_DimPlayerNews_CreatedDate DEFAULT GETDATE(),
+CONSTRAINT PK_DimPlayerNews PRIMARY KEY CLUSTERED (PlayerNewsKey)
+);

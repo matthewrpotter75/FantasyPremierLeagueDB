@@ -96,6 +96,9 @@
     <None Include="Deployment\Post Deploy\PopulateDimDate.sql" />
     <Build Include="dbo\Stored Procedures\GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasons.sql" />
     <Build Include="dbo\Tables\DimNewPlayer.sql" />
+    <Build Include="dbo\Tables\DimPlayerNews.sql" />
+    <None Include="Deployment\Pre Deploy\Update FactPlayerGameweekNews to have PlayerNewsKey - Copy FactPlayerGameweekNews into temp table.sql" />
+    <None Include="Deployment\Post Deploy\Populate DimPlayerNews and repopulate FactPlayerGameweekNews - Copy from temp table.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDW.publish.xml" />

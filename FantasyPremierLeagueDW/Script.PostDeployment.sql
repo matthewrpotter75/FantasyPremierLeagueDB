@@ -17,3 +17,4 @@ Post-Deployment Script Template
 :r ".\Deployment\Post Deploy\PopulateDimUserTeamGameweekChip.sql"
 :r ".\Deployment\Post Deploy\DimUserTeamPlayer - Copy from MyTeam temp table.sql"
 :r ".\Deployment\Post Deploy\PopulateDimDate.sql"
+:r ".\Deployment\Post Deploy\Populate DimPlayerNews and repopulate FactPlayerGameweekNews - Copy from temp table.sql"

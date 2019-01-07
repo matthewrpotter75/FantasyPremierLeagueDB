@@ -192,8 +192,10 @@ BEGIN
 			) fpgn1
 			CROSS APPLY
 			(
-				SELECT TOP (1) fpgn2.*
+				SELECT TOP (1) fpgn2.*,dpn.News
 				FROM dbo.FactPlayerGameweekNews fpgn2
+				INNER JOIN dbo.DimPlayerNews dpn
+				ON fpgn2.PlayerNewsKey = dpn.PlayerNewsKey
 				WHERE fpgn1.PlayerKey = fpgn2.PlayerKey
 				ORDER BY fpgn2.FactPlayerGameweekStatusKey DESC
 			) ca
@@ -673,8 +675,10 @@ BEGIN
 					) fpgn1
 					CROSS APPLY
 					(
-						SELECT TOP (1) fpgn2.*
+						SELECT TOP (1) fpgn2.*,dpn.News
 						FROM dbo.FactPlayerGameweekNews fpgn2
+						INNER JOIN dbo.DimPlayerNews dpn
+						ON fpgn2.PlayerNewsKey = dpn.PlayerNewsKey
 						WHERE fpgn1.PlayerKey = fpgn2.PlayerKey
 						ORDER BY fpgn2.FactPlayerGameweekStatusKey DESC
 					) ca
@@ -736,8 +740,10 @@ BEGIN
 			) fpgn1
 			CROSS APPLY
 			(
-				SELECT TOP (1) fpgn2.*
+				SELECT TOP (1) fpgn2.*,dpn.News
 				FROM dbo.FactPlayerGameweekNews fpgn2
+				INNER JOIN dbo.DimPlayerNews dpn
+				ON fpgn2.PlayerNewsKey = dpn.PlayerNewsKey
 				WHERE fpgn1.PlayerKey = fpgn2.PlayerKey
 				ORDER BY fpgn2.FactPlayerGameweekStatusKey DESC
 			) ca
@@ -941,8 +947,10 @@ BEGIN
 					) fpgn1
 					CROSS APPLY
 					(
-						SELECT TOP (1) fpgn2.*
+						SELECT TOP (1) fpgn2.*,dpn.News
 						FROM dbo.FactPlayerGameweekNews fpgn2
+						INNER JOIN dbo.DimPlayerNews dpn
+						ON fpgn2.PlayerNewsKey = dpn.PlayerNewsKey
 						WHERE fpgn1.PlayerKey = fpgn2.PlayerKey
 						ORDER BY fpgn2.FactPlayerGameweekStatusKey DESC
 					) ca
@@ -1003,8 +1011,10 @@ BEGIN
 			) fpgn1
 			CROSS APPLY
 			(
-				SELECT TOP (1) fpgn2.*
+				SELECT TOP (1) fpgn2.*,dpn.News
 				FROM dbo.FactPlayerGameweekNews fpgn2
+				INNER JOIN dbo.DimPlayerNews dpn
+				ON fpgn2.PlayerNewsKey = dpn.PlayerNewsKey
 				WHERE fpgn1.PlayerKey = fpgn2.PlayerKey
 				ORDER BY fpgn2.FactPlayerGameweekStatusKey DESC
 			) ca
