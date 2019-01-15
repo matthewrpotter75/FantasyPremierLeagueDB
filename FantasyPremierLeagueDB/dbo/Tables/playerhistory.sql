@@ -71,3 +71,7 @@ GO
 
 CREATE NONCLUSTERED INDEX [IX_PlayerHistory_opponent_teamId] ON [dbo].[PlayerHistory] ([opponent_teamId]);
 GO
+
+CREATE NONCLUSTERED INDEX [IX_PlayerHistory_was_home] ON [dbo].[PlayerHistory] ([was_home])
+INCLUDE ([kickoff_time],[gameweekId],[playerId],[opponent_teamId])
+GO
