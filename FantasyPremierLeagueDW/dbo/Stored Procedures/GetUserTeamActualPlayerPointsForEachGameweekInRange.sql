@@ -1,4 +1,4 @@
-CREATE PROCEDURE dbo.GetUserTeamActualPlayerPointsForEachGameweekInRange
+﻿CREATE PROCEDURE [dbo].[GetUserTeamActualPlayerPointsForEachGameweekInRange]
 (
 	@SeasonKey INT = NULL,
 	@UserTeamKey INT = NULL,
@@ -69,15 +69,15 @@ BEGIN
 			ON my.PlayerKey = dp.PlayerKey
 			INNER JOIN dbo.DimPlayerAttribute dpa
 			ON my.PlayerKey = dpa.PlayerKey
-			AND dpa.SeasonKey = @SeasonKey
+			AND dpa.SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + '
 			INNER JOIN dbo.DimPlayerPosition dpp
 			ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 			INNER JOIN dbo.FactPlayerHistory fph
 			ON dp.PlayerKey = fph.PlayerKey
 			AND my.GameweekKey = fph.GameweekKey
-			WHERE my.UserTeamKey = @UserTeamKey
-			AND fph.SeasonKey = @SeasonKey
-			AND mt.UserTeamKey = @UserTeamKey
+			WHERE my.UserTeamKey = ' + CAST(@UserTeamKey AS VARCHAR(3)) + '
+			AND fph.SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + '
+			AND my.UserTeamKey = ' + CAST(@UserTeamKey AS VARCHAR(3)) + '
 		)
 		SELECT PlayerName, PlayerPositionShort, ' + @colHeaders + '
 		FROM

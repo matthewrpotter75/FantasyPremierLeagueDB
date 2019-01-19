@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE dbo.GetPlayerPointsStatsByPlayerPosition
+﻿CREATE PROCEDURE [dbo].[GetPlayerPointsStatsByPlayerPosition]
 (
 	@PlayerPositionShortName VARCHAR(3) = NULL,
 	@PlayerAttributeSeasonKey INT
@@ -54,6 +54,7 @@ BEGIN
 		INNER JOIN dbo.DimPlayerPosition pp
 		ON pa.PlayerPositionKey = pp.PlayerPositionKey
 		WHERE pp.PlayerPositionShort = @PlayerPositionShortName
+		AND pa.SeasonKey = @PlayerAttributeSeasonKey
 		GROUP BY ph.PlayerKey, pp.PlayerPositionShort
 	)
 	SELECT p.PlayerKey,
