@@ -95,6 +95,9 @@ BEGIN
 	p.WebName,
 	t.TeamShortName,
 	pp.PlayerPositionShort AS PlayerPosition,
+	CAST((fpcs.Cost * 1.0)/10  AS DECIMAL(5,1)) AS Cost,
+	PPG5.PPG5 - PPG10.PPG10 AS PPGImprovement5Games,
+	PPG5.PPG5 - PPGS.PPGSeason AS PPGImprovementSeason,
 	PPG5.Points AS PPG5Points,
 	PPG5.Games AS PPG5Games,
 	PPG5.PPG5,
@@ -124,6 +127,8 @@ BEGIN
 	ON pa.PlayerPositionKey = pp.PlayerPositionKey
 	INNER JOIN dbo.DimTeam t
 	ON pa.TeamKey = t.TeamKey
+	INNER JOIN dbo.FactPlayerCurrentStats fpcs
+	ON p.PlayerKey = fpcs.PlayerKey
 	WHERE (@PlayerPosition IS NULL OR pp.PlayerPositionShort = @PlayerPosition)
 	AND (@TeamShortName IS NULL OR t.TeamShortName = @TeamShortName)
 	ORDER BY PPG5.Points DESC;
