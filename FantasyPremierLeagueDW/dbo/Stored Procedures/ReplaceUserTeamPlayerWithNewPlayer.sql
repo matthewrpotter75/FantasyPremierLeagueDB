@@ -62,26 +62,25 @@ BEGIN
 		IF @PlayerKey IS NOT NULL AND @NewPlayerKey IS NOT NULL
 		BEGIN
 
-			SELECT @DateKey = MAX(DateKey)
-			FROM dbo.DimDate
-			WHERE SeasonKey = @SeasonKey
-			AND GameweekKey = @NextGameweekKey;
+			SELECT @DateKey = d.DateKey
+			FROM dbo.DimGameweek gw
+			INNER JOIN dbo.DimDate d
+			ON CAST(gw.DeadlineTime AS DATE) = d.[Date]
+			WHERE gw.SeasonKey = @SeasonKey
+			AND gw.GameweekKey = @NextGameweekKey;
 			
-			SELECT @PlayerTransferredOutCost = Cost FROM dbo.FactPlayerDailyPrices WHERE PlayerKey = @PlayerKey AND DateKey = @DateKey;
-			SELECT @PlayerTransferredInCost = Cost FROM dbo.FactPlayerDailyPrices WHERE PlayerKey = @NewPlayerKey AND DateKey = @DateKey;
+			SELECT TOP 1 @PlayerTransferredOutCost = Cost FROM dbo.FactPlayerDailyPrices WHERE PlayerKey = @PlayerKey AND DateKey < @DateKey ORDER BY DateKey DESC;
+			SELECT TOP 1 @PlayerTransferredInCost = Cost FROM dbo.FactPlayerDailyPrices WHERE PlayerKey = @NewPlayerKey AND DateKey < @DateKey ORDER BY DateKey DESC;
 
 			IF @Debug = 1
-				SELECT @SeasonKey AS SeasonKey, @NextGameweekKey AS NextGameweekKey, @DateKey AS DateKey, @PlayerTransferredOutCost AS PlayerTransferredOutCost, @PlayerTransferredInCost AS PlayerTransferredInCost;
+				SELECT @SeasonKey AS SeasonKey, @NextGameweekKey AS NextGameweekKey, @PlayerTransferredOutCost AS PlayerTransferredOutCost, @PlayerTransferredInCost AS PlayerTransferredInCost;
 
-			IF @PlayerTransferredOutCost IS NOT NULL AND @PlayerTransferredInCost IS NOT NULL AND @DateKey IS NOT NULL
+			IF @PlayerTransferredOutCost IS NOT NULL AND @PlayerTransferredInCost IS NOT NULL
 			BEGIN
 
 				UPDATE utp
-				SET PlayerKey = @NewPlayerKey, Cost = pdp.Cost
+				SET PlayerKey = @NewPlayerKey, Cost = @PlayerTransferredInCost
 				FROM dbo.DimUserTeamPlayer utp
-				INNER JOIN dbo.FactPlayerDailyPrices pdp
-				ON utp.PlayerKey = pdp.PlayerKey
-				AND pdp.DateKey = @DateKey
 				WHERE utp.UserTeamKey = @UserTeamKey
 				AND utp.SeasonKey = @SeasonKey
 				AND utp.GameweekKey = @NextGameweekKey
