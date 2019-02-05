@@ -980,4 +980,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="FK_FactPlayerTransfers_UserTeamKey_SeasonKey_GameweekKey_PlayerTransferredInKey" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="85cd83d1-23c8-4ce6-95e5-b9d9b05b7ef6" ChangeDateTime="02/05/2019 03:13:14">
+    <Property Name="ElementName" Value="[dbo].[DimNewPlayer].[PlayerKey]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DimNewPlayer]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="NewPlayerKey" />
+  </Operation>
 </Operations>

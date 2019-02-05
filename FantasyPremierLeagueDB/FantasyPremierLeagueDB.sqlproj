@@ -98,6 +98,7 @@
     <Build Include="dbo\Stored Procedures\ComparePlayersByTeamAndPosition.sql" />
     <Build Include="dbo\Tables\MyTeam.sql" />
     <None Include="PopuateGameweekFixtures_FixturesOnly.sql" />
+    <Build Include="dbo\Tables\PlayerPrices.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDB.publish.xml" />

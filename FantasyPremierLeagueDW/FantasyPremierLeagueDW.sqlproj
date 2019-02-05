@@ -100,6 +100,7 @@
     <None Include="Deployment\Pre Deploy\Update FactPlayerGameweekNews to have PlayerNewsKey - Copy FactPlayerGameweekNews into temp table.sql" />
     <None Include="Deployment\Post Deploy\Populate DimPlayerNews and repopulate FactPlayerGameweekNews - Copy from temp table.sql" />
     <Build Include="dbo\Stored Procedures\GetAllPlayerPPGForSeasonPrevious5Previous10AndAllGameweeks.sql" />
+    <None Include="Deployment\Post Deploy\PopulateDimPlayer - Unknown PlayerKey.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDW.publish.xml" />

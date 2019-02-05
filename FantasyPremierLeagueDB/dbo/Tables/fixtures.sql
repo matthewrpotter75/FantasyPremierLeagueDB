@@ -16,7 +16,8 @@
     [gameweekId]             INT		   NULL,
     [team_a]                 INT	       NOT NULL,
     [team_h]                 INT	       NOT NULL,
-    CONSTRAINT [PK_fixtures] PRIMARY KEY CLUSTERED ([id] ASC),
+	[is_homeINT]             INT           NOT NULL,
+    CONSTRAINT [PK_fixtures] PRIMARY KEY CLUSTERED ([fixtureid] ASC),
     CONSTRAINT [FK_fixtures_gameweekId] FOREIGN KEY ([gameweekId]) REFERENCES [dbo].[Gameweeks] ([id]),
     CONSTRAINT [FK_fixtures_team_a] FOREIGN KEY ([team_a]) REFERENCES [dbo].[Teams] ([id]),
     CONSTRAINT [FK_fixtures_team_h] FOREIGN KEY ([team_h]) REFERENCES [dbo].[Teams] ([id])
