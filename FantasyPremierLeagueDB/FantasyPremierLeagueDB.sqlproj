@@ -109,4 +109,7 @@
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="FantasyPremierLeagueDB.refactorlog" />
+  </ItemGroup>
 </Project>
