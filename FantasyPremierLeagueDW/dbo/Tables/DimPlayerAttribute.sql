@@ -10,6 +10,7 @@
     [EA_Index] SMALLINT NOT NULL,
     [PlayerPositionKey] INT NOT NULL,
     [TeamKey] INT NOT NULL,
+	[DateInserted] DATETIME NULL CONSTRAINT [DF_DimPlayerAttribute_DateInserted] DEFAULT GETDATE(),
 	CONSTRAINT [PK_DimPlayerAttribute] PRIMARY KEY CLUSTERED ([PlayerKey] ASC, [SeasonKey] ASC),
 	CONSTRAINT [FK_DimPlayerAttribute_PlayerKey] FOREIGN KEY ([PlayerKey]) REFERENCES [dbo].[DimPlayer] ([PlayerKey]),
 	CONSTRAINT [FK_DimPlayerAttribute_SeasonKey] FOREIGN KEY ([SeasonKey]) REFERENCES [dbo].[DimSeason] ([SeasonKey])

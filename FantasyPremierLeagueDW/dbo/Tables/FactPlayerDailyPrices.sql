@@ -10,3 +10,8 @@ CREATE TABLE dbo.FactPlayerDailyPrices
 	CONSTRAINT FK_FactPlayerDailyPrices_TeamKey FOREIGN KEY(TeamKey) REFERENCES dbo.DimTeam ([TeamKey]),
 	CONSTRAINT FK_FactPlayerDailyPrices_DateKey FOREIGN KEY(DateKey) REFERENCES dbo.DimDate ([DateKey])
 );
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [UX_FactPlayerDailyPrices_PlayerKey_DateKey]
+    ON [dbo].[FactPlayerDailyPrices]([PlayerKey] ASC, [DateKey] ASC);
+GO

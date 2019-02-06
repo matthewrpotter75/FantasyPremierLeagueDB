@@ -6,6 +6,7 @@
     [PlayerName] VARCHAR (100) NOT NULL,
 	[LatestPlayerId] INT NULL,
 	[LatestTeamId] INT NULL,
+	[DateInserted] DATETIME NULL CONSTRAINT [DF_DimPlayer_DateInserted] DEFAULT GETDATE(),
     CONSTRAINT [PK_DimPlayer] PRIMARY KEY CLUSTERED ([PlayerKey] ASC)
 );
 
