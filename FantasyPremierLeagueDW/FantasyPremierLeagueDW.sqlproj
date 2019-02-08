@@ -101,6 +101,7 @@
     <None Include="Deployment\Post Deploy\Populate DimPlayerNews and repopulate FactPlayerGameweekNews - Copy from temp table.sql" />
     <Build Include="dbo\Stored Procedures\GetAllPlayerPPGForSeasonPrevious5Previous10AndAllGameweeks.sql" />
     <None Include="Deployment\Post Deploy\PopulateDimPlayer - Unknown PlayerKey.sql" />
+    <Build Include="dbo\Stored Procedures\DeleteDuplicatePlayersByPlayerKey.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDW.publish.xml" />

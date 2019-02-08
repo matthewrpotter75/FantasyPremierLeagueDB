@@ -408,7 +408,6 @@ BEGIN
 			SELECT *
 			FROM dbo.DimPlayerSeason ps
 			WHERE PlayerKey = @DuplicatePlayerKey
-			--AND SeasonKey = @SeasonKey
 			AND EXISTS
 			(
 				SELECT 1
@@ -446,7 +445,6 @@ BEGIN
 			SELECT *			
 			FROM dbo.DimPlayerTeamGameweekFixture ptgf
 			WHERE PlayerKey = @DuplicatePlayerKey
-			--AND SeasonKey = @SeasonKey
 			AND EXISTS
 			(
 				SELECT 1

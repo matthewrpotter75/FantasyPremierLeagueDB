@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[FactPlayerCurrentStats]
+﻿CREATE TABLE dbo.FactPlayerCurrentStats
 (
 	PlayerCurrentStatsKey INT IDENTITY(1,1) NOT NULL,
 	PlayerKey INT NOT NULL,
@@ -24,6 +24,7 @@
     RedCards TINYINT NOT NULL,
     Saves TINYINT NOT NULL,
     Bonus TINYINT NOT NULL,
-	CONSTRAINT [PK_FactPlayerCurrentStats] PRIMARY KEY CLUSTERED (PlayerKey ASC),
-	CONSTRAINT [FK_FactPlayerCurrentStats_PlayerKey] FOREIGN KEY (PlayerKey) REFERENCES [dbo].[DimPlayer] ([PlayerKey])
+	LastUpdated DATETIME CONSTRAINT DF_FactPlayerCurrentStats_LastUpdated DEFAULT (GETDATE()) NOT NULL,
+	CONSTRAINT PK_FactPlayerCurrentStats PRIMARY KEY CLUSTERED (PlayerKey ASC),
+	CONSTRAINT FK_FactPlayerCurrentStats_PlayerKey FOREIGN KEY (PlayerKey) REFERENCES dbo.DimPlayer (PlayerKey)
 );
