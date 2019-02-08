@@ -2,7 +2,6 @@ CREATE PROCEDURE dbo.DeleteDuplicatePlayersByPlayerKey
 (
 	@DuplicatePlayerKey INT,
 	@OriginalPlayerKey INT = 0,
-	@SeasonKey INT,
 	@Debug TINYINT = 0
 )
 AS 
