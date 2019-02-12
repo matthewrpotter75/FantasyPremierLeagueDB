@@ -27,7 +27,7 @@ BEGIN
 		SET @NextGameweekKey = (SELECT TOP (1) GameweekKey FROM dbo.DimGameweek WHERE DeadlineTime > GETDATE() ORDER BY DeadlineTime);
 	END
 
-	SET @LastGameweekKey = @NextGameweekKey + 4;
+	SET @LastGameweekKey = @NextGameweekKey + 9;
 
 	DECLARE @Gameweeks TABLE (Id INT IDENTITY(1,1), GameweekKey INT);
 
@@ -57,16 +57,16 @@ BEGIN
 			SELECT dp.PlayerKey,
 			dp.PlayerName, 
 			dtgwf.GameweekKey, 
-			pgs.Cost,
+			pcs.Cost,
 			hdt.TeamName,
 			dpa.PlayerPositionKey,
 			dpp.PlayerPositionShort AS PlayerPosition,
 			dt.TeamShortName + '' ('' + CASE WHEN IsHome = 1 THEN ''H'' ELSE ''A'' END + '') D'' + CAST(dtd.Difficulty AS VARCHAR(1)) AS Opponent
-			FROM dbo.DimUserTeamPlayer my
+			FROM dbo.DimUserTeamPlayer utp
 			INNER JOIN dbo.DimPlayer dp
-			ON my.PlayerKey = dp.PlayerKey
+			ON utp.PlayerKey = dp.PlayerKey
 			INNER JOIN dbo.DimPlayerAttribute dpa
-			ON my.PlayerKey = dpa.PlayerKey
+			ON utp.PlayerKey = dpa.PlayerKey
 			AND dpa.SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + '
 			INNER JOIN dbo.DimTeam hdt
 			ON dpa.TeamKey = hdt.TeamKey
@@ -81,14 +81,12 @@ BEGIN
 			ON dtgwf.OpponentTeamKey = dtd.TeamKey
 			AND dtgwf.IsHome = dtd.IsOpponentHome
 			AND dtd.SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + '
-			INNER JOIN dbo.FactPlayerGameweekStatus pgs
-			ON my.PlayerKey = pgs.PlayerKey
-			AND my.SeasonKey = pgs.SeasonKey
-			AND my.GameweekKey = pgs.GameweekKey
-			WHERE my.UserTeamKey = ' + CAST(@UserTeamKey AS VARCHAR(3)) + '
+			INNER JOIN dbo.FactPlayerCurrentStats pcs
+			ON utp.PlayerKey = pcs.PlayerKey
+			WHERE utp.UserTeamKey = ' + CAST(@UserTeamKey AS VARCHAR(3)) + '
 			AND dtgwf.SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + '
-			AND my.GameweekKey = ' + CAST(@NextGameweekKey AS VARCHAR(3)) + '
-			AND my.SeasonKey = ' + CAST(@UserTeamKey AS VARCHAR(3)) + '
+			AND utp.GameweekKey = ' + CAST(@NextGameweekKey AS VARCHAR(3)) + '
+			AND utp.SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + '
 		)
 		SELECT PlayerName, PlayerPosition, Cost, TeamName, ' + @colHeaders + '
 		FROM

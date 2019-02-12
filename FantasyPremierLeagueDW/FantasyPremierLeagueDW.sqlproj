@@ -103,6 +103,8 @@
     <None Include="Deployment\Post Deploy\PopulateDimPlayer - Unknown PlayerKey.sql" />
     <Build Include="dbo\Stored Procedures\DeleteDuplicatePlayersByPlayerKey.sql" />
     <Build Include="dbo\Stored Procedures\SelectPotentialDuplicatePlayers.sql" />
+    <Build Include="dbo\Stored Procedures\GetFactPlayerTransfers.sql" />
+    <Build Include="dbo\Stored Procedures\GetFactPlayerTransfersForGameweek.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDW.publish.xml" />

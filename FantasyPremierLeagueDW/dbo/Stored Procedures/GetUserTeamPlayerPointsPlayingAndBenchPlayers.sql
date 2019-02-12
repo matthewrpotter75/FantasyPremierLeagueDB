@@ -1,8 +1,9 @@
-CREATE PROCEDURE dbo.GetUserTeamPlayerPointsPlayingAndBenchPlayers
+CREATE PROCEDURE [dbo].[GetUserTeamPlayerPointsPlayingAndBenchPlayers]
 (
 	@UserTeamKey INT = NULL,
 	@UserTeamName VARCHAR(100) = NULL,
 	@SeasonKey INT = NULL,
+	@LastGameweekKey INT = NULL,
 	@Debug BIT = 0
 )
 AS
@@ -20,8 +21,8 @@ BEGIN
 		SELECT @UserTeamKey = UserTeamKey FROM dbo.DimUserTeam WHERE UserTeamName = @UserTeamName;
 	END
 
-	DECLARE @LastGameweekKey INT;
-	SET @LastGameweekKey = (SELECT MAX(GameweekKey) FROM dbo.FactPlayerHistory WHERE SeasonKey = @SeasonKey);
+	IF @LastGameweekKey IS NULL
+		SET @LastGameweekKey = (SELECT MAX(GameweekKey) FROM dbo.FactPlayerHistory WHERE SeasonKey = @SeasonKey);
 
 	DECLARE @Gameweeks TABLE (Id INT IDENTITY(1,1), GameweekKey INT);
 
@@ -40,7 +41,7 @@ BEGIN
 		FROM @Gameweeks;
 	END
 
-	DECLARE @colHeaders VARCHAR(200);
+	DECLARE @colHeaders VARCHAR(500);
 
 	SELECT @colHeaders = STUFF((SELECT  '],[' + CAST(GameweekKey AS VARCHAR(2))
     FROM @Gameweeks
@@ -50,7 +51,7 @@ BEGIN
 	IF @Debug = 1
 		SELECT @colHeaders;
 
-	DECLARE @sql NVARCHAR(4000);
+	DECLARE @sql NVARCHAR(MAX);
 	
 	--SET @sql = 'DECLARE @CurrentGameweekKey INT;
 	--SELECT @CurrentGameweekKey = MAX(GameweekKey) FROM dbo.DimGameweek WHERE SeasonKey = @SeasonKey AND DeadlineTime < GETDATE();
@@ -67,20 +68,20 @@ BEGIN
 				dpa.PlayerPositionKey,
 				dpp.PlayerPositionShort,
 				fph.TotalPoints
-				FROM dbo.DimUserTeamPlayer my
+				FROM dbo.DimUserTeamPlayer utp
 				INNER JOIN dbo.DimPlayer dp
-				ON my.PlayerKey = dp.PlayerKey
+				ON utp.PlayerKey = dp.PlayerKey
 				INNER JOIN dbo.DimPlayerAttribute dpa
-				ON my.PlayerKey = dpa.PlayerKey
-				AND dpa.SeasonKey = @SeasonKey
+				ON utp.PlayerKey = dpa.PlayerKey
+				AND dpa.SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + '
 				INNER JOIN dbo.DimPlayerPosition dpp
 				ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 				INNER JOIN dbo.FactPlayerHistory fph
 				ON dp.PlayerKey = fph.PlayerKey
-				AND my.GameweekKey = fph.GameweekKey
-				WHERE my.UserTeamKey = @UserTeamKey
-				AND fph.SeasonKey = @SeasonKey
-				AND my.IsPlay = 1
+				AND utp.GameweekKey = fph.GameweekKey
+				WHERE utp.UserTeamKey = ' + CAST(@UserTeamKey AS VARCHAR(10)) + '
+				AND fph.SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + '
+				AND utp.IsPlay = 1
 			),
 			PlayerGameweekPointsBench AS
 			(
@@ -90,20 +91,20 @@ BEGIN
 				dpa.PlayerPositionKey,
 				dpp.PlayerPositionShort,
 				fph.TotalPoints
-				FROM dbo.DimUserTeamPlayer my
+				FROM dbo.DimUserTeamPlayer utp
 				INNER JOIN dbo.DimPlayer dp
-				ON my.PlayerKey = dp.PlayerKey
+				ON utp.PlayerKey = dp.PlayerKey
 				INNER JOIN dbo.DimPlayerAttribute dpa
-				ON my.PlayerKey = dpa.PlayerKey
-				AND dpa.SeasonKey = @SeasonKey
+				ON utp.PlayerKey = dpa.PlayerKey
+				AND dpa.SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + '
 				INNER JOIN dbo.DimPlayerPosition dpp
 				ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 				INNER JOIN dbo.FactPlayerHistory fph
 				ON dp.PlayerKey = fph.PlayerKey
-				AND my.GameweekKey = fph.GameweekKey
-				WHERE my.UserTeamKey = @UserTeamKey
-				AND fph.SeasonKey = @SeasonKey
-				AND my.IsPlay = 0
+				AND utp.GameweekKey = fph.GameweekKey
+				WHERE utp.UserTeamKey = ' + CAST(@UserTeamKey AS VARCHAR(10)) + '
+				AND fph.SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + '
+				AND utp.IsPlay = 0
 			),
 			PlayerPoints AS
 			(
@@ -151,6 +152,9 @@ BEGIN
 		END
 
 		SET @sql = LEFT(@sql,LEN(@sql)-1);
+
+		IF @Debug = 1
+			SELECT LEN(@sql);
 
 		SET @sql = @sql + '
 				FROM PlayerPoints pp

@@ -24,10 +24,10 @@ BEGIN
 	IF @UserTeamKey IS NOT NULL
 	BEGIN
 
-		SELECT dpp.PlayerPositionShort AS PlayerPosition, mt.PlayerKey, dp.PlayerName, mt.IsCaptain, dp.WebName, pcs.Cost, ph.TotalPoints
-		FROM dbo.DimUserTeamPlayer mt
+		SELECT dpp.PlayerPositionShort AS PlayerPosition, utp.PlayerKey, dp.PlayerName, utp.IsCaptain, dp.WebName, pcs.Cost, SUM(ph.TotalPoints) AS TotalPoints
+		FROM dbo.DimUserTeamPlayer utp
 		INNER JOIN dbo.DimPlayer dp
-		ON mt.PlayerKey = dp.PlayerKey
+		ON utp.PlayerKey = dp.PlayerKey
 		INNER JOIN dbo.DimPlayerAttribute dpa
 		ON dp.PlayerKey = dpa.PlayerKey
 		AND dpa.SeasonKey = @SeasonKey
@@ -38,12 +38,13 @@ BEGIN
 		ON dp.PlayerKey = pcs.PlayerKey
 		INNER JOIN dbo.FactPlayerHistory ph
 		ON dp.PlayerKey = ph.PlayerKey
+		WHERE utp.UserTeamKey = @UserTeamKey
+		AND utp.SeasonKey = @SeasonKey
+		AND utp.GameweekKey = @GameweekKey
 		AND ph.SeasonKey = @SeasonKey
 		AND ph.GameweekKey = @GameweekKey
-		WHERE mt.UserTeamKey = @UserTeamKey
-		AND mt.SeasonKey = @SeasonKey
-		AND mt.GameweekKey = @GameweekKey
 		AND IsPlay = 1
+		GROUP BY dpp.PlayerPositionKey, dpp.PlayerPositionShort, utp.PlayerKey, dp.PlayerName, utp.IsCaptain, dp.WebName, pcs.Cost
 		ORDER BY dpp.PlayerPositionKey, dp.PlayerName;
 
 	END
@@ -55,6 +56,3 @@ BEGIN
 	END
 
 END
-GO
-
-

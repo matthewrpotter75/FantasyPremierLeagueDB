@@ -54,22 +54,22 @@ BEGIN
 		dpp.PlayerPositionShort,
 		COUNT(DISTINCT fph.GameweekFixtureKey) AS TotalGames,
 		SUM(fph.TotalPoints) AS TotalPoints
-		FROM dbo.DimUserTeamPlayer my
+		FROM dbo.DimUserTeamPlayer utp
 		INNER JOIN dbo.DimPlayer dp
-		ON my.PlayerKey = dp.PlayerKey
+		ON utp.PlayerKey = dp.PlayerKey
 		INNER JOIN dbo.DimPlayerAttribute dpa
-		ON my.PlayerKey = dpa.PlayerKey
+		ON utp.PlayerKey = dpa.PlayerKey
 		AND dpa.SeasonKey = @SeasonKey
 		INNER JOIN dbo.DimPlayerPosition dpp
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
-		AND my.SeasonKey = fph.SeasonKey
-		AND my.GameweekKey = fph.GameweekKey
-		WHERE my.UserTeamKey = @UserTeamKey
+		AND utp.SeasonKey = fph.SeasonKey
+		AND utp.GameweekKey = fph.GameweekKey
+		WHERE utp.UserTeamKey = @UserTeamKey
 		AND fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-		AND my.IsPlay = 1
+		AND utp.IsPlay = 1
 		GROUP BY dp.PlayerKey, dp.PlayerName, dpa.PlayerPositionKey, dpp.PlayerPositionShort
 		ORDER BY dpa.PlayerPositionKey, dp.PlayerKey, TotalPoints DESC;
 
@@ -84,22 +84,22 @@ BEGIN
 			dpp.PlayerPositionShort,
 			COUNT(DISTINCT fph.GameweekFixtureKey) AS TotalGames,
 			SUM(fph.TotalPoints) AS TotalPoints
-			FROM dbo.DimUserTeamPlayer my
+			FROM dbo.DimUserTeamPlayer utp
 			INNER JOIN dbo.DimPlayer dp
-			ON my.PlayerKey = dp.PlayerKey
+			ON utp.PlayerKey = dp.PlayerKey
 			INNER JOIN dbo.DimPlayerAttribute dpa
-			ON my.PlayerKey = dpa.PlayerKey
+			ON utp.PlayerKey = dpa.PlayerKey
 			AND dpa.SeasonKey = @SeasonKey
 			INNER JOIN dbo.DimPlayerPosition dpp
 			ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 			INNER JOIN dbo.FactPlayerHistory fph
 			ON dp.PlayerKey = fph.PlayerKey
-			AND my.SeasonKey = fph.SeasonKey
-			AND my.GameweekKey = fph.GameweekKey
-			WHERE my.UserTeamKey = @UserTeamKey
+			AND utp.SeasonKey = fph.SeasonKey
+			AND utp.GameweekKey = fph.GameweekKey
+			WHERE utp.UserTeamKey = @UserTeamKey
 			AND fph.SeasonKey = @SeasonKey
 			AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-			AND my.IsPlay = 1
+			AND utp.IsPlay = 1
 			GROUP BY dp.PlayerKey, dp.PlayerName, dpa.PlayerPositionKey, dpp.PlayerPositionShort
 		)
 		SELECT PlayerPositionKey, 
@@ -122,22 +122,22 @@ BEGIN
 			dpp.PlayerPositionShort,
 			fph.GameweekKey,
 			fph.TotalPoints
-			FROM dbo.DimUserTeamPlayer my
+			FROM dbo.DimUserTeamPlayer utp
 			INNER JOIN dbo.DimPlayer dp
-			ON my.PlayerKey = dp.PlayerKey
+			ON utp.PlayerKey = dp.PlayerKey
 			INNER JOIN dbo.DimPlayerAttribute dpa
-			ON my.PlayerKey = dpa.PlayerKey
+			ON utp.PlayerKey = dpa.PlayerKey
 			AND dpa.SeasonKey = @SeasonKey
 			INNER JOIN dbo.DimPlayerPosition dpp
 			ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 			INNER JOIN dbo.FactPlayerHistory fph
 			ON dp.PlayerKey = fph.PlayerKey
-			AND my.SeasonKey = fph.SeasonKey
-			AND my.GameweekKey = fph.GameweekKey
-			WHERE my.UserTeamKey = @UserTeamKey
+			AND utp.SeasonKey = fph.SeasonKey
+			AND utp.GameweekKey = fph.GameweekKey
+			WHERE utp.UserTeamKey = @UserTeamKey
 			AND fph.SeasonKey = @SeasonKey
 			AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-			AND my.IsPlay = 1
+			AND utp.IsPlay = 1
 		)
 		SELECT PlayerPositionShort AS PlayerPosition, ' + @colHeaders + '
 		FROM
@@ -154,8 +154,8 @@ BEGIN
 		IF @Debug=1
 			PRINT @sql;
 
-		SET @ParmDefinition = N'@SeasonKey INT, @GameweekStart INT, @GameweekEnd INT';
-		EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey, @GameweekStart = @GameweekStart, @GameweekEnd = @GameweekEnd;
+		SET @ParmDefinition = N'@UserTeamKey INT, @SeasonKey INT, @GameweekStart INT, @GameweekEnd INT';
+		EXEC sp_executesql @sql, @ParmDefinition, @UserTeamKey = @UserTeamKey, @SeasonKey = @SeasonKey, @GameweekStart = @GameweekStart, @GameweekEnd = @GameweekEnd;
 
 		--Player Bench Points by Player Position and Gameweek
 		SELECT 'Player Bench Points by Player Position and Gameweek';
@@ -169,22 +169,22 @@ BEGIN
 			dpp.PlayerPositionShort,
 			fph.GameweekKey,
 			fph.TotalPoints
-			FROM dbo.DimUserTeamPlayer my
+			FROM dbo.DimUserTeamPlayer utp
 			INNER JOIN dbo.DimPlayer dp
-			ON my.PlayerKey = dp.PlayerKey
+			ON utp.PlayerKey = dp.PlayerKey
 			INNER JOIN dbo.DimPlayerAttribute dpa
-			ON my.PlayerKey = dpa.PlayerKey
+			ON utp.PlayerKey = dpa.PlayerKey
 			AND dpa.SeasonKey = @SeasonKey
 			INNER JOIN dbo.DimPlayerPosition dpp
 			ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 			INNER JOIN dbo.FactPlayerHistory fph
 			ON dp.PlayerKey = fph.PlayerKey
-			AND my.SeasonKey = fph.SeasonKey
-			AND my.GameweekKey = fph.GameweekKey
-			WHERE my.UserTeamKey = @UserTeamKey
+			AND utp.SeasonKey = fph.SeasonKey
+			AND utp.GameweekKey = fph.GameweekKey
+			WHERE utp.UserTeamKey = @UserTeamKey
 			AND fph.SeasonKey = @SeasonKey
 			AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-			AND my.IsPlay = 0
+			AND utp.IsPlay = 0
 		)
 		SELECT PlayerPositionShort AS PlayerPosition, ' + @colHeaders + '
 		FROM
@@ -201,8 +201,8 @@ BEGIN
 		IF @Debug=1
 			PRINT @sql;
 
-		SET @ParmDefinition = N'@SeasonKey INT, @GameweekStart INT, @GameweekEnd INT';
-		EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey, @GameweekStart = @GameweekStart, @GameweekEnd = @GameweekEnd;
+		SET @ParmDefinition = N'@UserTeamKey INT, @SeasonKey INT, @GameweekStart INT, @GameweekEnd INT';
+		EXEC sp_executesql @sql, @ParmDefinition, @UserTeamKey = @UserTeamKey, @SeasonKey = @SeasonKey, @GameweekStart = @GameweekStart, @GameweekEnd = @GameweekEnd;
 
 		--Player Points by Gameweek
 		SELECT 'Player Points by Gameweek';
@@ -216,22 +216,22 @@ BEGIN
 			dpp.PlayerPositionShort,
 			fph.GameweekKey,
 			fph.TotalPoints
-			FROM dbo.DimUserTeamPlayer my
+			FROM dbo.DimUserTeamPlayer utp
 			INNER JOIN dbo.DimPlayer dp
-			ON my.PlayerKey = dp.PlayerKey
+			ON utp.PlayerKey = dp.PlayerKey
 			INNER JOIN dbo.DimPlayerAttribute dpa
-			ON my.PlayerKey = dpa.PlayerKey
+			ON utp.PlayerKey = dpa.PlayerKey
 			AND dpa.SeasonKey = @SeasonKey
 			INNER JOIN dbo.DimPlayerPosition dpp
 			ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 			INNER JOIN dbo.FactPlayerHistory fph
 			ON dp.PlayerKey = fph.PlayerKey
-			AND my.SeasonKey = fph.SeasonKey
-			AND my.GameweekKey = fph.GameweekKey
-			WHERE my.UserTeamKey = @UserTeamKey
+			AND utp.SeasonKey = fph.SeasonKey
+			AND utp.GameweekKey = fph.GameweekKey
+			WHERE utp.UserTeamKey = @UserTeamKey
 			AND fph.SeasonKey = @SeasonKey
 			AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-			AND my.IsPlay = 1
+			AND utp.IsPlay = 1
 		)
 		SELECT ' + @colHeaders + '
 		FROM
@@ -248,8 +248,8 @@ BEGIN
 		IF @Debug=1
 			PRINT @sql;
 
-		SET @ParmDefinition = N'@SeasonKey INT, @GameweekStart INT, @GameweekEnd INT';
-		EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey, @GameweekStart = @GameweekStart, @GameweekEnd = @GameweekEnd;
+		SET @ParmDefinition = N'@UserTeamKey INT, @SeasonKey INT, @GameweekStart INT, @GameweekEnd INT';
+		EXEC sp_executesql @sql, @ParmDefinition, @UserTeamKey = @UserTeamKey, @SeasonKey = @SeasonKey, @GameweekStart = @GameweekStart, @GameweekEnd = @GameweekEnd;
 
 		--Total Points
 		;WITH PlayerPoints AS
@@ -260,22 +260,22 @@ BEGIN
 			dpp.PlayerPositionShort,
 			COUNT(DISTINCT fph.GameweekFixtureKey) AS TotalGames,
 			SUM(fph.TotalPoints) AS TotalPoints
-			FROM dbo.DimUserTeamPlayer my
+			FROM dbo.DimUserTeamPlayer utp
 			INNER JOIN dbo.DimPlayer dp
-			ON my.PlayerKey = dp.PlayerKey
+			ON utp.PlayerKey = dp.PlayerKey
 			INNER JOIN dbo.DimPlayerAttribute dpa
-			ON my.PlayerKey = dpa.PlayerKey
+			ON utp.PlayerKey = dpa.PlayerKey
 			AND dpa.SeasonKey = @SeasonKey
 			INNER JOIN dbo.DimPlayerPosition dpp
 			ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 			INNER JOIN dbo.FactPlayerHistory fph
 			ON dp.PlayerKey = fph.PlayerKey
-			AND my.SeasonKey = fph.SeasonKey
-			AND my.GameweekKey = fph.GameweekKey
-			WHERE my.UserTeamKey = @UserTeamKey
+			AND utp.SeasonKey = fph.SeasonKey
+			AND utp.GameweekKey = fph.GameweekKey
+			WHERE utp.UserTeamKey = @UserTeamKey
 			AND fph.SeasonKey = @SeasonKey
 			AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-			AND my.IsPlay = 1
+			AND utp.IsPlay = 1
 			GROUP BY dp.PlayerKey, dp.PlayerName, dpa.PlayerPositionKey, dpp.PlayerPositionShort
 		)
 		SELECT SUM(TotalPoints) AS TotalPoints
@@ -290,22 +290,22 @@ BEGIN
 			dpp.PlayerPositionShort,
 			COUNT(DISTINCT fph.GameweekFixtureKey) AS TotalGames,
 			SUM(fph.TotalPoints) AS TotalPoints
-			FROM dbo.DimUserTeamPlayer my
+			FROM dbo.DimUserTeamPlayer utp
 			INNER JOIN dbo.DimPlayer dp
-			ON my.PlayerKey = dp.PlayerKey
+			ON utp.PlayerKey = dp.PlayerKey
 			INNER JOIN dbo.DimPlayerAttribute dpa
-			ON my.PlayerKey = dpa.PlayerKey
+			ON utp.PlayerKey = dpa.PlayerKey
 			AND dpa.SeasonKey = @SeasonKey
 			INNER JOIN dbo.DimPlayerPosition dpp
 			ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 			INNER JOIN dbo.FactPlayerHistory fph
 			ON dp.PlayerKey = fph.PlayerKey
-			AND my.SeasonKey = fph.SeasonKey
-			AND my.GameweekKey = fph.GameweekKey
-			WHERE my.UserTeamKey = @UserTeamKey
+			AND utp.SeasonKey = fph.SeasonKey
+			AND utp.GameweekKey = fph.GameweekKey
+			WHERE utp.UserTeamKey = @UserTeamKey
 			AND fph.SeasonKey = @SeasonKey
 			AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-			AND my.IsPlay = 0
+			AND utp.IsPlay = 0
 			GROUP BY dp.PlayerKey, dp.PlayerName, dpa.PlayerPositionKey, dpp.PlayerPositionShort
 		)
 		SELECT SUM(TotalPoints) AS BenchPoints
