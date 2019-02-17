@@ -105,6 +105,7 @@
     <Build Include="dbo\Stored Procedures\SelectPotentialDuplicatePlayers.sql" />
     <Build Include="dbo\Stored Procedures\GetFactPlayerTransfers.sql" />
     <Build Include="dbo\Stored Procedures\GetFactPlayerTransfersForGameweek.sql" />
+    <Build Include="dbo\Tables\FactPlayerDailyAttributes.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDW.publish.xml" />
