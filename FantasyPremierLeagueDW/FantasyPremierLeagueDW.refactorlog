@@ -987,4 +987,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="NewPlayerKey" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="b9d88b3f-18b8-454f-96cf-1e418baa8285" ChangeDateTime="02/18/2019 00:04:11">
+    <Property Name="ElementName" Value="[dbo].[GetGameweekPlayerHistoryForSeason]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="GetPlayerGameweekHistoryForSeason" />
+  </Operation>
 </Operations>

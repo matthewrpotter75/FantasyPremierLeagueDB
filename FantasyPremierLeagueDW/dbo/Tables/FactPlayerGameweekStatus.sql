@@ -27,3 +27,9 @@
 	CONSTRAINT FK_FactPlayerGameweekStatus_GameweekKey FOREIGN KEY(GameweekKey, SeasonKey) REFERENCES dbo.DimGameweek ([GameweekKey], [SeasonKey]),
 	CONSTRAINT UX_FactPlayerGameweekStatus_PlayerKey_SeasonKey_GameweekKey UNIQUE (PlayerKey, SeasonKey, GameweekKey)
 );
+GO
+
+CREATE NONCLUSTERED INDEX IX_FactPlayerGameweekStatus_SeasonKey_GameweekKey
+ON [dbo].[FactPlayerGameweekStatus] ([SeasonKey],[GameweekKey])
+INCLUDE ([PlayerKey],[Cost])
+GO

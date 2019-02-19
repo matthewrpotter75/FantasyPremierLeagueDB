@@ -54,10 +54,11 @@ BEGIN
 	ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 	INNER JOIN dbo.FactPlayerHistory fph
 	ON dp.PlayerKey = fph.PlayerKey
+	AND pt.SeasonKey = fph.SeasonKey
 	AND pt.GameweekKey = fph.GameweekKey
 	WHERE fph.SeasonKey = @SeasonKey
 	AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-	AND pt.IsPlay = 1
+	--AND pt.IsPlay = 1
 	GROUP BY dp.PlayerKey, dp.PlayerName, dpa.PlayerPositionKey, dpp.PlayerPositionShort
 	ORDER BY dpa.PlayerPositionKey, dp.PlayerKey, TotalPoints DESC;
 
@@ -82,10 +83,11 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND pt.SeasonKey = fph.SeasonKey
 		AND pt.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-		AND pt.IsPlay = 1
+		--AND pt.IsPlay = 1
 		GROUP BY dp.PlayerKey, dp.PlayerName, dpa.PlayerPositionKey, dpp.PlayerPositionShort
 	)
 	SELECT PlayerPositionKey, 
@@ -118,10 +120,11 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND pt.SeasonKey = fph.SeasonKey
 		AND pt.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-		AND pt.IsPlay = 1
+		--AND pt.IsPlay = 1
 	)
 	SELECT PlayerPositionShort AS PlayerPosition, ' + @colHeaders + '
 	FROM
@@ -163,6 +166,7 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND pt.SeasonKey = fph.SeasonKey
 		AND pt.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
@@ -208,10 +212,11 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND pt.SeasonKey = fph.SeasonKey
 		AND pt.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-		AND pt.IsPlay = 1
+		--AND pt.IsPlay = 1
 	)
 	SELECT ' + @colHeaders + '
 	FROM
@@ -250,10 +255,11 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND pt.SeasonKey = fph.SeasonKey
 		AND pt.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
-		AND pt.IsPlay = 1
+		--AND pt.IsPlay = 1
 		GROUP BY dp.PlayerKey, dp.PlayerName, dpa.PlayerPositionKey, dpp.PlayerPositionShort
 	)
 	SELECT SUM(TotalPoints) AS TotalPoints
@@ -278,6 +284,7 @@ BEGIN
 		ON dpa.PlayerPositionKey = dpp.PlayerPositionKey
 		INNER JOIN dbo.FactPlayerHistory fph
 		ON dp.PlayerKey = fph.PlayerKey
+		AND pt.SeasonKey = fph.SeasonKey
 		AND pt.GameweekKey = fph.GameweekKey
 		WHERE fph.SeasonKey = @SeasonKey
 		AND fph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd

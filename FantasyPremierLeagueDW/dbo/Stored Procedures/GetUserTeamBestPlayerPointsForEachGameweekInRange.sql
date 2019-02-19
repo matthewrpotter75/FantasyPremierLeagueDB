@@ -37,12 +37,12 @@ BEGIN
 			ph.SeasonKey,
 			ph.GameweekKey,
 			SUM(ph.TotalPoints) AS TotalPoints
-			FROM dbo.DimUserTeamPlayer mt
+			FROM dbo.DimUserTeamPlayer utp
 			INNER JOIN dbo.FactPlayerHistory ph
-			ON mt.PlayerKey = ph.PlayerKey
-			AND mt.SeasonKey = ph.SeasonKey
-			AND mt.GameweekKey = ph.GameweekKey
-			WHERE mt.UserTeamKey = @UserTeamKey
+			ON utp.PlayerKey = ph.PlayerKey
+			AND utp.SeasonKey = ph.SeasonKey
+			AND utp.GameweekKey = ph.GameweekKey
+			WHERE utp.UserTeamKey = @UserTeamKey
 			AND ph.SeasonKey = @SeasonKey
 			AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 			GROUP BY ph.PlayerKey, ph.SeasonKey, ph.GameweekKey
@@ -211,19 +211,19 @@ BEGIN
 		SET @sql = '	
 		;WITH PlayerGameweekPoints AS
 		(
-			SELECT mt.PlayerKey,
+			SELECT utp.PlayerKey,
 			bp.PlayerName, 
-			mt.GameweekKey, 
+			utp.GameweekKey, 
 			bp.PlayerPositionKey,
 			bp.PlayerPositionShort,
 			bp.Cost,
 			bp.TotalPoints
-			FROM dbo.DimUserTeamPlayer mt
+			FROM dbo.DimUserTeamPlayer utp
 			INNER JOIN #Best11Players bp
-			ON mt.PlayerKey = bp.PlayerKey
-			AND mt.SeasonKey = bp.SeasonKey
-			AND mt.GameweekKey = bp.GameweekKey
-			WHERE mt.UserTeamKey = @UserTeamKey
+			ON utp.PlayerKey = bp.PlayerKey
+			AND utp.SeasonKey = bp.SeasonKey
+			AND utp.GameweekKey = bp.GameweekKey
+			WHERE utp.UserTeamKey = @UserTeamKey
 		)
 		SELECT PlayerName, PlayerPositionShort, Cost, ' + @colHeaders + ',' + @sumHeaders + ' AS TotalPoints 
 		FROM
@@ -242,8 +242,8 @@ BEGIN
 			PRINT @sql;
 
 		DECLARE @ParmDefinition NVARCHAR(500);
-		SET @ParmDefinition = N'@SeasonKey INT, @GameweekStart INT, @GameweekEnd INT';
-		EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey, @GameweekStart = @GameweekStart, @GameweekEnd = @GameweekEnd;
+		SET @ParmDefinition = N'@SeasonKey INT, @GameweekStart INT, @GameweekEnd INT, @UserTeamKey INT';
+		EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey, @GameweekStart = @GameweekStart, @GameweekEnd = @GameweekEnd, @UserTeamKey = @UserTeamKey;
 
 		SELECT SUM(TotalPoints) AS TotalPoints
 		FROM #Best11Players;
@@ -259,12 +259,12 @@ BEGIN
 				ph.SeasonKey,
 				ph.GameweekKey,
 				SUM(ph.TotalPoints) AS TotalPoints
-				FROM dbo.DimUserTeamPlayer mt
+				FROM dbo.DimUserTeamPlayer utp
 				INNER JOIN dbo.FactPlayerHistory ph
-				ON mt.PlayerKey = ph.PlayerKey
-				AND mt.SeasonKey = ph.SeasonKey
-				AND mt.GameweekKey = ph.GameweekKey
-				WHERE mt.UserTeamKey = @UserTeamKey
+				ON utp.PlayerKey = ph.PlayerKey
+				AND utp.SeasonKey = ph.SeasonKey
+				AND utp.GameweekKey = ph.GameweekKey
+				WHERE utp.UserTeamKey = @UserTeamKey
 				AND ph.SeasonKey = @SeasonKey
 				AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 				GROUP BY ph.PlayerKey, ph.SeasonKey, ph.GameweekKey
@@ -310,12 +310,12 @@ BEGIN
 				ph.SeasonKey,
 				ph.GameweekKey,
 				SUM(ph.TotalPoints) AS TotalPoints
-				FROM dbo.DimUserTeamPlayer mt
+				FROM dbo.DimUserTeamPlayer utp
 				INNER JOIN dbo.FactPlayerHistory ph
-				ON mt.PlayerKey = ph.PlayerKey
-				AND mt.SeasonKey = ph.SeasonKey
-				AND mt.GameweekKey = ph.GameweekKey
-				WHERE mt.UserTeamKey = @UserTeamKey
+				ON utp.PlayerKey = ph.PlayerKey
+				AND utp.SeasonKey = ph.SeasonKey
+				AND utp.GameweekKey = ph.GameweekKey
+				WHERE utp.UserTeamKey = @UserTeamKey
 				AND ph.SeasonKey = @SeasonKey
 				AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 				GROUP BY ph.PlayerKey, ph.SeasonKey, ph.GameweekKey
@@ -361,12 +361,12 @@ BEGIN
 				ph.SeasonKey,
 				ph.GameweekKey,
 				SUM(ph.TotalPoints) AS TotalPoints
-				FROM dbo.DimUserTeamPlayer mt
+				FROM dbo.DimUserTeamPlayer utp
 				INNER JOIN dbo.FactPlayerHistory ph
-				ON mt.PlayerKey = ph.PlayerKey
-				AND mt.SeasonKey = ph.SeasonKey
-				AND mt.GameweekKey = ph.GameweekKey
-				WHERE mt.UserTeamKey = @UserTeamKey
+				ON utp.PlayerKey = ph.PlayerKey
+				AND utp.SeasonKey = ph.SeasonKey
+				AND utp.GameweekKey = ph.GameweekKey
+				WHERE utp.UserTeamKey = @UserTeamKey
 				AND ph.SeasonKey = @SeasonKey
 				AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 				GROUP BY ph.PlayerKey, ph.SeasonKey, ph.GameweekKey
@@ -419,12 +419,12 @@ BEGIN
 				ph.SeasonKey,
 				ph.GameweekKey,
 				SUM(ph.TotalPoints) AS TotalPoints
-				FROM dbo.DimUserTeamPlayer mt
+				FROM dbo.DimUserTeamPlayer utp
 				INNER JOIN dbo.FactPlayerHistory ph
-				ON mt.PlayerKey = ph.PlayerKey
-				AND mt.SeasonKey = ph.SeasonKey
-				AND mt.GameweekKey = ph.GameweekKey
-				WHERE mt.UserTeamKey = @UserTeamKey
+				ON utp.PlayerKey = ph.PlayerKey
+				AND utp.SeasonKey = ph.SeasonKey
+				AND utp.GameweekKey = ph.GameweekKey
+				WHERE utp.UserTeamKey = @UserTeamKey
 				AND ph.SeasonKey = @SeasonKey
 				AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 				GROUP BY ph.PlayerKey, ph.SeasonKey, ph.GameweekKey
@@ -477,12 +477,12 @@ BEGIN
 				ph.SeasonKey,
 				ph.GameweekKey,
 				SUM(ph.TotalPoints) AS TotalPoints
-				FROM dbo.DimUserTeamPlayer mt
+				FROM dbo.DimUserTeamPlayer utp
 				INNER JOIN dbo.FactPlayerHistory ph
-				ON mt.PlayerKey = ph.PlayerKey
-				AND mt.SeasonKey = ph.SeasonKey
-				AND mt.GameweekKey = ph.GameweekKey
-				WHERE mt.UserTeamKey = @UserTeamKey
+				ON utp.PlayerKey = ph.PlayerKey
+				AND utp.SeasonKey = ph.SeasonKey
+				AND utp.GameweekKey = ph.GameweekKey
+				WHERE utp.UserTeamKey = @UserTeamKey
 				AND ph.SeasonKey = @SeasonKey
 				AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 				GROUP BY ph.PlayerKey, ph.SeasonKey, ph.GameweekKey
@@ -573,12 +573,12 @@ BEGIN
 				ph.SeasonKey,
 				ph.GameweekKey,
 				SUM(ph.TotalPoints) AS TotalPoints
-				FROM dbo.DimUserTeamPlayer mt
+				FROM dbo.DimUserTeamPlayer utp
 				INNER JOIN dbo.FactPlayerHistory ph
-				ON mt.PlayerKey = ph.PlayerKey
-				AND mt.SeasonKey = ph.SeasonKey
-				AND mt.GameweekKey = ph.GameweekKey
-				WHERE mt.UserTeamKey = @UserTeamKey
+				ON utp.PlayerKey = ph.PlayerKey
+				AND utp.SeasonKey = ph.SeasonKey
+				AND utp.GameweekKey = ph.GameweekKey
+				WHERE utp.UserTeamKey = @UserTeamKey
 				AND ph.SeasonKey = @SeasonKey
 				AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 				GROUP BY ph.PlayerKey, ph.SeasonKey, ph.GameweekKey

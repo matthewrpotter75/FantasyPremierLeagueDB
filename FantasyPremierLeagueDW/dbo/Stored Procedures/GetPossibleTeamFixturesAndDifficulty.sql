@@ -38,9 +38,7 @@ BEGIN
 
 	DECLARE @sql NVARCHAR(2000);
 	
-	SET @sql = 'DECLARE @CurrentGameweekKey INT;
-	SELECT @CurrentGameweekKey = MAX(GameweekKey) FROM dbo.DimGameweek WHERE SeasonKey = @SeasonKey AND DeadlineTime < GETDATE();
-	
+	SET @sql = '
 	;WITH PlayerOpponentDifficulty AS
 	(
 		SELECT dp.PlayerKey,
@@ -67,7 +65,7 @@ BEGIN
 		AND dtgwf.IsHome = dtd.IsOpponentHome
 		AND dtd.SeasonKey = @SeasonKey
 		WHERE dtgwf.SeasonKey = @SeasonKey
-		AND pt.GameweekKey = @CurrentGameweekKey
+		AND pt.GameweekKey = @NextGameweekKey
 		AND pt.SeasonKey = @SeasonKey
 	)
 	SELECT PlayerName, PlayerPosition, ' + @colHeaders + '
@@ -95,7 +93,7 @@ BEGIN
 		PRINT @sql;
 
 	DECLARE @ParmDefinition NVARCHAR(500);
-	SET @ParmDefinition = N'@SeasonKey INT';
-	EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey;
+	SET @ParmDefinition = N'@SeasonKey INT, @NextGameweekKey INT';
+	EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey, @NextGameweekKey = @NextGameweekKey;
 
 END;

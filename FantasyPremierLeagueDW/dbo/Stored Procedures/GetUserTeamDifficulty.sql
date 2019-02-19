@@ -30,6 +30,7 @@ BEGIN
 	SET @LastGameweekKey = @NextGameweekKey + 4;
 
 	DECLARE @Gameweeks TABLE (Id INT IDENTITY(1,1), GameweekKey INT);
+
 	INSERT INTO @Gameweeks (GameweekKey)
 	SELECT DISTINCT GameweekKey
 	FROM dbo.DimGameweek
@@ -59,12 +60,12 @@ BEGIN
 			hdt.TeamName,
 			dpa.PlayerPositionKey,
 			dpp.PlayerPositionShort AS PlayerPosition,
-			dtd.Difficulty
-			FROM dbo.DimUserTeamPlayer my
+			CAST(dtd.Difficulty AS VARCHAR(2)) AS Difficulty
+			FROM dbo.DimUserTeamPlayer utp
 			INNER JOIN dbo.DimPlayer dp
-			ON my.PlayerKey = dp.PlayerKey
+			ON utp.PlayerKey = dp.PlayerKey
 			INNER JOIN dbo.DimPlayerAttribute dpa
-			ON my.PlayerKey = dpa.PlayerKey
+			ON utp.PlayerKey = dpa.PlayerKey
 			AND dpa.SeasonKey = @SeasonKey
 			INNER JOIN dbo.DimTeam hdt
 			ON dpa.TeamKey = hdt.TeamKey
@@ -80,25 +81,25 @@ BEGIN
 			AND dtgwf.IsHome = dtd.IsOpponentHome
 			AND dtd.SeasonKey = @SeasonKey
 			INNER JOIN dbo.FactPlayerGameweekStatus pgs
-			ON my.PlayerKey = pgs.PlayerKey
-			AND my.SeasonKey = pgs.SeasonKey
-			AND my.GameweekKey = pgs.GameweekKey
-			WHERE my.UserTeamKey = @UserTeamKey
+			ON utp.PlayerKey = pgs.PlayerKey
+			AND utp.SeasonKey = pgs.SeasonKey
+			AND utp.GameweekKey = pgs.GameweekKey
+			WHERE utp.UserTeamKey = @UserTeamKey
 			AND dtgwf.SeasonKey = @SeasonKey
-			AND my.GameweekKey = @CurrentGameweekKey
-			AND my.SeasonKey = @SeasonKey
+			AND utp.GameweekKey = @CurrentGameweekKey
+			AND utp.SeasonKey = @SeasonKey
 		)
 		SELECT PlayerName, PlayerPosition, Cost, TeamName, ' + @colHeaders + '
 		FROM
 		(
-			SELECT DISTINCT PlayerName, PlayerKey, PlayerPosition, PlayerPositionKey, GameweekKey, TeamName, Cost, CAST(LEFT(r.Difficulty , LEN(r.Difficulty)-1) AS INT) AS Difficulty
+			SELECT DISTINCT PlayerName, PlayerKey, PlayerPosition, PlayerPositionKey, GameweekKey, TeamName, Cost, CAST(LEFT(r.Difficulty , LEN(r.Difficulty)-1) AS VARCHAR(10)) AS Difficulty
 			FROM PlayerOpponentDifficulty pod
 			CROSS APPLY
 			(
-				SELECT CAST(r.Difficulty AS VARCHAR(2)) + '', ''
+				SELECT r.Difficulty + '', ''
 				FROM PlayerOpponentDifficulty r
 				WHERE pod.PlayerKey = r.PlayerKey
-				  and pod.GameweekKey = r.GameweekKey
+				  AND pod.GameweekKey = r.GameweekKey
 				FOR XML PATH('''')
 			) r (Difficulty)
 		) src
@@ -109,9 +110,12 @@ BEGIN
 		) piv
 		ORDER BY PlayerPositionKey, PlayerKey;';
 
+		IF @Debug = 1
+			PRINT @sql;
+
 		DECLARE @ParmDefinition NVARCHAR(500);
-		SET @ParmDefinition = N'@SeasonKey INT';
-		EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey;
+		SET @ParmDefinition = N'@SeasonKey INT, @UserTeamKey INT';
+		EXEC sp_executesql @sql, @ParmDefinition, @SeasonKey = @SeasonKey, @UserTeamKey = @UserTeamKey;
 
 	END
 	ELSE
@@ -120,8 +124,4 @@ BEGIN
 		RAISERROR('UserTeamKey is null. Check supplied UserTeamKey or UserTeamName!!!' , 0, 1) WITH NOWAIT;
 
 	END
-
-	IF @Debug = 1
-		PRINT @sql;
-
 END;

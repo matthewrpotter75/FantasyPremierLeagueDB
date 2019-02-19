@@ -128,7 +128,7 @@
     <Build Include="dbo\Tables\DimTeamDifficulty.sql" />
     <Build Include="dbo\Tables\FactTeamResults.sql" />
     <Build Include="dbo\Views\vwFactPlayerHistoryForAnalysis.sql" />
-    <Build Include="dbo\Stored Procedures\GetGameweekPlayerHistoryForSeason.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerGameweekHistoryForSeason.sql" />
     <Build Include="dbo\Tables\DimTeamGameweekFixture.sql" />
     <Build Include="dbo\Stored Procedures\GetPlayerGameweekHistoryComparison.sql" />
     <Build Include="dbo\Stored Procedures\GetPlayerGameweekHistoryComparisonClub2Club.sql" />
