@@ -117,95 +117,36 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTest_TestAction.SqlScript" xml:space="preserve">
-    <value>-- database unit test for dbo.GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasons
-DECLARE @SeasonStartKey AS INT, @SeasonEndKey AS INT, @GameweekStart AS INT, @GameweekEnd AS INT, @Debug AS BIT;
+  <data name="dbo_GetPlayerPricesChangesTest_TestAction.SqlScript" xml:space="preserve">
+    <value>-- database unit test for dbo.GetPlayerPricesChanges
+DECLARE @Date AS DATETIME;
 
-SELECT @SeasonStartKey = 12,
-       @SeasonEndKey = 13,
-       @GameweekStart = 20,
-       @GameweekEnd = 5,
-       @Debug = 0;
+--SELECT @Date = GETDATE();
+SELECT @Date = [Date]
+FROM dbo.DimDate
+WHERE DateKey IN
+(
+	SELECT MAX(DateKey)
+	FROM dbo.FactPlayerDailyPrices
+);
 
-EXECUTE [dbo].[GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasons] @SeasonStartKey, @SeasonEndKey, @GameweekStart, @GameweekEnd, @Debug;</value>
+EXECUTE [dbo].[GetPlayerPricesChanges] @Date;</value>
   </data>
-  <data name="dbo_GetBestSquadPlayerPointsForGameweekPeriodTest_TestAction.SqlScript" xml:space="preserve">
-    <value>-- database unit test for dbo.GetBestSquadPlayerPointsForGameweekPeriod
-DECLARE @SeasonKey AS INT, @GameweekStart AS INT, @GameweekEnd AS INT, @Debug AS BIT;
+  <data name="dbo_GetPlayerPricesChangesByNameSearchTest_TestAction.SqlScript" xml:space="preserve">
+    <value>-- database unit test for dbo.GetPlayerPricesChangesByNameSearch
+DECLARE @PlayerSearchString AS VARCHAR (100);
 
-SELECT @SeasonKey = 13,
-       @GameweekStart = 1,
-       @GameweekEnd = 10,
-       @Debug = 0;
+SELECT @PlayerSearchString = 'Ryan';
 
-EXECUTE [dbo].[GetBestSquadPlayerPointsForGameweekPeriod] @SeasonKey, @GameweekStart, @GameweekEnd, @Debug;</value>
+EXECUTE [dbo].[GetPlayerPricesChangesByNameSearch] @PlayerSearchString;</value>
   </data>
-  <data name="dbo_GetBestTeamBasedOnPredictionsTest_TestAction.SqlScript" xml:space="preserve">
-    <value>-- database unit test for dbo.GetBestTeamBasedOnPredictions
-DECLARE @SeasonKey AS INT, @Gameweeks AS INT, @MinutesLimit AS INT, @Debug AS BIT, @GameweekStart AS INT;
-
-SELECT @SeasonKey = 0,
-       @Gameweeks = 0,
-       @MinutesLimit = 0,
-       @Debug = 0,
-       @GameweekStart = 0;
-
-EXECUTE [dbo].[GetBestTeamBasedOnPredictions] @SeasonKey, @Gameweeks, @MinutesLimit, @Debug, @GameweekStart;</value>
-  </data>
-  <data name="dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction.SqlScript" xml:space="preserve">
-    <value>-- database unit test for dbo.GetBestTeamPlayerPointsForEachGameweekInRange
-DECLARE @RC AS INT, @SeasonKey AS INT, @GameweekStart AS INT, @GameweekEnd AS INT, @Debug AS BIT;
-
-SELECT @RC = 0,
-       @SeasonKey = 12,
-       @GameweekStart = 1,
-       @GameweekEnd = 5,
-       @Debug = 0;
-
-EXECUTE @RC = [dbo].[GetBestTeamPlayerPointsForEachGameweekInRange] @SeasonKey, @GameweekStart, @GameweekEnd, @Debug;
-
---SELECT @RC AS RC;
-
-</value>
-  </data>
-  <data name="dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction.SqlScript" xml:space="preserve">
-    <value>-- database unit test for dbo.GetBestTeamPlayerPointsForGameweek
-DECLARE @RC AS INT, @SeasonKey AS INT, @GameweekKey AS INT, @Debug AS BIT;
-
-SELECT @RC = 0,
-       @SeasonKey = 12,
-       @GameweekKey = 1,
-       @Debug = 0;
-
-EXECUTE @RC = [dbo].[GetBestTeamPlayerPointsForGameweek] @SeasonKey, @GameweekKey, @Debug;
-
---SELECT @RC AS RC;
-
-</value>
-  </data>
-  <data name="dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction.SqlScript" xml:space="preserve">
-    <value>-- database unit test for dbo.GetBestTeamPlayerPointsForGameweekPeriod
-DECLARE @RC AS INT, @SeasonKey AS INT, @GameweekStart AS INT, @GameweekEnd AS INT, @Debug AS BIT;
-
-SELECT @RC = 0,
-       @SeasonKey = 12,
-       @GameweekStart = 1,
-       @GameweekEnd = 5,
-       @Debug = 0;
-
-EXECUTE @RC = [dbo].[GetBestTeamPlayerPointsForGameweekPeriod] @SeasonKey, @GameweekStart, @GameweekEnd, @Debug;
-
---SELECT @RC AS RC;
-
-</value>
-  </data>
-  <data name="dbo_GetBestSquadPlayerDetailsTest_TestAction.SqlScript" xml:space="preserve">
-    <value>-- database unit test for dbo.GetBestSquadPlayerDetails
+  <data name="dbo_GetPlayerPricesChangesFromFirstPriceInSeasonTest_TestAction.SqlScript" xml:space="preserve">
+    <value>-- database unit test for dbo.GetPlayerPricesChangesFromFirstPriceInSeason
 DECLARE @SeasonKey AS INT;
 
-SELECT @SeasonKey = 12;
+SELECT @SeasonKey = 13;
 
-EXECUTE [dbo].[GetBestSquadPlayerDetails] @SeasonKey;</value>
+EXECUTE [dbo].[GetPlayerPricesChangesFromFirstPriceInSeason] @SeasonKey;</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

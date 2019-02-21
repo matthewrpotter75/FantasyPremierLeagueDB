@@ -106,6 +106,9 @@
     <Build Include="dbo\Stored Procedures\GetFactPlayerTransfers.sql" />
     <Build Include="dbo\Stored Procedures\GetFactPlayerTransfersForGameweek.sql" />
     <Build Include="dbo\Tables\FactPlayerDailyAttributes.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPricesChangesFromFirstPriceInSeason.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPricesChangesByNameSearch.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPricesChanges.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDW.publish.xml" />

@@ -67,7 +67,7 @@ BEGIN
 	)
 	INSERT dbo.DimDate WITH (TABLOCKX)
 	(
-		[Date]
+		 [Date]
         ,[SeasonKey]
         ,[GameweekKey]
         ,[Day]
@@ -98,6 +98,8 @@ BEGIN
         ,[LastDayOfYear]
         ,[FirstDayOfNextMonth]
         ,[FirstDayOfNextYear]
+		,[MonthShortName]
+		,[DisplayDate]
 	)
 	SELECT
 	  d.[Date],
@@ -149,6 +151,8 @@ BEGIN
 	  LastDayOfYear       = MAX([Date]) OVER (PARTITION BY [Year]),
 	  FirstDayOfNextMonth = DATEADD(MONTH, 1, FirstOfMonth),
 	  FirstDayOfNextYear  = DATEADD(YEAR,  1, FirstOfYear)
+	  MonthNameShort  = LEFT(CONVERT(VARCHAR(10), [MonthName]),3),
+	  DisplayDate     = LEFT(CONVERT(VARCHAR(10), [MonthName]),3) + ' ' + CONVERT(VARCHAR(2), [Day]) + ' ' + CONVERT(VARCHAR(4), [Year])
 	FROM #dim d
 	LEFT JOIN Gameweeks gw
 	ON d.[Date] > gw.LastDeadlineTime AND d.[Date] <= gw.DeadlineTime

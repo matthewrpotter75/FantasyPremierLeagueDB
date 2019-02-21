@@ -32,6 +32,8 @@ CREATE TABLE dbo.DimDate
 	LastDayOfYear       DATE        NOT NULL,
 	FirstDayOfNextMonth DATE        NOT NULL,
 	FirstDayOfNextYear  DATE        NOT NULL,
+	MonthNameShort		VARCHAR(3)	NOT NULL, 
+	DisplayDate			VARCHAR(12) NOT NULL,
 	CONSTRAINT PK_DimDate PRIMARY KEY CLUSTERED (DateKey ASC),
 	CONSTRAINT FK_DimDate_SeasonKey FOREIGN KEY(SeasonKey) REFERENCES dbo.DimSeason ([SeasonKey]),
 	CONSTRAINT FK_DimDate_GameweekKey FOREIGN KEY(GameweekKey, SeasonKey) REFERENCES dbo.DimGameweek ([GameweekKey], [SeasonKey])

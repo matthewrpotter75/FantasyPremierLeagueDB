@@ -40,15 +40,16 @@ namespace FantasyPremierLeagueTest
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPlayerPointsStatsTest_TestAction;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GetPlayerPointsUnitTest));
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPlayerPointsByGameweekTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPlayerPointsByPlayerPositionTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPlayerPointsByGameweekNotEmptyResultSetCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPlayerPointsByPlayerPositionTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPlayerCostSelectedExpectedPointsFormPointsTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPlayerPointsStatsNotEmptyResultSetCondition;
             this.dbo_GetPlayerPointsStatsTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             this.dbo_GetPlayerPointsByGameweekTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             this.dbo_GetPlayerPointsByPlayerPositionTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
@@ -57,19 +58,76 @@ namespace FantasyPremierLeagueTest
             this.dbo_GetPlayerCostSelectedExpectedPointsFormPointsTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             dbo_GetPlayerPointsStatsTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             dbo_GetPlayerPointsByGameweekTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetPlayerPointsByPlayerPositionTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetPlayerPointsByGameweekNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            dbo_GetPlayerPointsByPlayerPositionTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             dbo_GetPlayerCostSelectedExpectedPointsFormPointsTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            GetPlayerPointsStatsNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             // 
             // dbo_GetPlayerPointsStatsTest_TestAction
             // 
+            dbo_GetPlayerPointsStatsTest_TestAction.Conditions.Add(GetPlayerPointsStatsNotEmptyResultSetCondition);
             resources.ApplyResources(dbo_GetPlayerPointsStatsTest_TestAction, "dbo_GetPlayerPointsStatsTest_TestAction");
+            // 
+            // dbo_GetPlayerPointsByGameweekTest_TestAction
+            // 
+            dbo_GetPlayerPointsByGameweekTest_TestAction.Conditions.Add(GetPlayerPointsByGameweekNotEmptyResultSetCondition);
+            resources.ApplyResources(dbo_GetPlayerPointsByGameweekTest_TestAction, "dbo_GetPlayerPointsByGameweekTest_TestAction");
+            // 
+            // GetPlayerPointsByGameweekNotEmptyResultSetCondition
+            // 
+            GetPlayerPointsByGameweekNotEmptyResultSetCondition.Enabled = true;
+            GetPlayerPointsByGameweekNotEmptyResultSetCondition.Name = "GetPlayerPointsByGameweekNotEmptyResultSetCondition";
+            GetPlayerPointsByGameweekNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // dbo_GetPlayerPointsByPlayerPositionTest_TestAction
+            // 
+            dbo_GetPlayerPointsByPlayerPositionTest_TestAction.Conditions.Add(GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition);
+            resources.ApplyResources(dbo_GetPlayerPointsByPlayerPositionTest_TestAction, "dbo_GetPlayerPointsByPlayerPositionTest_TestAction");
+            // 
+            // GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition
+            // 
+            GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition.Enabled = true;
+            GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition.Name = "GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition";
+            GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction
+            // 
+            dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction.Conditions.Add(GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition);
+            resources.ApplyResources(dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction, "dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction");
+            // 
+            // GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition
+            // 
+            GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition.Enabled = true;
+            GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition.Name = "GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition";
+            GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction
+            // 
+            dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction.Conditions.Add(GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition);
+            resources.ApplyResources(dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction, "dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction");
+            // 
+            // GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition
+            // 
+            GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition.Enabled = true;
+            GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition.Name = "GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition";
+            GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // dbo_GetPlayerCostSelectedExpectedPointsFormPointsTest_TestAction
+            // 
+            dbo_GetPlayerCostSelectedExpectedPointsFormPointsTest_TestAction.Conditions.Add(GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition);
+            resources.ApplyResources(dbo_GetPlayerCostSelectedExpectedPointsFormPointsTest_TestAction, "dbo_GetPlayerCostSelectedExpectedPointsFormPointsTest_TestAction");
+            // 
+            // GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition
+            // 
+            GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition.Enabled = true;
+            GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition.Name = "GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition";
+            GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition.ResultSet = 1;
             // 
             // dbo_GetPlayerPointsStatsTestData
             // 
@@ -83,21 +141,11 @@ namespace FantasyPremierLeagueTest
             this.dbo_GetPlayerPointsByGameweekTestData.PretestAction = null;
             this.dbo_GetPlayerPointsByGameweekTestData.TestAction = dbo_GetPlayerPointsByGameweekTest_TestAction;
             // 
-            // dbo_GetPlayerPointsByGameweekTest_TestAction
-            // 
-            dbo_GetPlayerPointsByGameweekTest_TestAction.Conditions.Add(GetPlayerPointsByGameweekNotEmptyResultSetCondition);
-            resources.ApplyResources(dbo_GetPlayerPointsByGameweekTest_TestAction, "dbo_GetPlayerPointsByGameweekTest_TestAction");
-            // 
             // dbo_GetPlayerPointsByPlayerPositionTestData
             // 
             this.dbo_GetPlayerPointsByPlayerPositionTestData.PosttestAction = null;
             this.dbo_GetPlayerPointsByPlayerPositionTestData.PretestAction = null;
             this.dbo_GetPlayerPointsByPlayerPositionTestData.TestAction = dbo_GetPlayerPointsByPlayerPositionTest_TestAction;
-            // 
-            // dbo_GetPlayerPointsByPlayerPositionTest_TestAction
-            // 
-            dbo_GetPlayerPointsByPlayerPositionTest_TestAction.Conditions.Add(GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition);
-            resources.ApplyResources(dbo_GetPlayerPointsByPlayerPositionTest_TestAction, "dbo_GetPlayerPointsByPlayerPositionTest_TestAction");
             // 
             // dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTestData
             // 
@@ -105,45 +153,11 @@ namespace FantasyPremierLeagueTest
             this.dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTestData.PretestAction = null;
             this.dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTestData.TestAction = dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction;
             // 
-            // dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction
-            // 
-            dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction.Conditions.Add(GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition);
-            resources.ApplyResources(dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction, "dbo_GetPlayerPointsForPlayerPositionCostAfterStartGameweekTest_TestAction");
-            // 
             // dbo_GetPlayerPointsStatsByPlayerPositionTestData
             // 
             this.dbo_GetPlayerPointsStatsByPlayerPositionTestData.PosttestAction = null;
             this.dbo_GetPlayerPointsStatsByPlayerPositionTestData.PretestAction = null;
             this.dbo_GetPlayerPointsStatsByPlayerPositionTestData.TestAction = dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction;
-            // 
-            // dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction
-            // 
-            dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction.Conditions.Add(GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition);
-            resources.ApplyResources(dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction, "dbo_GetPlayerPointsStatsByPlayerPositionTest_TestAction");
-            // 
-            // GetPlayerPointsByGameweekNotEmptyResultSetCondition
-            // 
-            GetPlayerPointsByGameweekNotEmptyResultSetCondition.Enabled = true;
-            GetPlayerPointsByGameweekNotEmptyResultSetCondition.Name = "GetPlayerPointsByGameweekNotEmptyResultSetCondition";
-            GetPlayerPointsByGameweekNotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition
-            // 
-            GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition.Enabled = true;
-            GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition.Name = "GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition";
-            GetPlayerPointsByPlayerPositionNotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition
-            // 
-            GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition.Enabled = true;
-            GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition.Name = "GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition";
-            GetPlayerPointsForPlayerPositionCostAfterStartGameweekNotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition
-            // 
-            GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition.Enabled = true;
-            GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition.Name = "GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition";
-            GetPlayerPointsStatsByPlayerPositionNotEmptyResultSetCondition.ResultSet = 1;
             // 
             // dbo_GetPlayerCostSelectedExpectedPointsFormPointsTestData
             // 
@@ -151,16 +165,11 @@ namespace FantasyPremierLeagueTest
             this.dbo_GetPlayerCostSelectedExpectedPointsFormPointsTestData.PretestAction = null;
             this.dbo_GetPlayerCostSelectedExpectedPointsFormPointsTestData.TestAction = dbo_GetPlayerCostSelectedExpectedPointsFormPointsTest_TestAction;
             // 
-            // dbo_GetPlayerCostSelectedExpectedPointsFormPointsTest_TestAction
+            // GetPlayerPointsStatsNotEmptyResultSetCondition
             // 
-            dbo_GetPlayerCostSelectedExpectedPointsFormPointsTest_TestAction.Conditions.Add(GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition);
-            resources.ApplyResources(dbo_GetPlayerCostSelectedExpectedPointsFormPointsTest_TestAction, "dbo_GetPlayerCostSelectedExpectedPointsFormPointsTest_TestAction");
-            // 
-            // GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition
-            // 
-            GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition.Enabled = true;
-            GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition.Name = "GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition";
-            GetPlayerCostSelectedExpectedPointsFormPointsNotEmptyResultSetCondition.ResultSet = 1;
+            GetPlayerPointsStatsNotEmptyResultSetCondition.Enabled = true;
+            GetPlayerPointsStatsNotEmptyResultSetCondition.Name = "GetPlayerPointsStatsNotEmptyResultSetCondition";
+            GetPlayerPointsStatsNotEmptyResultSetCondition.ResultSet = 1;
         }
 
         #endregion

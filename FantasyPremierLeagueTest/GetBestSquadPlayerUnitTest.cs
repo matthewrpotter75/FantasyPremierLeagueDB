@@ -42,20 +42,19 @@ namespace FantasyPremierLeagueTest
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsNotEmptyResultSetCondition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsRowCountCondition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetBestSquadPlayerPointsForGameweekPeriodTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetBestTeamBasedOnPredictionsTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetBestSquadPlayerDetailsTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetBestSquadPlayerDetailsNotEmptyResultSetCondition;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetBestSquadPlayerDetailsRowCountCondition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetBestSquadPlayerPointsForGameweekPeriodNotEmptyResultSetCondition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetBestSquadPlayerPointsForGameweekPeriodRowCountCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetBestTeamBasedOnPredictionsTest_TestAction;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetBestTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetBestTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetBestTeamPlayerPointsForGameweekPeriodRowCountCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetBestTeamPlayerPointsForGameweekRowCountCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetBestTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetBestTeamPlayerPointsForGameweekPeriodRowCountCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetBestSquadPlayerDetailsTest_TestAction;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetBestSquadPlayerDetailsNotEmptyResultSetCondition;
             this.dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             this.dbo_GetBestSquadPlayerPointsForGameweekPeriodTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             this.dbo_GetBestTeamBasedOnPredictionsTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
@@ -67,20 +66,19 @@ namespace FantasyPremierLeagueTest
             GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
             dbo_GetBestSquadPlayerPointsForGameweekPeriodTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetBestTeamBasedOnPredictionsTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetBestSquadPlayerDetailsTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            GetBestSquadPlayerDetailsNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
-            GetBestSquadPlayerDetailsRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
             GetBestSquadPlayerPointsForGameweekPeriodNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetBestSquadPlayerPointsForGameweekPeriodRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
+            dbo_GetBestTeamBasedOnPredictionsTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
+            dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetBestTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
-            GetBestTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
-            GetBestTeamPlayerPointsForGameweekPeriodRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
+            dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetBestTeamPlayerPointsForGameweekRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
+            dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
+            GetBestTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            GetBestTeamPlayerPointsForGameweekPeriodRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
+            dbo_GetBestSquadPlayerDetailsTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
+            GetBestSquadPlayerDetailsNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             // 
             // dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTest_TestAction
             // 
@@ -101,93 +99,11 @@ namespace FantasyPremierLeagueTest
             GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsRowCountCondition.ResultSet = 1;
             GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsRowCountCondition.RowCount = 15;
             // 
-            // dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTestData
-            // 
-            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTestData.PosttestAction = null;
-            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTestData.PretestAction = null;
-            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTestData.TestAction = dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTest_TestAction;
-            // 
-            // dbo_GetBestSquadPlayerPointsForGameweekPeriodTestData
-            // 
-            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodTestData.PosttestAction = null;
-            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodTestData.PretestAction = null;
-            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodTestData.TestAction = dbo_GetBestSquadPlayerPointsForGameweekPeriodTest_TestAction;
-            // 
             // dbo_GetBestSquadPlayerPointsForGameweekPeriodTest_TestAction
             // 
             dbo_GetBestSquadPlayerPointsForGameweekPeriodTest_TestAction.Conditions.Add(GetBestSquadPlayerPointsForGameweekPeriodNotEmptyResultSetCondition);
             dbo_GetBestSquadPlayerPointsForGameweekPeriodTest_TestAction.Conditions.Add(GetBestSquadPlayerPointsForGameweekPeriodRowCountCondition);
             resources.ApplyResources(dbo_GetBestSquadPlayerPointsForGameweekPeriodTest_TestAction, "dbo_GetBestSquadPlayerPointsForGameweekPeriodTest_TestAction");
-            // 
-            // dbo_GetBestTeamBasedOnPredictionsTestData
-            // 
-            this.dbo_GetBestTeamBasedOnPredictionsTestData.PosttestAction = null;
-            this.dbo_GetBestTeamBasedOnPredictionsTestData.PretestAction = null;
-            this.dbo_GetBestTeamBasedOnPredictionsTestData.TestAction = dbo_GetBestTeamBasedOnPredictionsTest_TestAction;
-            // 
-            // dbo_GetBestTeamBasedOnPredictionsTest_TestAction
-            // 
-            resources.ApplyResources(dbo_GetBestTeamBasedOnPredictionsTest_TestAction, "dbo_GetBestTeamBasedOnPredictionsTest_TestAction");
-            // 
-            // dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTestData
-            // 
-            this.dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTestData.PosttestAction = null;
-            this.dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTestData.PretestAction = null;
-            this.dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTestData.TestAction = dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction;
-            // 
-            // dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction
-            // 
-            dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction.Conditions.Add(GetBestTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition);
-            resources.ApplyResources(dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction, "dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction");
-            // 
-            // dbo_GetBestTeamPlayerPointsForGameweekTestData
-            // 
-            this.dbo_GetBestTeamPlayerPointsForGameweekTestData.PosttestAction = null;
-            this.dbo_GetBestTeamPlayerPointsForGameweekTestData.PretestAction = null;
-            this.dbo_GetBestTeamPlayerPointsForGameweekTestData.TestAction = dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction;
-            // 
-            // dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction
-            // 
-            dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction.Conditions.Add(GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition);
-            dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction.Conditions.Add(GetBestTeamPlayerPointsForGameweekRowCountCondition);
-            resources.ApplyResources(dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction, "dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction");
-            // 
-            // dbo_GetBestTeamPlayerPointsForGameweekPeriodTestData
-            // 
-            this.dbo_GetBestTeamPlayerPointsForGameweekPeriodTestData.PosttestAction = null;
-            this.dbo_GetBestTeamPlayerPointsForGameweekPeriodTestData.PretestAction = null;
-            this.dbo_GetBestTeamPlayerPointsForGameweekPeriodTestData.TestAction = dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction;
-            // 
-            // dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction
-            // 
-            dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction.Conditions.Add(GetBestTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition);
-            dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction.Conditions.Add(GetBestTeamPlayerPointsForGameweekPeriodRowCountCondition);
-            resources.ApplyResources(dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction, "dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction");
-            // 
-            // dbo_GetBestSquadPlayerDetailsTestData
-            // 
-            this.dbo_GetBestSquadPlayerDetailsTestData.PosttestAction = null;
-            this.dbo_GetBestSquadPlayerDetailsTestData.PretestAction = null;
-            this.dbo_GetBestSquadPlayerDetailsTestData.TestAction = dbo_GetBestSquadPlayerDetailsTest_TestAction;
-            // 
-            // dbo_GetBestSquadPlayerDetailsTest_TestAction
-            // 
-            dbo_GetBestSquadPlayerDetailsTest_TestAction.Conditions.Add(GetBestSquadPlayerDetailsNotEmptyResultSetCondition);
-            dbo_GetBestSquadPlayerDetailsTest_TestAction.Conditions.Add(GetBestSquadPlayerDetailsRowCountCondition);
-            resources.ApplyResources(dbo_GetBestSquadPlayerDetailsTest_TestAction, "dbo_GetBestSquadPlayerDetailsTest_TestAction");
-            // 
-            // GetBestSquadPlayerDetailsNotEmptyResultSetCondition
-            // 
-            GetBestSquadPlayerDetailsNotEmptyResultSetCondition.Enabled = true;
-            GetBestSquadPlayerDetailsNotEmptyResultSetCondition.Name = "GetBestSquadPlayerDetailsNotEmptyResultSetCondition";
-            GetBestSquadPlayerDetailsNotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetBestSquadPlayerDetailsRowCountCondition
-            // 
-            GetBestSquadPlayerDetailsRowCountCondition.Enabled = true;
-            GetBestSquadPlayerDetailsRowCountCondition.Name = "GetBestSquadPlayerDetailsRowCountCondition";
-            GetBestSquadPlayerDetailsRowCountCondition.ResultSet = 1;
-            GetBestSquadPlayerDetailsRowCountCondition.RowCount = 15;
             // 
             // GetBestSquadPlayerPointsForGameweekPeriodNotEmptyResultSetCondition
             // 
@@ -202,11 +118,45 @@ namespace FantasyPremierLeagueTest
             GetBestSquadPlayerPointsForGameweekPeriodRowCountCondition.ResultSet = 1;
             GetBestSquadPlayerPointsForGameweekPeriodRowCountCondition.RowCount = 15;
             // 
+            // dbo_GetBestTeamBasedOnPredictionsTest_TestAction
+            // 
+            resources.ApplyResources(dbo_GetBestTeamBasedOnPredictionsTest_TestAction, "dbo_GetBestTeamBasedOnPredictionsTest_TestAction");
+            // 
+            // dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction
+            // 
+            dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction.Conditions.Add(GetBestTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition);
+            resources.ApplyResources(dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction, "dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction");
+            // 
             // GetBestTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition
             // 
             GetBestTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition.Enabled = true;
             GetBestTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition.Name = "GetBestTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition";
             GetBestTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction
+            // 
+            dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction.Conditions.Add(GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition);
+            dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction.Conditions.Add(GetBestTeamPlayerPointsForGameweekRowCountCondition);
+            resources.ApplyResources(dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction, "dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction");
+            // 
+            // GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition
+            // 
+            GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition.Enabled = true;
+            GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition.Name = "GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition";
+            GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // GetBestTeamPlayerPointsForGameweekRowCountCondition
+            // 
+            GetBestTeamPlayerPointsForGameweekRowCountCondition.Enabled = true;
+            GetBestTeamPlayerPointsForGameweekRowCountCondition.Name = "GetBestTeamPlayerPointsForGameweekRowCountCondition";
+            GetBestTeamPlayerPointsForGameweekRowCountCondition.ResultSet = 1;
+            GetBestTeamPlayerPointsForGameweekRowCountCondition.RowCount = 11;
+            // 
+            // dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction
+            // 
+            dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction.Conditions.Add(GetBestTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition);
+            dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction.Conditions.Add(GetBestTeamPlayerPointsForGameweekPeriodRowCountCondition);
+            resources.ApplyResources(dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction, "dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction");
             // 
             // GetBestTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition
             // 
@@ -221,18 +171,58 @@ namespace FantasyPremierLeagueTest
             GetBestTeamPlayerPointsForGameweekPeriodRowCountCondition.ResultSet = 1;
             GetBestTeamPlayerPointsForGameweekPeriodRowCountCondition.RowCount = 11;
             // 
-            // GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition
+            // dbo_GetBestSquadPlayerDetailsTest_TestAction
             // 
-            GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition.Enabled = true;
-            GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition.Name = "GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition";
-            GetBestTeamPlayerPointsForGameweekNotEmptyResultSetCondition.ResultSet = 1;
+            dbo_GetBestSquadPlayerDetailsTest_TestAction.Conditions.Add(GetBestSquadPlayerDetailsNotEmptyResultSetCondition);
+            resources.ApplyResources(dbo_GetBestSquadPlayerDetailsTest_TestAction, "dbo_GetBestSquadPlayerDetailsTest_TestAction");
             // 
-            // GetBestTeamPlayerPointsForGameweekRowCountCondition
+            // GetBestSquadPlayerDetailsNotEmptyResultSetCondition
             // 
-            GetBestTeamPlayerPointsForGameweekRowCountCondition.Enabled = true;
-            GetBestTeamPlayerPointsForGameweekRowCountCondition.Name = "GetBestTeamPlayerPointsForGameweekRowCountCondition";
-            GetBestTeamPlayerPointsForGameweekRowCountCondition.ResultSet = 1;
-            GetBestTeamPlayerPointsForGameweekRowCountCondition.RowCount = 11;
+            GetBestSquadPlayerDetailsNotEmptyResultSetCondition.Enabled = true;
+            GetBestSquadPlayerDetailsNotEmptyResultSetCondition.Name = "GetBestSquadPlayerDetailsNotEmptyResultSetCondition";
+            GetBestSquadPlayerDetailsNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTestData
+            // 
+            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTestData.PosttestAction = null;
+            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTestData.PretestAction = null;
+            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTestData.TestAction = dbo_GetBestSquadPlayerPointsForGameweekPeriodAcrossSeasonsTest_TestAction;
+            // 
+            // dbo_GetBestSquadPlayerPointsForGameweekPeriodTestData
+            // 
+            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodTestData.PosttestAction = null;
+            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodTestData.PretestAction = null;
+            this.dbo_GetBestSquadPlayerPointsForGameweekPeriodTestData.TestAction = dbo_GetBestSquadPlayerPointsForGameweekPeriodTest_TestAction;
+            // 
+            // dbo_GetBestTeamBasedOnPredictionsTestData
+            // 
+            this.dbo_GetBestTeamBasedOnPredictionsTestData.PosttestAction = null;
+            this.dbo_GetBestTeamBasedOnPredictionsTestData.PretestAction = null;
+            this.dbo_GetBestTeamBasedOnPredictionsTestData.TestAction = dbo_GetBestTeamBasedOnPredictionsTest_TestAction;
+            // 
+            // dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTestData
+            // 
+            this.dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTestData.PosttestAction = null;
+            this.dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTestData.PretestAction = null;
+            this.dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTestData.TestAction = dbo_GetBestTeamPlayerPointsForEachGameweekInRangeTest_TestAction;
+            // 
+            // dbo_GetBestTeamPlayerPointsForGameweekTestData
+            // 
+            this.dbo_GetBestTeamPlayerPointsForGameweekTestData.PosttestAction = null;
+            this.dbo_GetBestTeamPlayerPointsForGameweekTestData.PretestAction = null;
+            this.dbo_GetBestTeamPlayerPointsForGameweekTestData.TestAction = dbo_GetBestTeamPlayerPointsForGameweekTest_TestAction;
+            // 
+            // dbo_GetBestTeamPlayerPointsForGameweekPeriodTestData
+            // 
+            this.dbo_GetBestTeamPlayerPointsForGameweekPeriodTestData.PosttestAction = null;
+            this.dbo_GetBestTeamPlayerPointsForGameweekPeriodTestData.PretestAction = null;
+            this.dbo_GetBestTeamPlayerPointsForGameweekPeriodTestData.TestAction = dbo_GetBestTeamPlayerPointsForGameweekPeriodTest_TestAction;
+            // 
+            // dbo_GetBestSquadPlayerDetailsTestData
+            // 
+            this.dbo_GetBestSquadPlayerDetailsTestData.PosttestAction = null;
+            this.dbo_GetBestSquadPlayerDetailsTestData.PretestAction = null;
+            this.dbo_GetBestSquadPlayerDetailsTestData.TestAction = dbo_GetBestSquadPlayerDetailsTest_TestAction;
         }
 
         #endregion

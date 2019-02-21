@@ -119,7 +119,11 @@
   </resheader>
   <data name="dbo_GetPlayerPointsStatsTest_TestAction.SqlScript" xml:space="preserve">
     <value>-- database unit test for dbo.GetPlayerPointsStats
-EXECUTE [dbo].[GetPlayerPointsStats];</value>
+DECLARE @SeasonKey AS INT;
+
+SELECT @SeasonKey = 13;
+
+EXECUTE [dbo].[GetPlayerPointsStats] @SeasonKey;</value>
   </data>
   <data name="dbo_GetPlayerPointsByGameweekTest_TestAction.SqlScript" xml:space="preserve">
     <value>-- database unit test for dbo.GetPlayerPointsByGameweek

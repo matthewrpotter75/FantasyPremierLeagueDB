@@ -81,6 +81,9 @@
     <Compile Include="GetPlayerPPGUnitTest.cs">
       <SubType>Designer</SubType>
     </Compile>
+    <Compile Include="GetPlayerPricesUnitTest.cs">
+      <SubType>Designer</SubType>
+    </Compile>
     <Compile Include="GetPlayerTotalPointsUnitTest.cs">
       <SubType>Designer</SubType>
     </Compile>
@@ -126,6 +129,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GetPlayerPPGUnitTest.resx">
       <DependentUpon>GetPlayerPPGUnitTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetPlayerPricesUnitTest.resx">
+      <DependentUpon>GetPlayerPricesUnitTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GetPlayerTotalPointsUnitTest.resx">
       <DependentUpon>GetPlayerTotalPointsUnitTest.cs</DependentUpon>
