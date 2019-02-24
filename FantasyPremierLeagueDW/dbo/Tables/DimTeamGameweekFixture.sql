@@ -6,6 +6,7 @@ CREATE TABLE dbo.DimTeamGameweekFixture
 	SeasonKey INT NOT NULL,
 	OpponentTeamKey INT NOT NULL,
 	IsHome BIT NOT NULL,
+	IsScheduled BIT NOT NULL DEFAULT 1,
 	CONSTRAINT PK_DimTeamGameweekFixture PRIMARY KEY CLUSTERED (TeamKey ASC, GameweekFixtureKey ASC),
 	CONSTRAINT FK_DimTeamGameweekFixture_SeasonKey FOREIGN KEY(SeasonKey) REFERENCES dbo.DimSeason ([SeasonKey]),
 	CONSTRAINT FK_DimTeamGameweekFixture_TeamKey FOREIGN KEY(TeamKey) REFERENCES dbo.DimTeam ([TeamKey]),

@@ -6,7 +6,8 @@
 	[awayTeamId] INT NOT NULL,
 	[homeTeam_Shortname] VARCHAR (3) NOT NULL,
 	[awayTeam_Shortname] VARCHAR (3) NOT NULL,
-	[kickoff_time] SMALLDATETIME NULL
+	[kickoff_time] SMALLDATETIME NULL,
+	IsScheduled BIT DEFAULT 1,
 	CONSTRAINT [PK_GameweekFixtures] PRIMARY KEY CLUSTERED ([gameweekId] ASC, [homeTeamId], [awayTeamId]),
 	CONSTRAINT [FK_GameweekFixtures_gameweekId] FOREIGN KEY ([gameweekId]) REFERENCES [dbo].[Gameweeks] ([id]),
 	CONSTRAINT [FK_GameweekFixtures_hometeamId] FOREIGN KEY ([homeTeamId]) REFERENCES [dbo].[Teams] ([id]),

@@ -150,7 +150,7 @@ BEGIN
 	  FirstDayOfYear      = FirstOfYear,
 	  LastDayOfYear       = MAX([Date]) OVER (PARTITION BY [Year]),
 	  FirstDayOfNextMonth = DATEADD(MONTH, 1, FirstOfMonth),
-	  FirstDayOfNextYear  = DATEADD(YEAR,  1, FirstOfYear)
+	  FirstDayOfNextYear  = DATEADD(YEAR,  1, FirstOfYear),
 	  MonthNameShort  = LEFT(CONVERT(VARCHAR(10), [MonthName]),3),
 	  DisplayDate     = LEFT(CONVERT(VARCHAR(10), [MonthName]),3) + ' ' + CONVERT(VARCHAR(2), [Day]) + ' ' + CONVERT(VARCHAR(4), [Year])
 	FROM #dim d
@@ -369,6 +369,7 @@ BEGIN
 		DROP TABLE #dim;
 
 END
+GO
 
 DECLARE @sScriptName VARCHAR(256) = N'PopulateDimDate.sql';
 DECLARE @sExecDate VARCHAR(32) = CONVERT(VARCHAR(32), GETDATE(), 126);                   

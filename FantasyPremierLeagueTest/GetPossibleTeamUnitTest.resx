@@ -182,7 +182,7 @@ DECLARE @SeasonKey AS INT, @GameweekStart AS INT, @GameweekEnd AS INT, @Debug AS
 
 SELECT @SeasonKey = 12,
        @GameweekStart = 1,
-       @GameweekEnd = 10,
+       @GameweekEnd = 9,
        @Debug = 0;
 
 EXECUTE [dbo].[GetPossibleTeamPlayerPointsForGameweekPeriod] @SeasonKey, @GameweekStart, @GameweekEnd, @Debug;</value>

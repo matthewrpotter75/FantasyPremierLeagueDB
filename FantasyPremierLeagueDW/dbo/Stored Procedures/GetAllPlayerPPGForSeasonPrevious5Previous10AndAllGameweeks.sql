@@ -3,6 +3,7 @@
 	@SeasonKey INT,
 	@GameweekKey INT,
 	@MinutesLimit INT,
+	@MaxCost INT = 1000,
 	@PlayerKey INT = NULL,
 	@PlayerPosition VARCHAR(3) = NULL,
 	@TeamShortName VARCHAR(3) = NULL,
@@ -131,6 +132,7 @@ BEGIN
 	ON p.PlayerKey = fpcs.PlayerKey
 	WHERE (@PlayerPosition IS NULL OR pp.PlayerPositionShort = @PlayerPosition)
 	AND (@TeamShortName IS NULL OR t.TeamShortName = @TeamShortName)
+	AND fpcs.Cost <= @MaxCost
 	ORDER BY PPG5.Points DESC;
 	
 	IF @Debug = 1

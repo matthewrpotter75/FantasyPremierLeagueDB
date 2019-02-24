@@ -39,39 +39,40 @@ namespace FantasyPremierLeagueTest
         {
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamDifficultyTest_TestAction;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GetPossibleTeamUnitTest));
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamFixturesAndDifficultyTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsByGameweekTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsForGameweekTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTest_TestAction;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamTotalPointsForGameweekPeriodTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamDifficultyNotEmptyResultSetCondition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamDifficultyRowCountCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamFixturesAndDifficultyTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamFixturesAndDifficultyRowCountCondition;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamPlayerPointsByGameweekRowCountCondition;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamPlayerPointsForGameweekRowCountCondition;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsNotEmptyResultSetCondition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamPlayerPointsRowCountCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsByGameweekTest_TestAction;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamPlayerPointsByGameweekRowCountCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTest_TestAction;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsForGameweekTest_TestAction;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamPlayerPointsForGameweekRowCountCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTest_TestAction;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTest_TestAction;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPossibleTeamTotalPointsForGameweekPeriodTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_Squad;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_Squad;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_PlayerPosition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPositionAndGameweek;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_PlayerPositionAndGameweek;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_Gameweek;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_Gameweek;
-            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_TotalPointsByGamewwek;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_TotalPointsByGameweek;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition GetPossibleTeamPlayerPointsForGameweekPeriodRowCountCondition;
             this.dbo_GetPossibleTeamDifficultyTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             this.dbo_GetPossibleTeamFixturesAndDifficultyTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             this.dbo_GetPossibleTeamPlayerPointsTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
@@ -82,45 +83,40 @@ namespace FantasyPremierLeagueTest
             this.dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             this.dbo_GetPossibleTeamTotalPointsForGameweekPeriodTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             dbo_GetPossibleTeamDifficultyTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetPossibleTeamFixturesAndDifficultyTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetPossibleTeamPlayerPointsTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetPossibleTeamPlayerPointsByGameweekTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetPossibleTeamPlayerPointsForGameweekTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
-            dbo_GetPossibleTeamTotalPointsForGameweekPeriodTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetPossibleTeamDifficultyNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetPossibleTeamDifficultyRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
+            dbo_GetPossibleTeamFixturesAndDifficultyTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetPossibleTeamFixturesAndDifficultyRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
-            GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
-            GetPossibleTeamPlayerPointsByGameweekRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
-            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
-            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
-            GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
-            GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
-            GetPossibleTeamPlayerPointsForGameweekRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
-            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
-            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
+            dbo_GetPossibleTeamPlayerPointsTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetPossibleTeamPlayerPointsNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetPossibleTeamPlayerPointsRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
+            dbo_GetPossibleTeamPlayerPointsByGameweekTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
+            GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            GetPossibleTeamPlayerPointsByGameweekRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
+            dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
+            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            dbo_GetPossibleTeamPlayerPointsForGameweekTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
+            GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            GetPossibleTeamPlayerPointsForGameweekRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
+            dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
+            GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
+            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
+            dbo_GetPossibleTeamTotalPointsForGameweekPeriodTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_Squad = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_Squad = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
+            GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_PlayerPosition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
             GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPositionAndGameweek = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_PlayerPositionAndGameweek = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
             GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_Gameweek = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_Gameweek = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
-            GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_TotalPointsByGamewwek = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_TotalPointsByGameweek = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
-            // 
-            // dbo_GetPossibleTeamDifficultyTestData
-            // 
-            this.dbo_GetPossibleTeamDifficultyTestData.PosttestAction = null;
-            this.dbo_GetPossibleTeamDifficultyTestData.PretestAction = null;
-            this.dbo_GetPossibleTeamDifficultyTestData.TestAction = dbo_GetPossibleTeamDifficultyTest_TestAction;
+            GetPossibleTeamPlayerPointsForGameweekPeriodRowCountCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.RowCountCondition();
             // 
             // dbo_GetPossibleTeamDifficultyTest_TestAction
             // 
@@ -128,11 +124,18 @@ namespace FantasyPremierLeagueTest
             dbo_GetPossibleTeamDifficultyTest_TestAction.Conditions.Add(GetPossibleTeamDifficultyRowCountCondition);
             resources.ApplyResources(dbo_GetPossibleTeamDifficultyTest_TestAction, "dbo_GetPossibleTeamDifficultyTest_TestAction");
             // 
-            // dbo_GetPossibleTeamFixturesAndDifficultyTestData
+            // GetPossibleTeamDifficultyNotEmptyResultSetCondition
             // 
-            this.dbo_GetPossibleTeamFixturesAndDifficultyTestData.PosttestAction = null;
-            this.dbo_GetPossibleTeamFixturesAndDifficultyTestData.PretestAction = null;
-            this.dbo_GetPossibleTeamFixturesAndDifficultyTestData.TestAction = dbo_GetPossibleTeamFixturesAndDifficultyTest_TestAction;
+            GetPossibleTeamDifficultyNotEmptyResultSetCondition.Enabled = true;
+            GetPossibleTeamDifficultyNotEmptyResultSetCondition.Name = "GetPossibleTeamDifficultyNotEmptyResultSetCondition";
+            GetPossibleTeamDifficultyNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // GetPossibleTeamDifficultyRowCountCondition
+            // 
+            GetPossibleTeamDifficultyRowCountCondition.Enabled = true;
+            GetPossibleTeamDifficultyRowCountCondition.Name = "GetPossibleTeamDifficultyRowCountCondition";
+            GetPossibleTeamDifficultyRowCountCondition.ResultSet = 1;
+            GetPossibleTeamDifficultyRowCountCondition.RowCount = 15;
             // 
             // dbo_GetPossibleTeamFixturesAndDifficultyTest_TestAction
             // 
@@ -140,11 +143,18 @@ namespace FantasyPremierLeagueTest
             dbo_GetPossibleTeamFixturesAndDifficultyTest_TestAction.Conditions.Add(GetPossibleTeamFixturesAndDifficultyRowCountCondition);
             resources.ApplyResources(dbo_GetPossibleTeamFixturesAndDifficultyTest_TestAction, "dbo_GetPossibleTeamFixturesAndDifficultyTest_TestAction");
             // 
-            // dbo_GetPossibleTeamPlayerPointsTestData
+            // GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition
             // 
-            this.dbo_GetPossibleTeamPlayerPointsTestData.PosttestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsTestData.PretestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsTestData.TestAction = dbo_GetPossibleTeamPlayerPointsTest_TestAction;
+            GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition.Enabled = true;
+            GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition.Name = "GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition";
+            GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // GetPossibleTeamFixturesAndDifficultyRowCountCondition
+            // 
+            GetPossibleTeamFixturesAndDifficultyRowCountCondition.Enabled = true;
+            GetPossibleTeamFixturesAndDifficultyRowCountCondition.Name = "GetPossibleTeamFixturesAndDifficultyRowCountCondition";
+            GetPossibleTeamFixturesAndDifficultyRowCountCondition.ResultSet = 1;
+            GetPossibleTeamFixturesAndDifficultyRowCountCondition.RowCount = 15;
             // 
             // dbo_GetPossibleTeamPlayerPointsTest_TestAction
             // 
@@ -152,11 +162,18 @@ namespace FantasyPremierLeagueTest
             dbo_GetPossibleTeamPlayerPointsTest_TestAction.Conditions.Add(GetPossibleTeamPlayerPointsRowCountCondition);
             resources.ApplyResources(dbo_GetPossibleTeamPlayerPointsTest_TestAction, "dbo_GetPossibleTeamPlayerPointsTest_TestAction");
             // 
-            // dbo_GetPossibleTeamPlayerPointsByGameweekTestData
+            // GetPossibleTeamPlayerPointsNotEmptyResultSetCondition
             // 
-            this.dbo_GetPossibleTeamPlayerPointsByGameweekTestData.PosttestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsByGameweekTestData.PretestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsByGameweekTestData.TestAction = dbo_GetPossibleTeamPlayerPointsByGameweekTest_TestAction;
+            GetPossibleTeamPlayerPointsNotEmptyResultSetCondition.Enabled = true;
+            GetPossibleTeamPlayerPointsNotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsNotEmptyResultSetCondition";
+            GetPossibleTeamPlayerPointsNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // GetPossibleTeamPlayerPointsRowCountCondition
+            // 
+            GetPossibleTeamPlayerPointsRowCountCondition.Enabled = true;
+            GetPossibleTeamPlayerPointsRowCountCondition.Name = "GetPossibleTeamPlayerPointsRowCountCondition";
+            GetPossibleTeamPlayerPointsRowCountCondition.ResultSet = 1;
+            GetPossibleTeamPlayerPointsRowCountCondition.RowCount = 15;
             // 
             // dbo_GetPossibleTeamPlayerPointsByGameweekTest_TestAction
             // 
@@ -164,11 +181,18 @@ namespace FantasyPremierLeagueTest
             dbo_GetPossibleTeamPlayerPointsByGameweekTest_TestAction.Conditions.Add(GetPossibleTeamPlayerPointsByGameweekRowCountCondition);
             resources.ApplyResources(dbo_GetPossibleTeamPlayerPointsByGameweekTest_TestAction, "dbo_GetPossibleTeamPlayerPointsByGameweekTest_TestAction");
             // 
-            // dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTestData
+            // GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition
             // 
-            this.dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTestData.PosttestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTestData.PretestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTestData.TestAction = dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTest_TestAction;
+            GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition.Enabled = true;
+            GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition";
+            GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // GetPossibleTeamPlayerPointsByGameweekRowCountCondition
+            // 
+            GetPossibleTeamPlayerPointsByGameweekRowCountCondition.Enabled = true;
+            GetPossibleTeamPlayerPointsByGameweekRowCountCondition.Name = "GetPossibleTeamPlayerPointsByGameweekRowCountCondition";
+            GetPossibleTeamPlayerPointsByGameweekRowCountCondition.ResultSet = 1;
+            GetPossibleTeamPlayerPointsByGameweekRowCountCondition.RowCount = 15;
             // 
             // dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTest_TestAction
             // 
@@ -176,11 +200,18 @@ namespace FantasyPremierLeagueTest
             dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTest_TestAction.Conditions.Add(GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot);
             resources.ApplyResources(dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTest_TestAction, "dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTest_TestAction");
             // 
-            // dbo_GetPossibleTeamPlayerPointsForGameweekTestData
+            // GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition
             // 
-            this.dbo_GetPossibleTeamPlayerPointsForGameweekTestData.PosttestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsForGameweekTestData.PretestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsForGameweekTestData.TestAction = dbo_GetPossibleTeamPlayerPointsForGameweekTest_TestAction;
+            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition.Enabled = true;
+            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition";
+            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot
+            // 
+            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot.Enabled = true;
+            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot.Name = "GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot" +
+                "";
+            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot.ResultSet = 1;
             // 
             // dbo_GetPossibleTeamPlayerPointsForGameweekTest_TestAction
             // 
@@ -188,22 +219,30 @@ namespace FantasyPremierLeagueTest
             dbo_GetPossibleTeamPlayerPointsForGameweekTest_TestAction.Conditions.Add(GetPossibleTeamPlayerPointsForGameweekRowCountCondition);
             resources.ApplyResources(dbo_GetPossibleTeamPlayerPointsForGameweekTest_TestAction, "dbo_GetPossibleTeamPlayerPointsForGameweekTest_TestAction");
             // 
-            // dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTestData
+            // GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition
             // 
-            this.dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTestData.PosttestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTestData.PretestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTestData.TestAction = dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTest_TestAction;
+            GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition.Enabled = true;
+            GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition";
+            GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // GetPossibleTeamPlayerPointsForGameweekRowCountCondition
+            // 
+            GetPossibleTeamPlayerPointsForGameweekRowCountCondition.Enabled = true;
+            GetPossibleTeamPlayerPointsForGameweekRowCountCondition.Name = "GetPossibleTeamPlayerPointsForGameweekRowCountCondition";
+            GetPossibleTeamPlayerPointsForGameweekRowCountCondition.ResultSet = 1;
+            GetPossibleTeamPlayerPointsForGameweekRowCountCondition.RowCount = 11;
             // 
             // dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTest_TestAction
             // 
             dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTest_TestAction.Conditions.Add(GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition);
+            dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTest_TestAction.Conditions.Add(GetPossibleTeamPlayerPointsForGameweekPeriodRowCountCondition);
             resources.ApplyResources(dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTest_TestAction, "dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTest_TestAction");
             // 
-            // dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTestData
+            // GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition
             // 
-            this.dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTestData.PosttestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTestData.PretestAction = null;
-            this.dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTestData.TestAction = dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTest_TestAction;
+            GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition.Enabled = true;
+            GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition";
+            GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition.ResultSet = 1;
             // 
             // dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTest_TestAction
             // 
@@ -211,11 +250,18 @@ namespace FantasyPremierLeagueTest
             dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTest_TestAction.Conditions.Add(GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition);
             resources.ApplyResources(dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTest_TestAction, "dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTest_TestAction");
             // 
-            // dbo_GetPossibleTeamTotalPointsForGameweekPeriodTestData
+            // GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition
             // 
-            this.dbo_GetPossibleTeamTotalPointsForGameweekPeriodTestData.PosttestAction = null;
-            this.dbo_GetPossibleTeamTotalPointsForGameweekPeriodTestData.PretestAction = null;
-            this.dbo_GetPossibleTeamTotalPointsForGameweekPeriodTestData.TestAction = dbo_GetPossibleTeamTotalPointsForGameweekPeriodTest_TestAction;
+            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition.Enabled = true;
+            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition";
+            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition.ResultSet = 1;
+            // 
+            // GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition
+            // 
+            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition.Enabled = true;
+            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition.Name = "GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition";
+            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition.ResultSet = 1;
+            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition.RowCount = 15;
             // 
             // dbo_GetPossibleTeamTotalPointsForGameweekPeriodTest_TestAction
             // 
@@ -231,103 +277,6 @@ namespace FantasyPremierLeagueTest
             dbo_GetPossibleTeamTotalPointsForGameweekPeriodTest_TestAction.Conditions.Add(GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_TotalPointsByGameweek);
             resources.ApplyResources(dbo_GetPossibleTeamTotalPointsForGameweekPeriodTest_TestAction, "dbo_GetPossibleTeamTotalPointsForGameweekPeriodTest_TestAction");
             // 
-            // GetPossibleTeamDifficultyNotEmptyResultSetCondition
-            // 
-            GetPossibleTeamDifficultyNotEmptyResultSetCondition.Enabled = true;
-            GetPossibleTeamDifficultyNotEmptyResultSetCondition.Name = "GetPossibleTeamDifficultyNotEmptyResultSetCondition";
-            GetPossibleTeamDifficultyNotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetPossibleTeamDifficultyRowCountCondition
-            // 
-            GetPossibleTeamDifficultyRowCountCondition.Enabled = true;
-            GetPossibleTeamDifficultyRowCountCondition.Name = "GetPossibleTeamDifficultyRowCountCondition";
-            GetPossibleTeamDifficultyRowCountCondition.ResultSet = 1;
-            GetPossibleTeamDifficultyRowCountCondition.RowCount = 15;
-            // 
-            // GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition
-            // 
-            GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition.Enabled = true;
-            GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition.Name = "GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition";
-            GetPossibleTeamFixturesAndDifficultyNotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetPossibleTeamFixturesAndDifficultyRowCountCondition
-            // 
-            GetPossibleTeamFixturesAndDifficultyRowCountCondition.Enabled = true;
-            GetPossibleTeamFixturesAndDifficultyRowCountCondition.Name = "GetPossibleTeamFixturesAndDifficultyRowCountCondition";
-            GetPossibleTeamFixturesAndDifficultyRowCountCondition.ResultSet = 1;
-            GetPossibleTeamFixturesAndDifficultyRowCountCondition.RowCount = 15;
-            // 
-            // GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition
-            // 
-            GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition.Enabled = true;
-            GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition";
-            GetPossibleTeamPlayerPointsByGameweekNotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetPossibleTeamPlayerPointsByGameweekRowCountCondition
-            // 
-            GetPossibleTeamPlayerPointsByGameweekRowCountCondition.Enabled = true;
-            GetPossibleTeamPlayerPointsByGameweekRowCountCondition.Name = "GetPossibleTeamPlayerPointsByGameweekRowCountCondition";
-            GetPossibleTeamPlayerPointsByGameweekRowCountCondition.ResultSet = 1;
-            GetPossibleTeamPlayerPointsByGameweekRowCountCondition.RowCount = 15;
-            // 
-            // GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition
-            // 
-            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition.Enabled = true;
-            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition";
-            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot
-            // 
-            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot.Enabled = true;
-            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot.Name = "GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot" +
-                "";
-            GetPossibleTeamPlayerPointsForEachGameweekInRangeNotEmptyResultSetCondition_Pivot.ResultSet = 1;
-            // 
-            // GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition
-            // 
-            GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition.Enabled = true;
-            GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition";
-            GetPossibleTeamPlayerPointsForGameweekPeriodNotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition
-            // 
-            GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition.Enabled = true;
-            GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition";
-            GetPossibleTeamPlayerPointsForGameweekRotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetPossibleTeamPlayerPointsForGameweekRowCountCondition
-            // 
-            GetPossibleTeamPlayerPointsForGameweekRowCountCondition.Enabled = true;
-            GetPossibleTeamPlayerPointsForGameweekRowCountCondition.Name = "GetPossibleTeamPlayerPointsForGameweekRowCountCondition";
-            GetPossibleTeamPlayerPointsForGameweekRowCountCondition.ResultSet = 1;
-            GetPossibleTeamPlayerPointsForGameweekRowCountCondition.RowCount = 11;
-            // 
-            // GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition
-            // 
-            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition.Enabled = true;
-            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition";
-            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersNotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition
-            // 
-            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition.Enabled = true;
-            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition.Name = "GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition";
-            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition.ResultSet = 1;
-            GetPossibleTeamPlayerPointsPlayingAndBenchPlayersRowCountCondition.RowCount = 15;
-            // 
-            // GetPossibleTeamPlayerPointsNotEmptyResultSetCondition
-            // 
-            GetPossibleTeamPlayerPointsNotEmptyResultSetCondition.Enabled = true;
-            GetPossibleTeamPlayerPointsNotEmptyResultSetCondition.Name = "GetPossibleTeamPlayerPointsNotEmptyResultSetCondition";
-            GetPossibleTeamPlayerPointsNotEmptyResultSetCondition.ResultSet = 1;
-            // 
-            // GetPossibleTeamPlayerPointsRowCountCondition
-            // 
-            GetPossibleTeamPlayerPointsRowCountCondition.Enabled = true;
-            GetPossibleTeamPlayerPointsRowCountCondition.Name = "GetPossibleTeamPlayerPointsRowCountCondition";
-            GetPossibleTeamPlayerPointsRowCountCondition.ResultSet = 1;
-            GetPossibleTeamPlayerPointsRowCountCondition.RowCount = 15;
-            // 
             // GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_Squad
             // 
             GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_Squad.Enabled = true;
@@ -340,6 +289,13 @@ namespace FantasyPremierLeagueTest
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_Squad.Name = "GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_Squad";
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_Squad.ResultSet = 1;
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_Squad.RowCount = 15;
+            // 
+            // GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition
+            // 
+            GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition.Enabled = true;
+            GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition.Name = "GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosit" +
+                "ion";
+            GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition.ResultSet = 3;
             // 
             // GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_PlayerPosition
             // 
@@ -376,13 +332,6 @@ namespace FantasyPremierLeagueTest
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_Gameweek.ResultSet = 7;
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_Gameweek.RowCount = 4;
             // 
-            // GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition
-            // 
-            GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition.Enabled = true;
-            GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition.Name = "GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosit" +
-                "ion";
-            GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_PlayerPosition.ResultSet = 3;
-            // 
             // GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_TotalPointsByGamewwek
             // 
             GetPossibleTeamTotalPointsForGameweekPeriodNotEmptyResultSetCondition_TotalPointsByGamewwek.Enabled = true;
@@ -397,6 +346,67 @@ namespace FantasyPremierLeagueTest
                 "k";
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_TotalPointsByGameweek.ResultSet = 9;
             GetPossibleTeamTotalPointsForGameweekPeriodRowCountCondition_TotalPointsByGameweek.RowCount = 1;
+            // 
+            // dbo_GetPossibleTeamDifficultyTestData
+            // 
+            this.dbo_GetPossibleTeamDifficultyTestData.PosttestAction = null;
+            this.dbo_GetPossibleTeamDifficultyTestData.PretestAction = null;
+            this.dbo_GetPossibleTeamDifficultyTestData.TestAction = dbo_GetPossibleTeamDifficultyTest_TestAction;
+            // 
+            // dbo_GetPossibleTeamFixturesAndDifficultyTestData
+            // 
+            this.dbo_GetPossibleTeamFixturesAndDifficultyTestData.PosttestAction = null;
+            this.dbo_GetPossibleTeamFixturesAndDifficultyTestData.PretestAction = null;
+            this.dbo_GetPossibleTeamFixturesAndDifficultyTestData.TestAction = dbo_GetPossibleTeamFixturesAndDifficultyTest_TestAction;
+            // 
+            // dbo_GetPossibleTeamPlayerPointsTestData
+            // 
+            this.dbo_GetPossibleTeamPlayerPointsTestData.PosttestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsTestData.PretestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsTestData.TestAction = dbo_GetPossibleTeamPlayerPointsTest_TestAction;
+            // 
+            // dbo_GetPossibleTeamPlayerPointsByGameweekTestData
+            // 
+            this.dbo_GetPossibleTeamPlayerPointsByGameweekTestData.PosttestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsByGameweekTestData.PretestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsByGameweekTestData.TestAction = dbo_GetPossibleTeamPlayerPointsByGameweekTest_TestAction;
+            // 
+            // dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTestData
+            // 
+            this.dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTestData.PosttestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTestData.PretestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTestData.TestAction = dbo_GetPossibleTeamPlayerPointsForEachGameweekInRangeTest_TestAction;
+            // 
+            // dbo_GetPossibleTeamPlayerPointsForGameweekTestData
+            // 
+            this.dbo_GetPossibleTeamPlayerPointsForGameweekTestData.PosttestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsForGameweekTestData.PretestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsForGameweekTestData.TestAction = dbo_GetPossibleTeamPlayerPointsForGameweekTest_TestAction;
+            // 
+            // dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTestData
+            // 
+            this.dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTestData.PosttestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTestData.PretestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTestData.TestAction = dbo_GetPossibleTeamPlayerPointsForGameweekPeriodTest_TestAction;
+            // 
+            // dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTestData
+            // 
+            this.dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTestData.PosttestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTestData.PretestAction = null;
+            this.dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTestData.TestAction = dbo_GetPossibleTeamPlayerPointsPlayingAndBenchPlayersTest_TestAction;
+            // 
+            // dbo_GetPossibleTeamTotalPointsForGameweekPeriodTestData
+            // 
+            this.dbo_GetPossibleTeamTotalPointsForGameweekPeriodTestData.PosttestAction = null;
+            this.dbo_GetPossibleTeamTotalPointsForGameweekPeriodTestData.PretestAction = null;
+            this.dbo_GetPossibleTeamTotalPointsForGameweekPeriodTestData.TestAction = dbo_GetPossibleTeamTotalPointsForGameweekPeriodTest_TestAction;
+            // 
+            // GetPossibleTeamPlayerPointsForGameweekPeriodRowCountCondition
+            // 
+            GetPossibleTeamPlayerPointsForGameweekPeriodRowCountCondition.Enabled = true;
+            GetPossibleTeamPlayerPointsForGameweekPeriodRowCountCondition.Name = "GetPossibleTeamPlayerPointsForGameweekPeriodRowCountCondition";
+            GetPossibleTeamPlayerPointsForGameweekPeriodRowCountCondition.ResultSet = 1;
+            GetPossibleTeamPlayerPointsForGameweekPeriodRowCountCondition.RowCount = 15;
         }
 
         #endregion

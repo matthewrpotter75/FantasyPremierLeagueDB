@@ -45,14 +45,29 @@ BEGIN
 	--SELECT @CurrentGameweekKey = MAX(GameweekKey) FROM dbo.DimGameweek WHERE SeasonKey = @SeasonKey AND DeadlineTime < GETDATE();
 
 	SET @sql = '	
-	;WITH PlayerGameweekPoints AS
+	;WITH PlayerStartCost AS
+	(
+		SELECT PlayerKey, Cost AS StartCost
+		FROM dbo.PossibleTeam pt
+		WHERE SeasonKey = @SeasonKey
+		AND GameweekKey = @GameweekStart
+	),
+	PlayerEndCost AS
+	(
+		SELECT PlayerKey, Cost AS EndCost
+		FROM dbo.PossibleTeam pt
+		WHERE SeasonKey = @SeasonKey
+		AND GameweekKey = @GameweekEnd
+	),		
+	PlayerGameweekPoints AS
 	(
 		SELECT pt.PlayerKey,
 		p.PlayerName, 
 		pt.GameweekKey, 
 		pp.PlayerPositionKey,
 		pp.PlayerPositionShort,
-		pt.Cost,
+		psc.StartCost,
+		pec.EndCost,
 		ph.TotalPoints
 		FROM dbo.PossibleTeam pt
 		INNER JOIN dbo.DimPlayer p
@@ -66,13 +81,17 @@ BEGIN
 		ON pt.PlayerKey = ph.PlayerKey
 		AND pt.SeasonKey = ph.SeasonKey
 		AND pt.GameweekKey = ph.GameweekKey
+		INNER JOIN PlayerStartCost psc
+		ON pt.PlayerKey = psc.PlayerKey
+		INNER JOIN PlayerEndCost pec
+		ON pt.PlayerKey = pec.PlayerKey
 		WHERE ph.SeasonKey = @SeasonKey
 		AND ph.GameweekKey BETWEEN @GameweekStart AND @GameweekEnd
 	)
-	SELECT PlayerName, PlayerPositionShort, Cost, ' + @colHeaders + '
+	SELECT PlayerName, PlayerPositionShort, StartCost, EndCost, ' + @colHeaders + '
 	FROM
 	(
-		SELECT DISTINCT PlayerName, PlayerKey, PlayerPositionShort, Cost, PlayerPositionKey, GameweekKey, TotalPoints
+		SELECT DISTINCT PlayerName, PlayerKey, PlayerPositionShort, StartCost, EndCost, PlayerPositionKey, GameweekKey, TotalPoints
 		FROM PlayerGameweekPoints pgp
 	) src
 	PIVOT
