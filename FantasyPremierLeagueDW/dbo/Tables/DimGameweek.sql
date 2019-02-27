@@ -13,3 +13,8 @@
 	CONSTRAINT [PK_DimGameweek] PRIMARY KEY CLUSTERED ([GameweekKey] ASC, [SeasonKey] ASC),
 	CONSTRAINT [FK_DimGameweek_SeasonKey] FOREIGN KEY ([SeasonKey]) REFERENCES [dbo].[DimSeason] ([SeasonKey])
 );
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [UX_FactGameweekFixture_SeasonKey_HomeTeamKey_AwayTeamKey]
+    ON [dbo].[FactGameweekFixture]([SeasonKey] ASC, [HomeTeamKey] ASC, [AwayTeamKey] ASC);
+GO
