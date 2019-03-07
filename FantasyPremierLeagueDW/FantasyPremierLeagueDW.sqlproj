@@ -109,6 +109,11 @@
     <Build Include="dbo\Stored Procedures\GetPlayerPricesChangesFromFirstPriceInSeason.sql" />
     <Build Include="dbo\Stored Procedures\GetPlayerPricesChangesByNameSearch.sql" />
     <Build Include="dbo\Stored Procedures\GetPlayerPricesChanges.sql" />
+    <Build Include="dbo\Stored Procedures\UpdateUserTeamPlayerIsCaptainForGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerHistoryAgainstOpponentTeam.sql" />
+    <Build Include="dbo\Stored Procedures\GetAllPlayerPPGForSeasonHalfAndSeasonPart.sql" />
+    <Build Include="dbo\Stored Procedures\GetAllPlayerPPGForHomeAgainstAwayMatches.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamPlayerSquadPointsForGameweek.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDW.publish.xml" />

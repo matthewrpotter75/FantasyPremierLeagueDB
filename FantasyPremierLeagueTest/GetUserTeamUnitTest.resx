@@ -214,6 +214,20 @@ SELECT @UserTeamKey = 1,
 
 EXECUTE [dbo].[GetUserTeamTotalPlayerPointsForGameweekPeriod] @UserTeamKey, @UserTeamName, @SeasonKey, @GameweekStart, @GameweekEnd, @Debug;</value>
   </data>
+  <data name="dbo_GetUserTeamPlayerSquadPointsForGameweekTest_TestAction.SqlScript" xml:space="preserve">
+    <value>-- database unit test for dbo.GetUserTeamPlayerSquadPointsForGameweek
+DECLARE @UserTeamKey AS INT, @UserTeamName AS VARCHAR (100), @SeasonKey AS INT, @GameweekKey AS INT, @Debug AS BIT;
+
+SELECT @UserTeamKey = 2,
+       @UserTeamName = NULL,
+       @SeasonKey = 13,
+       @GameweekKey = 1,
+       @Debug = 0;
+
+EXECUTE [dbo].[GetUserTeamPlayerSquadPointsForGameweek] @UserTeamKey, @UserTeamName, @SeasonKey, @GameweekKey, @Debug;
+
+</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

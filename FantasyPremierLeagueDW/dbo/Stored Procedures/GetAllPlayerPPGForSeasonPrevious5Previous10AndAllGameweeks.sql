@@ -46,6 +46,12 @@ BEGIN
 			OR
 			gw.SeasonKey < @SeasonKey
 		)
+		AND
+		(
+			ph.PlayerKey = @PlayerKey
+			OR
+			@PlayerKey IS NULL
+		)
 	),
 	PPGSeason AS
 	(
@@ -167,7 +173,6 @@ BEGIN
 			)
 		)
 		SELECT ph.PlayerKey,
-		p.PlayerName,
 		gw.SeasonKey,
 		gw.GameweekKey,
 		gw.GameweekInc,
@@ -179,10 +184,19 @@ BEGIN
 		LEFT JOIN dbo.FactPlayerHistory ph
 		ON gw.SeasonKey = ph.SeasonKey
 		AND gw.GameweekKey = ph.GameweekKey
-		INNER JOIN dbo.DimPlayer p
-		ON ph.PlayerKey = p.PlayerKey
 		WHERE ISNULL(ph.[Minutes],@MinutesLimit + 1) > @MinutesLimit
-		AND ph.PlayerKey = ISNULL(@PlayerKey,1);
+		AND 
+		(
+			(gw.SeasonKey = @SeasonKey AND gw.GameweekKey < @GameweekKey)
+			OR
+			gw.SeasonKey < @SeasonKey
+		)
+		AND
+		(
+			ph.PlayerKey = @PlayerKey
+			OR
+			@PlayerKey IS NULL
+		)
 
 		SELECT 'PPGSeason';
 
@@ -202,7 +216,6 @@ BEGIN
 		fnGetPlayerHistoryRankedByGameweek AS
 		(
 			SELECT ph.PlayerKey,
-			p.PlayerName,
 			gw.SeasonKey,
 			gw.GameweekKey,
 			gw.GameweekInc,
@@ -214,9 +227,19 @@ BEGIN
 			LEFT JOIN dbo.FactPlayerHistory ph
 			ON gw.SeasonKey = ph.SeasonKey
 			AND gw.GameweekKey = ph.GameweekKey
-			INNER JOIN dbo.DimPlayer p
-			ON ph.PlayerKey = p.PlayerKey
 			WHERE ISNULL(ph.[Minutes],@MinutesLimit + 1) > @MinutesLimit
+			AND 
+			(
+				(gw.SeasonKey = @SeasonKey AND gw.GameweekKey < @GameweekKey)
+				OR
+				gw.SeasonKey < @SeasonKey
+			)
+			AND
+			(
+				ph.PlayerKey = @PlayerKey
+				OR
+				@PlayerKey IS NULL
+			)
 		)
 		SELECT ph.PlayerKey,
 		p.PlayerName,
@@ -259,7 +282,6 @@ BEGIN
 		fnGetPlayerHistoryRankedByGameweek AS
 		(
 			SELECT ph.PlayerKey,
-			p.PlayerName,
 			gw.SeasonKey,
 			gw.GameweekKey,
 			gw.GameweekInc,
@@ -271,9 +293,19 @@ BEGIN
 			LEFT JOIN dbo.FactPlayerHistory ph
 			ON gw.SeasonKey = ph.SeasonKey
 			AND gw.GameweekKey = ph.GameweekKey
-			INNER JOIN dbo.DimPlayer p
-			ON ph.PlayerKey = p.PlayerKey
 			WHERE ISNULL(ph.[Minutes],@MinutesLimit + 1) > @MinutesLimit
+			AND 
+			(
+				(gw.SeasonKey = @SeasonKey AND gw.GameweekKey < @GameweekKey)
+				OR
+				gw.SeasonKey < @SeasonKey
+			)
+			AND
+			(
+				ph.PlayerKey = @PlayerKey
+				OR
+				@PlayerKey IS NULL
+			)
 		)
 		SELECT ph.PlayerKey,
 		p.PlayerName,
@@ -316,7 +348,6 @@ BEGIN
 		fnGetPlayerHistoryRankedByGameweek AS
 		(
 			SELECT ph.PlayerKey,
-			p.PlayerName,
 			gw.SeasonKey,
 			gw.GameweekKey,
 			gw.GameweekInc,
@@ -328,9 +359,19 @@ BEGIN
 			LEFT JOIN dbo.FactPlayerHistory ph
 			ON gw.SeasonKey = ph.SeasonKey
 			AND gw.GameweekKey = ph.GameweekKey
-			INNER JOIN dbo.DimPlayer p
-			ON ph.PlayerKey = p.PlayerKey
 			WHERE ISNULL(ph.[Minutes],@MinutesLimit + 1) > @MinutesLimit
+			AND 
+			(
+				(gw.SeasonKey = @SeasonKey AND gw.GameweekKey < @GameweekKey)
+				OR
+				gw.SeasonKey < @SeasonKey
+			)
+			AND
+			(
+				ph.PlayerKey = @PlayerKey
+				OR
+				@PlayerKey IS NULL
+			)
 		)
 		SELECT ph.PlayerKey,
 		p.PlayerName,
@@ -373,7 +414,6 @@ BEGIN
 		fnGetPlayerHistoryRankedByGameweek AS
 		(
 			SELECT ph.PlayerKey,
-			p.PlayerName,
 			gw.SeasonKey,
 			gw.GameweekKey,
 			gw.GameweekInc,
@@ -385,9 +425,19 @@ BEGIN
 			LEFT JOIN dbo.FactPlayerHistory ph
 			ON gw.SeasonKey = ph.SeasonKey
 			AND gw.GameweekKey = ph.GameweekKey
-			INNER JOIN dbo.DimPlayer p
-			ON ph.PlayerKey = p.PlayerKey
 			WHERE ISNULL(ph.[Minutes],@MinutesLimit + 1) > @MinutesLimit
+			AND 
+			(
+				(gw.SeasonKey = @SeasonKey AND gw.GameweekKey < @GameweekKey)
+				OR
+				gw.SeasonKey < @SeasonKey
+			)
+			AND
+			(
+				ph.PlayerKey = @PlayerKey
+				OR
+				@PlayerKey IS NULL
+			)
 		)
 		SELECT ph.PlayerKey,
 		p.PlayerName,

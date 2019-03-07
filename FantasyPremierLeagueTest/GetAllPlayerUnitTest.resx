@@ -127,17 +127,50 @@ EXECUTE [dbo].[GetAllPlayerPoints] @SeasonKey;</value>
   </data>
   <data name="dbo_GetAllPlayerPPGForSeasonPrevious5Previous10AndAllGameweeksTest_TestAction.SqlScript" xml:space="preserve">
     <value>-- database unit test for dbo.GetAllPlayerPPGForSeasonPrevious5Previous10AndAllGameweeks
-DECLARE @SeasonKey AS INT, @GameweekKey AS INT, @MinutesLimit AS INT, @PlayerKey AS INT, @PlayerPosition AS VARCHAR (3), @TeamShortName AS VARCHAR (3), @Debug AS BIT;
+DECLARE @SeasonKey AS INT, @GameweekKey AS INT, @MinutesLimit AS INT, @MaxCost AS INT, @PlayerKey AS INT, @PlayerPosition AS VARCHAR (3), @TeamShortName AS VARCHAR (3), @Debug AS BIT;
 
 SELECT @SeasonKey = 13,
        @GameweekKey = 15,
        @MinutesLimit = 60,
-       @PlayerKey = 0,
+	   @MaxCost = 1000,
+       @PlayerKey = NULL,
        @PlayerPosition = 'MID',
        @TeamShortName = 'MCI',
        @Debug = 0;
 
-EXECUTE [dbo].[GetAllPlayerPPGForSeasonPrevious5Previous10AndAllGameweeks] @SeasonKey, @GameweekKey, @MinutesLimit, @PlayerKey, @PlayerPosition, @TeamShortName, @Debug;</value>
+EXECUTE [dbo].[GetAllPlayerPPGForSeasonPrevious5Previous10AndAllGameweeks] @SeasonKey, @GameweekKey, @MinutesLimit, @MaxCost, @PlayerKey, @PlayerPosition, @TeamShortName, @Debug;</value>
+  </data>
+  <data name="dbo_GetAllPlayerPPGForHomeAgainstAwayMatchesTest_TestAction.SqlScript" xml:space="preserve">
+    <value>-- database unit test for dbo.GetAllPlayerPPGForHomeAgainstAwayMatches
+DECLARE @SeasonKey AS INT, @PlayerKey AS INT, @PlayerPosition AS VARCHAR (3), @TeamShortName AS VARCHAR (3), @MinGames AS INT, @MinutesLimit AS INT, @MaxCost AS INT, @Debug AS BIT;
+
+SELECT @SeasonKey = 13,
+       @PlayerKey = 110,
+       @PlayerPosition = 'FWD',
+       @TeamShortName = NULL,
+       @MinGames = 2,
+       @MinutesLimit = 60,
+       @MaxCost = 100,
+       @Debug = 0;
+
+EXECUTE [dbo].[GetAllPlayerPPGForHomeAgainstAwayMatches] @SeasonKey, @PlayerKey, @PlayerPosition, @TeamShortName, @MinGames, @MinutesLimit, @MaxCost, @Debug;</value>
+  </data>
+  <data name="dbo_GetAllPlayerPPGForSeasonHalfAndSeasonPartTest_TestAction.SqlScript" xml:space="preserve">
+    <value>-- database unit test for dbo.GetAllPlayerPPGForSeasonHalfAndSeasonPart
+DECLARE @SeasonKey AS INT, @PlayerKey AS INT, @PlayerPosition AS VARCHAR (3), @TeamShortName AS VARCHAR (3), @MinGames AS INT, @MinutesLimit AS INT, @MaxCost AS INT, @Debug AS BIT;
+
+SELECT @SeasonKey = 13,
+       @PlayerKey = 110,
+       @PlayerPosition = 'FWD',
+       @TeamShortName = NULL,
+       @MinGames = 1,
+       @MinutesLimit = 60,
+       @MaxCost = 90,
+       @Debug = 0;
+
+EXECUTE [dbo].[GetAllPlayerPPGForSeasonHalfAndSeasonPart] @SeasonKey, @PlayerKey, @PlayerPosition, @TeamShortName, @MinGames, @MinutesLimit, @MaxCost, @Debug;
+
+</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

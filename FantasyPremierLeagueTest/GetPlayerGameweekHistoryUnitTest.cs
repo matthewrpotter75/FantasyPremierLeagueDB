@@ -49,11 +49,14 @@ namespace FantasyPremierLeagueTest
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPlayerGameweekHistoryStatsByDifficultyWasHomeNotEmptyResultSetCondition_Results;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPlayerGameweekHistoryForSeasonTest_TestAction;
             Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction dbo_GetPlayerHistoryAgainstOpponentTeamTest_TestAction;
+            Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition GetPlayerHistoryAgainstOpponentTeamNotEmptyResultSetCondition;
             this.dbo_GetPlayerGameweekHistoryTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             this.dbo_GetPlayerGameweekHistoryComparisonTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             this.dbo_GetPlayerGameweekHistoryComparisonClub2ClubTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             this.dbo_GetPlayerGameweekHistoryStatsByDifficultyWasHomeTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             this.dbo_GetPlayerGameweekHistoryForSeasonTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
+            this.dbo_GetPlayerHistoryAgainstOpponentTeamTestData = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestActions();
             dbo_GetPlayerGameweekHistoryTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetPlayerGameweekHistoryNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             dbo_GetPlayerGameweekHistoryComparisonTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
@@ -65,6 +68,8 @@ namespace FantasyPremierLeagueTest
             GetPlayerGameweekHistoryStatsByDifficultyWasHomeNotEmptyResultSetCondition_Results = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             dbo_GetPlayerGameweekHistoryForSeasonTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
             GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
+            dbo_GetPlayerHistoryAgainstOpponentTeamTest_TestAction = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.SqlDatabaseTestAction();
+            GetPlayerHistoryAgainstOpponentTeamNotEmptyResultSetCondition = new Microsoft.Data.Tools.Schema.Sql.UnitTesting.Conditions.NotEmptyResultSetCondition();
             // 
             // dbo_GetPlayerGameweekHistoryTest_TestAction
             // 
@@ -118,6 +123,17 @@ namespace FantasyPremierLeagueTest
                 "s";
             GetPlayerGameweekHistoryStatsByDifficultyWasHomeNotEmptyResultSetCondition_Results.ResultSet = 2;
             // 
+            // dbo_GetPlayerGameweekHistoryForSeasonTest_TestAction
+            // 
+            dbo_GetPlayerGameweekHistoryForSeasonTest_TestAction.Conditions.Add(GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition);
+            resources.ApplyResources(dbo_GetPlayerGameweekHistoryForSeasonTest_TestAction, "dbo_GetPlayerGameweekHistoryForSeasonTest_TestAction");
+            // 
+            // GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition
+            // 
+            GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition.Enabled = true;
+            GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition.Name = "GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition";
+            GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition.ResultSet = 1;
+            // 
             // dbo_GetPlayerGameweekHistoryTestData
             // 
             this.dbo_GetPlayerGameweekHistoryTestData.PosttestAction = null;
@@ -148,16 +164,22 @@ namespace FantasyPremierLeagueTest
             this.dbo_GetPlayerGameweekHistoryForSeasonTestData.PretestAction = null;
             this.dbo_GetPlayerGameweekHistoryForSeasonTestData.TestAction = dbo_GetPlayerGameweekHistoryForSeasonTest_TestAction;
             // 
-            // dbo_GetPlayerGameweekHistoryForSeasonTest_TestAction
+            // dbo_GetPlayerHistoryAgainstOpponentTeamTestData
             // 
-            dbo_GetPlayerGameweekHistoryForSeasonTest_TestAction.Conditions.Add(GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition);
-            resources.ApplyResources(dbo_GetPlayerGameweekHistoryForSeasonTest_TestAction, "dbo_GetPlayerGameweekHistoryForSeasonTest_TestAction");
+            this.dbo_GetPlayerHistoryAgainstOpponentTeamTestData.PosttestAction = null;
+            this.dbo_GetPlayerHistoryAgainstOpponentTeamTestData.PretestAction = null;
+            this.dbo_GetPlayerHistoryAgainstOpponentTeamTestData.TestAction = dbo_GetPlayerHistoryAgainstOpponentTeamTest_TestAction;
             // 
-            // GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition
+            // dbo_GetPlayerHistoryAgainstOpponentTeamTest_TestAction
             // 
-            GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition.Enabled = true;
-            GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition.Name = "GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition";
-            GetGameweekPlayerHistoryForSeasonNotEmptyResultSetCondition.ResultSet = 1;
+            dbo_GetPlayerHistoryAgainstOpponentTeamTest_TestAction.Conditions.Add(GetPlayerHistoryAgainstOpponentTeamNotEmptyResultSetCondition);
+            resources.ApplyResources(dbo_GetPlayerHistoryAgainstOpponentTeamTest_TestAction, "dbo_GetPlayerHistoryAgainstOpponentTeamTest_TestAction");
+            // 
+            // GetPlayerHistoryAgainstOpponentTeamNotEmptyResultSetCondition
+            // 
+            GetPlayerHistoryAgainstOpponentTeamNotEmptyResultSetCondition.Enabled = true;
+            GetPlayerHistoryAgainstOpponentTeamNotEmptyResultSetCondition.Name = "GetPlayerHistoryAgainstOpponentTeamNotEmptyResultSetCondition";
+            GetPlayerHistoryAgainstOpponentTeamNotEmptyResultSetCondition.ResultSet = 1;
         }
 
         #endregion
@@ -294,6 +316,30 @@ namespace FantasyPremierLeagueTest
                 SqlExecutionResult[] posttestResults = TestService.Execute(this.PrivilegedContext, this.PrivilegedContext, testActions.PosttestAction);
             }
         }
+        [TestMethod()]
+        public void dbo_GetPlayerHistoryAgainstOpponentTeamTest()
+        {
+            SqlDatabaseTestActions testActions = this.dbo_GetPlayerHistoryAgainstOpponentTeamTestData;
+            // Execute the pre-test script
+            // 
+            System.Diagnostics.Trace.WriteLineIf((testActions.PretestAction != null), "Executing pre-test script...");
+            SqlExecutionResult[] pretestResults = TestService.Execute(this.PrivilegedContext, this.PrivilegedContext, testActions.PretestAction);
+            try
+            {
+                // Execute the test script
+                // 
+                System.Diagnostics.Trace.WriteLineIf((testActions.TestAction != null), "Executing test script...");
+                SqlExecutionResult[] testResults = TestService.Execute(this.ExecutionContext, this.PrivilegedContext, testActions.TestAction);
+            }
+            finally
+            {
+                // Execute the post-test script
+                // 
+                System.Diagnostics.Trace.WriteLineIf((testActions.PosttestAction != null), "Executing post-test script...");
+                SqlExecutionResult[] posttestResults = TestService.Execute(this.PrivilegedContext, this.PrivilegedContext, testActions.PosttestAction);
+            }
+        }
+
 
 
         private SqlDatabaseTestActions dbo_GetPlayerGameweekHistoryTestData;
@@ -301,5 +347,6 @@ namespace FantasyPremierLeagueTest
         private SqlDatabaseTestActions dbo_GetPlayerGameweekHistoryComparisonClub2ClubTestData;
         private SqlDatabaseTestActions dbo_GetPlayerGameweekHistoryStatsByDifficultyWasHomeTestData;
         private SqlDatabaseTestActions dbo_GetPlayerGameweekHistoryForSeasonTestData;
+        private SqlDatabaseTestActions dbo_GetPlayerHistoryAgainstOpponentTeamTestData;
     }
 }

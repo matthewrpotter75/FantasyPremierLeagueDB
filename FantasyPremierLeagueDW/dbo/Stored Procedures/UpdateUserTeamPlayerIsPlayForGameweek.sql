@@ -5,14 +5,13 @@
 	@SeasonKey INT = NULL,
 	@GameweekKey INT = NULL,
 	@PlayerKeys VARCHAR(50) = NULL,
+	@PlayerNames VARCHAR(4000) = NULL,
 	@Debug BIT = 0
 )
 AS
 BEGIN
 
 	SET NOCOUNT ON;
-
-	DECLARE @SQL VARCHAR(1000);
 
 	IF @SeasonKey IS NULL
 	BEGIN
@@ -32,20 +31,48 @@ BEGIN
 	IF @UserTeamKey IS NOT NULL
 	BEGIN
 
-		SET @SQL = 
-		'UPDATE dbo.DimUserTeamPlayer 
-		 SET IsPlay = 1
-		 WHERE UserTeamKey = ' + CAST(@UserTeamKey AS VARCHAR(3)) + '
-		 AND SeasonKey = ' + CAST(@SeasonKey AS VARCHAR(3)) + '
-		 AND GameweekKey = ' + CAST(@GameweekKey AS VARCHAR(3)) + '
-		 AND PlayerKey IN (' + @PlayerKeys + ');';
+		UPDATE dbo.DimUserTeamPlayer
+		SET IsPlay = 0
+		WHERE UserTeamKey = @UserTeamKey
+		AND SeasonKey = @SeasonKey
+		AND GameweekKey = @GameweekKey;
 
-		EXEC (@SQL);
+		IF @PlayerKeys IS NOT NULL
+		BEGIN
+
+			IF @Debug = 1
+				SELECT * FROM dbo.fnSplit(@PlayerKeys,',')
+
+			UPDATE utp
+			SET IsPlay = 1
+			FROM dbo.DimUserTeamPlayer utp
+			INNER JOIN dbo.fnSplit(@PlayerKeys,',') k
+			ON utp.PlayerKey = k.Term
+			WHERE UserTeamKey = @UserTeamKey
+			AND SeasonKey = @SeasonKey
+			AND GameweekKey = @GameweekKey;
+
+		END
+		ELSE
+		BEGIN
+
+			IF @Debug = 1
+				SELECT * FROM dbo.fnSplit(@PlayerNames,',')
+
+			UPDATE utp
+			SET IsPlay = 1
+			FROM dbo.DimUserTeamPlayer utp
+			INNER JOIN dbo.DimPlayer p
+			ON utp.PlayerKey = p.PlayerKey
+			INNER JOIN dbo.fnSplit(@PlayerNames,',') k
+			ON k.Term = p.PlayerName
+			WHERE UserTeamKey = @UserTeamKey
+			AND SeasonKey = @SeasonKey
+			AND GameweekKey = @GameweekKey;
+
+		END
 
 		PRINT CAST(@@ROWCOUNT AS VARCHAR(2)) + ' players updated';
-
-		IF @Debug = 1
-			PRINT @SQL;
 
 	END
 	ELSE
