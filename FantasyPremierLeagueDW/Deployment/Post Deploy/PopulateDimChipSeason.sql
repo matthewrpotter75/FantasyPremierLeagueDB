@@ -13,10 +13,15 @@ USING
 	(1, 12),
 	(2, 12),
 	(3, 12),
-	(4, 12)
+	(4, 12),
+	(1, 13),
+	(2, 13),
+	(3, 13),
+	(4, 13)
 )
 AS Source (ChipKey, SeasonKey)
 ON Target.ChipKey = Source.ChipKey
+AND Target.SeasonKey = Source.SeasonKey
 WHEN NOT MATCHED BY TARGET THEN 
 INSERT (ChipKey, SeasonKey) 
 VALUES (ChipKey, SeasonKey)  
