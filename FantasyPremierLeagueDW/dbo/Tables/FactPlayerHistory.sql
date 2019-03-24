@@ -88,3 +88,6 @@ CREATE NONCLUSTERED INDEX IX_FactPlayerHistory_GameweekKey_SeasonKey_Inc_PlayerK
 ON [dbo].[FactPlayerHistory] ([GameweekKey],[SeasonKey])
 INCLUDE ([PlayerKey],[TotalPoints])
 GO
+
+CREATE UNIQUE INDEX UX_FactPlayerHistory_PlayerKey_GameweekFixtureKey ON dbo.FactPlayerHistory (PlayerKey, GameweekFixtureKey)
+GO

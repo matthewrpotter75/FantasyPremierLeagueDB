@@ -8,7 +8,6 @@ CREATE TABLE dbo.FactPlayerTransfers
 	PlayerTransferredInKey INT NOT NULL,
 	PlayerTransferredOutCost INT NOT NULL,
 	PlayerTransferredInCost INT NOT NULL,
-	IsWildcard BIT NULL CONSTRAINT DF_FactPlayerTransfers_IsWildcard  DEFAULT (0),
 	CONSTRAINT PK_FactPlayerTransfers PRIMARY KEY CLUSTERED (PlayerTransfersKey ASC),
 	CONSTRAINT FK_FactPlayerTransfers_PlayerTransferredOutKey FOREIGN KEY (PlayerTransferredOutKey) REFERENCES dbo.DimPlayer (PlayerKey),
 	CONSTRAINT FK_FactPlayerTransfers_PlayerTransferredInKey FOREIGN KEY (PlayerTransferredInKey) REFERENCES dbo.DimPlayer (PlayerKey),
