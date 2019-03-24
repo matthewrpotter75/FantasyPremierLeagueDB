@@ -116,6 +116,8 @@
     <Build Include="dbo\Stored Procedures\GetUserTeamPlayerSquadPointsForGameweek.sql" />
     <Build Include="dbo\Stored Procedures\SetUserTeamGameweekChipForUserTeamAndGameweek.sql" />
     <Build Include="dbo\Stored Procedures\CopyDimChipSeasonChipKeysFromPreviousSeason.sql" />
+    <Build Include="dbo\Functions\fnGetUserTeamFreeTransfers.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamSeasonPointsByGameweek.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDW.publish.xml" />

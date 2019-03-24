@@ -1,0 +1,3 @@
+CREATE TABLE dbo.UserTeamWildcard(	id INT IDENTITY(1,1),	wildcard_played_time_formatted SMALLDATETIME NOT NULL,	chip_status NVARCHAR(26) NOT NULL,	chip_name VARCHAR(50) NOT NULL,	chip_time SMALLDATETIME NOT NULL,	chipid INT NOT NULL,	userTeamid INT NOT NULL,	gameweekid INT NOT NULL,	CONSTRAINT PK_UserTeamWildcard PRIMARY KEY CLUSTERED (id ASC),
+	CONSTRAINT FK_UserTeamWildcard_userTeamid FOREIGN KEY (userTeamid) REFERENCES dbo.UserTeam (id),
+	CONSTRAINT FK_UserTeamWildcard_gameweekId FOREIGN KEY (gameweekid) REFERENCES dbo.Gameweeks (id));

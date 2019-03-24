@@ -99,6 +99,18 @@
     <Build Include="dbo\Tables\MyTeam.sql" />
     <None Include="PopuateGameweekFixtures_FixturesOnly.sql" />
     <Build Include="dbo\Tables\PlayerPrices.sql" />
+    <Build Include="dbo\Tables\UserTeamSeason.sql" />
+    <Build Include="dbo\Tables\UserTeamGameweekHistory.sql" />
+    <Build Include="dbo\Tables\UserTeamChip.sql" />
+    <Build Include="dbo\Tables\UserTeamTransferHistory.sql" />
+    <Build Include="dbo\Tables\UserTeamWildcard.sql" />
+    <Build Include="dbo\Tables\H2hLeague.sql" />
+    <Build Include="dbo\Tables\ClassicLeague.sql" />
+    <Build Include="dbo\Tables\Cup.sql" />
+    <Build Include="dbo\Tables\UserTeam.sql" />
+    <Build Include="dbo\Tables\UserTeamPickAutomaticSub.sql" />
+    <Build Include="dbo\Tables\UserTeamPick.sql" />
+    <Build Include="dbo\Tables\Cup_Tiebreak.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDB.publish.xml" />

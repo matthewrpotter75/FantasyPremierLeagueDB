@@ -7,4 +7,39 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="playerid" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="94442af0-9499-4180-a20c-2afdf10b3e69" ChangeDateTime="03/19/2019 17:08:42">
+    <Property Name="ElementName" Value="[dbo].[UserTeams].[player]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserTeams]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="userPlayerid" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e1358ddc-088e-462c-a4ab-edecd1b0e3d1" ChangeDateTime="03/19/2019 21:31:44">
+    <Property Name="ElementName" Value="[dbo].[LeaguesClassic]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="ClassicLeague" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b236b9fd-77b9-4767-a0b3-7c1133b17532" ChangeDateTime="03/19/2019 21:33:28">
+    <Property Name="ElementName" Value="[dbo].[LeaguesH2h]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="H2hLeague" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ccef6184-db17-406f-ac89-4577cac27ccf" ChangeDateTime="03/20/2019 11:08:11">
+    <Property Name="ElementName" Value="[dbo].[UserTeamChips]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="UserTeamChip" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ef0bf53e-05c5-4d02-9a1e-ecd528572180" ChangeDateTime="03/20/2019 11:10:06">
+    <Property Name="ElementName" Value="[dbo].[UserTeams]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="UserTeam" />
+  </Operation>
 </Operations>
