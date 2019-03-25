@@ -104,13 +104,13 @@
     <Build Include="dbo\Tables\UserTeamChip.sql" />
     <Build Include="dbo\Tables\UserTeamTransferHistory.sql" />
     <Build Include="dbo\Tables\UserTeamWildcard.sql" />
-    <Build Include="dbo\Tables\H2hLeague.sql" />
-    <Build Include="dbo\Tables\ClassicLeague.sql" />
-    <Build Include="dbo\Tables\Cup.sql" />
+    <Build Include="dbo\Tables\UserTeamH2hLeague.sql" />
+    <Build Include="dbo\Tables\UserTeamClassicLeague.sql" />
+    <Build Include="dbo\Tables\UserTeamCup.sql" />
     <Build Include="dbo\Tables\UserTeam.sql" />
     <Build Include="dbo\Tables\UserTeamPickAutomaticSub.sql" />
     <Build Include="dbo\Tables\UserTeamPick.sql" />
-    <Build Include="dbo\Tables\Cup_Tiebreak.sql" />
+    <Build Include="dbo\Tables\UserTeamCup_Tiebreak.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDB.publish.xml" />

@@ -1,4 +1,4 @@
-CREATE TABLE dbo.Cup
+CREATE TABLE dbo.UserTeamCup
 (
 	id INT NOT NULL,
 	homeTeam_userTeamid INT NOT NULL,
@@ -22,15 +22,15 @@ CREATE TABLE dbo.Cup
 	awayTeam_total INT NOT NULL,
 	seed_value INT NULL,
 	gameweekid INT NOT NULL
-	CONSTRAINT PK_Cup PRIMARY KEY CLUSTERED (id ASC),
-	CONSTRAINT FK_Cup_homeTeam_userTeamid FOREIGN KEY (homeTeam_userTeamid) REFERENCES dbo.UserTeam (id),
-	CONSTRAINT FK_Cup_awayTeam_userTeamid FOREIGN KEY (awayTeam_userTeamid) REFERENCES dbo.UserTeam (id),
-	CONSTRAINT FK_Cup_gameweekId FOREIGN KEY (gameweekid) REFERENCES dbo.Gameweeks (id)
+	CONSTRAINT PK_UserTeamCup PRIMARY KEY CLUSTERED (id ASC),
+	CONSTRAINT FK_UserTeamCup_homeTeam_userTeamid FOREIGN KEY (homeTeam_userTeamid) REFERENCES dbo.UserTeam (id),
+	CONSTRAINT FK_UserTeamCup_awayTeam_userTeamid FOREIGN KEY (awayTeam_userTeamid) REFERENCES dbo.UserTeam (id),
+	CONSTRAINT FK_UserTeamCup_gameweekId FOREIGN KEY (gameweekid) REFERENCES dbo.Gameweeks (id)
 );
 GO
 
-CREATE INDEX IX_Cup_homeTeam_userteamid ON dbo.Cup (homeTeam_userTeamid);
+CREATE INDEX IX_UserTeamCup_homeTeam_userteamid ON dbo.UserTeamCup (homeTeam_userTeamid);
 GO
 
-CREATE INDEX IX_Cup_awayTeam_userteamid ON dbo.Cup (awayTeam_userTeamid);
+CREATE INDEX IX_UserTeamCup_awayTeam_userteamid ON dbo.UserTeamCup (awayTeam_userTeamid);
 GO

@@ -42,4 +42,81 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="UserTeam" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="c5da7207-722e-4bf5-8cda-2c22087528db" ChangeDateTime="03/24/2019 23:24:48">
+    <Property Name="ElementName" Value="[dbo].[ClassicLeague]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="UserTeamClassicLeague" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="767edaf7-be31-4ba9-981d-0134b0b5e9fa" ChangeDateTime="03/24/2019 23:25:17">
+    <Property Name="ElementName" Value="[dbo].[Cup]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="UserTeamCup" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9c79950d-6103-40ad-8a57-50047c38b0f1" ChangeDateTime="03/24/2019 23:25:37">
+    <Property Name="ElementName" Value="[dbo].[H2hLeague]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="UserTeamH2hLeague" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a2ad968a-1e1f-4ee6-892c-482b6018c607" ChangeDateTime="03/24/2019 23:26:43">
+    <Property Name="ElementName" Value="[dbo].[Cup_Tiebreak]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="UserTeamCup_Tiebreak" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7a0ce5b5-12a6-4a54-ae9a-5d482492657c" ChangeDateTime="03/24/2019 23:29:26">
+    <Property Name="ElementName" Value="[dbo].[UserTeamCup].[IX_Cup_awayTeam_userteamid]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[dbo].[UserTeamCup]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IX_UserTeamCup_awayTeam_userteamid" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fc6a7a69-0b5d-4ef2-839e-0a548d66ca67" ChangeDateTime="03/24/2019 23:29:39">
+    <Property Name="ElementName" Value="[dbo].[UserTeamCup].[IX_Cup_homeTeam_userteamid]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[dbo].[UserTeamCup]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IX_UserTeamCup_homeTeam_userteamid" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="87957632-46db-4515-b16c-2a7f015cae2f" ChangeDateTime="03/24/2019 23:31:12">
+    <Property Name="ElementName" Value="[dbo].[PK_ClassicLeague]" />
+    <Property Name="ElementType" Value="SqlPrimaryKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[UserTeamClassicLeague]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PK_UserTeamClassicLeague" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="af9c2b50-d614-4e31-8305-98d492b38de4" ChangeDateTime="03/24/2019 23:31:40">
+    <Property Name="ElementName" Value="[dbo].[PK_Cup]" />
+    <Property Name="ElementType" Value="SqlPrimaryKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[UserTeamCup]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PK_UserTeamCup" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="40acec69-5c34-4151-9310-d3d1796c80ee" ChangeDateTime="03/24/2019 23:32:24">
+    <Property Name="ElementName" Value="[dbo].[PK_Cup_Tiebreak]" />
+    <Property Name="ElementType" Value="SqlPrimaryKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[UserTeamCup_Tiebreak]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PK_UserTeamCupTiebreak" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8a60ad06-63cf-4585-b516-eec3f0cf12fc" ChangeDateTime="03/24/2019 23:32:38">
+    <Property Name="ElementName" Value="[dbo].[UserTeamCup_Tiebreak]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="UserTeamCupTiebreak" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ad737598-7bae-4793-a23c-a2128a60ce75" ChangeDateTime="03/24/2019 23:33:06">
+    <Property Name="ElementName" Value="[dbo].[PK_H2hLeague]" />
+    <Property Name="ElementType" Value="SqlPrimaryKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[UserTeamH2hLeague]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="PK_UserTeamH2hLeague" />
+  </Operation>
 </Operations>
