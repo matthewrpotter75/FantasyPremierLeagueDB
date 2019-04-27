@@ -15,7 +15,7 @@ CREATE TABLE dbo.UserTeamGameweekHistory
 	userteam_bank INT NOT NULL,
 	userteamid INT NOT NULL,
 	gameweekid INT NOT NULL,
-	CONSTRAINT PK_UserTeamGameweekHistory PRIMARY KEY CLUSTERED (userteamid ASC,gameweekid ASC, id ASC),
-	CONSTRAINT FK_UserTeamGameweekHistory_userteamid FOREIGN KEY (userteamid) REFERENCES dbo.UserTeam (id),
-	CONSTRAINT FK_UserTeamGameweekHistory_gameweekId FOREIGN KEY (gameweekid) REFERENCES dbo.Gameweeks (id)
+	CONSTRAINT PK_UserTeamGameweekHistory PRIMARY KEY CLUSTERED (userteamid ASC,gameweekid ASC, id ASC)
+	--CONSTRAINT FK_UserTeamGameweekHistory_userteamid FOREIGN KEY (userteamid) REFERENCES dbo.UserTeam (id),
+	--CONSTRAINT FK_UserTeamGameweekHistory_gameweekId FOREIGN KEY (gameweekid) REFERENCES dbo.Gameweeks (id)
 );

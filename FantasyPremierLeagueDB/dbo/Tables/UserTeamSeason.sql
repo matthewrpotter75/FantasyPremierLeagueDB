@@ -6,10 +6,11 @@ CREATE TABLE dbo.UserTeamSeason
 	userteam_rank INT NOT NULL,
 	seasonid INT NOT NULL,
 	userplayerid INT NOT NULL,
-	CONSTRAINT PK_UserTeamSeason PRIMARY KEY CLUSTERED (id ASC),
-	CONSTRAINT FK_UserTeamSeason_userplayerid FOREIGN KEY (userplayerid) REFERENCES dbo.UserTeam (userPlayerid)
+	userteamid INT NOT NULL,
+	CONSTRAINT PK_UserTeamSeason PRIMARY KEY CLUSTERED (userteamid ASC, id ASC)
+	--CONSTRAINT FK_UserTeamSeason_userplayerid FOREIGN KEY (userplayerid) REFERENCES dbo.UserTeam (userPlayerid)
 );
 GO
 
-CREATE NONCLUSTERED INDEX IX_UserTeamSeason_userplayerid_inc_id ON dbo.UserTeamSeason (userplayerid) INCLUDE (id);
-GO
+--CREATE NONCLUSTERED INDEX IX_UserTeamSeason_userplayerid_inc_id ON dbo.UserTeamSeason (userplayerid) INCLUDE (id);
+--GO

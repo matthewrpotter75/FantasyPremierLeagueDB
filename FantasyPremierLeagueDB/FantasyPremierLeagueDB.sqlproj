@@ -110,7 +110,20 @@
     <Build Include="dbo\Tables\UserTeam.sql" />
     <Build Include="dbo\Tables\UserTeamPickAutomaticSub.sql" />
     <Build Include="dbo\Tables\UserTeamPick.sql" />
-    <Build Include="dbo\Tables\UserTeamCup_Tiebreak.sql" />
+    <Build Include="dbo\Tables\UserTeamCupTiebreak.sql" />
+    <Build Include="dbo\Tables\UserTeamCounts.sql" />
+    <Build Include="dbo\Tables\UserTeamTableCounts.sql" />
+    <Build Include="dbo\Tables\LeagueResults.sql" />
+    <Build Include="dbo\Tables\League.sql" />
+    <Build Include="dbo\Tables\TeamFixture.sql" />
+    <Build Include="dbo\Tables\TeamFixtureStats.sql" />
+    <Build Include="dbo\Stored Procedures\GetMaxUserTeamIdForEachUserTeamTable.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamCounts.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamTableCounts.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamTableRowCountsIncrease.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamCountsIncrease.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamRecordsForUserTeamId.sql" />
+    <Build Include="dbo\Tables\UserTeam_ManualInserts.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDB.publish.xml" />

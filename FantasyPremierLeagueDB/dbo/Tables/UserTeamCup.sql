@@ -2,11 +2,11 @@ CREATE TABLE dbo.UserTeamCup
 (
 	id INT NOT NULL,
 	homeTeam_userTeamid INT NOT NULL,
-	homeTeam_userTeamName VARCHAR(100) NOT NULL,
-	homeTeam_playerName VARCHAR(100) NOT NULL,
+	homeTeam_userTeamName VARCHAR(200) NOT NULL,
+	homeTeam_playerName VARCHAR(200) NOT NULL,
 	awayTeam_userTeamid INT NOT NULL,
-	awayTeam_userTeamName VARCHAR(100) NOT NULL,
-	awayTeam_playerName VARCHAR(100) NOT NULL,
+	awayTeam_userTeamName VARCHAR(200) NOT NULL,
+	awayTeam_playerName VARCHAR(200) NOT NULL,
 	is_knockout BIT NOT NULL,
 	winner INT NULL,
 	own_entry BIT NOT NULL,
@@ -21,11 +21,12 @@ CREATE TABLE dbo.UserTeamCup
 	homeTeam_total INT NOT NULL,
 	awayTeam_total INT NOT NULL,
 	seed_value INT NULL,
-	gameweekid INT NOT NULL
-	CONSTRAINT PK_UserTeamCup PRIMARY KEY CLUSTERED (id ASC),
-	CONSTRAINT FK_UserTeamCup_homeTeam_userTeamid FOREIGN KEY (homeTeam_userTeamid) REFERENCES dbo.UserTeam (id),
-	CONSTRAINT FK_UserTeamCup_awayTeam_userTeamid FOREIGN KEY (awayTeam_userTeamid) REFERENCES dbo.UserTeam (id),
-	CONSTRAINT FK_UserTeamCup_gameweekId FOREIGN KEY (gameweekid) REFERENCES dbo.Gameweeks (id)
+	gameweekid INT NOT NULL,
+	fromuserteamid INT NULL,
+	CONSTRAINT PK_UserTeamCup PRIMARY KEY CLUSTERED (id ASC)
+	--CONSTRAINT FK_UserTeamCup_homeTeam_userTeamid FOREIGN KEY (homeTeam_userTeamid) REFERENCES dbo.UserTeam (id),
+	--CONSTRAINT FK_UserTeamCup_awayTeam_userTeamid FOREIGN KEY (awayTeam_userTeamid) REFERENCES dbo.UserTeam (id),
+	--CONSTRAINT FK_UserTeamCup_gameweekId FOREIGN KEY (gameweekid) REFERENCES dbo.Gameweeks (id)
 );
 GO
 
