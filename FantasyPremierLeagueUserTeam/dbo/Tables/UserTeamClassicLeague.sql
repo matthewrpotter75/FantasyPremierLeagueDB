@@ -23,8 +23,8 @@ CREATE TABLE dbo.UserTeamClassicLeague
 	reprocess_standings VARCHAR(50) NOT NULL,
 	start_gameweekid INT NOT NULL,
 	admin_userTeamid INT NULL,
-	userTeamid INT NOT NULL,
-	CONSTRAINT PK_UserTeamClassicLeague PRIMARY KEY CLUSTERED (userTeamid ASC, id ASC)
+	userteamid INT NOT NULL,
+	CONSTRAINT PK_UserTeamClassicLeague PRIMARY KEY CLUSTERED (userteamid ASC, id ASC)
 	--CONSTRAINT FK_UserTeamClassicLeague_userTeamid FOREIGN KEY (userTeamid) REFERENCES dbo.UserTeam (id),
 	--CONSTRAINT FK_UserTeamClassicLeague_admin_userTeamid FOREIGN KEY (admin_userTeamid) REFERENCES dbo.UserTeam (id),
 	--CONSTRAINT FK_UserTeamClassicLeague_start_gameweekid FOREIGN KEY (start_gameweekid) REFERENCES dbo.Gameweeks (id)

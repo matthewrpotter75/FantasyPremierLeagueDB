@@ -1,4 +1,9 @@
-﻿PRINT 'Updating dbo.GameweekFixtures';
+﻿DECLARE @sScriptName VARCHAR(256) = N'PopuateGameweekFixtures.sql';
+DECLARE @sExecDate VARCHAR(32) = CONVERT(VARCHAR(32), GETDATE(), 126);                   
+RAISERROR('*** %s - Starting at [%s] *** ' , 0, 1, @sScriptName, @sExecDate) WITH NOWAIT;
+GO
+
+SET IDENTITY_INSERT dbo.GameweekFixtures ON;
 
 MERGE INTO dbo.GameweekFixtures AS Target 
 USING 
@@ -46,3 +51,10 @@ INSERT (Id, gameweekId, homeTeamId, awayTeamId, homeTeam_Shortname, awayTeam_Sho
 VALUES (Source.Id, Source.gameweekId, Source.homeTeamId, Source.awayTeamId, Source.homeTeam_Shortname, Source.awayTeam_Shortname, Source.kickoff_time)
 WHEN NOT MATCHED BY SOURCE THEN
 DELETE;
+
+SET IDENTITY_INSERT dbo.GameweekFixtures OFF;
+
+DECLARE @sScriptName VARCHAR(256) = N'PopuateGameweekFixtures.sql';
+DECLARE @sExecDate VARCHAR(32) = CONVERT(VARCHAR(32), GETDATE(), 126);                   
+RAISERROR('*** %s - Finished at [%s] *** ' , 0, 1, @sScriptName, @sExecDate) WITH NOWAIT;
+GO

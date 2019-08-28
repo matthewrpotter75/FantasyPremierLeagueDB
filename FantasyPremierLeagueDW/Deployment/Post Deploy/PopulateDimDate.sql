@@ -98,7 +98,7 @@ BEGIN
         ,[LastDayOfYear]
         ,[FirstDayOfNextMonth]
         ,[FirstDayOfNextYear]
-		,[MonthShortName]
+		,[MonthNameShort]
 		,[DisplayDate]
 	)
 	SELECT

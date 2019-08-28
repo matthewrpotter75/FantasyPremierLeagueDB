@@ -55,9 +55,9 @@ BEGIN
 
 	SELECT utth.*, playerout.web_name AS PlayerOut, playerin.web_name AS PlayerIn
 	FROM dbo.UserTeamTransferHistory utth
-	INNER JOIN dbo.Players playerin
+	INNER JOIN [$(FantasyPremierLeague)].dbo.Players playerin
 	ON utth.playerid_in = playerin.id
-	INNER JOIN dbo.Players playerout
+	INNER JOIN [$(FantasyPremierLeague)].dbo.Players playerout
 	ON utth.playerid_out = playerout.id
 	WHERE userteamid = @UserTeamId
 	ORDER BY utth.gameweekid;
@@ -66,7 +66,7 @@ BEGIN
 
 	SELECT utp.*, p.web_name AS PlayerName
 	FROM dbo.UserTeamPick utp
-	INNER JOIN dbo.Players p
+	INNER JOIN [$(FantasyPremierLeague)].dbo.Players p
 	ON utp.playerid = p.id
 	WHERE userteamid = @UserTeamId
 	ORDER BY utp.gameweekid, utp.position;
@@ -75,9 +75,9 @@ BEGIN
 
 	SELECT utpas.*, playerout.web_name AS PlayerOutName, playerin.web_name AS PlayerInName
 	FROM dbo.UserTeamPickAutomaticSub utpas
-	INNER JOIN dbo.Players playerin
+	INNER JOIN [$(FantasyPremierLeague)].dbo.Players playerin
 	ON utpas.playerid_in = playerin.id
-	INNER JOIN dbo.Players playerout
+	INNER JOIN [$(FantasyPremierLeague)].dbo.Players playerout
 	ON utpas.playerid_out = playerout.id
 	WHERE utpas.userteamid = @UserTeamId
 	ORDER BY utpas.gameweekid, utpas.id;

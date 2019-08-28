@@ -12,14 +12,14 @@
     [draw]                  INT      NOT NULL,
     [points]                INT      NOT NULL,
     [form]                  INT      NULL,
-    [link_url]              VARCHAR (50) NOT NULL,
+    [link_url]              VARCHAR (50) NULL,
     [strength_overall_home] INT     NOT NULL,
     [strength_overall_away] INT     NOT NULL,
     [strength_attack_home]  INT     NOT NULL,
     [strength_attack_away]  INT     NOT NULL,
     [strength_defence_home] INT     NOT NULL,
     [strength_defence_away] INT     NOT NULL,
-    [team_division]         INT      NOT NULL,
+    [team_division]         INT     NULL,
     CONSTRAINT [PK_Teams] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 

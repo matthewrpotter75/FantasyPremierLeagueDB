@@ -4,7 +4,7 @@
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseName>FantasyPremierLeague</TargetDatabaseName>
     <DeployScriptFileName>FantasyPremierLeagueDB.sql</DeployScriptFileName>
-    <TargetConnectionString>Data Source=MATTASUS\SQL2014;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True</TargetConnectionString>
+    <TargetConnectionString>Data Source=MATTASUS\SQL2017;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True</TargetConnectionString>
     <ProfileVersionNumber>1</ProfileVersionNumber>
     <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
     <ScriptDatabaseOptions>False</ScriptDatabaseOptions>

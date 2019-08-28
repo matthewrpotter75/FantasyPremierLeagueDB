@@ -24,8 +24,8 @@ CREATE TABLE dbo.UserTeamH2hLeague
 	ko_rounds INT NOT NULL,
 	admin_userTeamid INT NULL,
 	start_gameweekid INT NOT NULL,
-	userTeamid INT NOT NULL,
-	CONSTRAINT PK_UserTeamH2hLeague PRIMARY KEY CLUSTERED (userTeamid ASC, id ASC)
+	userteamid INT NOT NULL,
+	CONSTRAINT PK_UserTeamH2hLeague PRIMARY KEY CLUSTERED (userteamid ASC, id ASC)
 	--CONSTRAINT FK_UserTeamH2hLeague_userTeamid FOREIGN KEY (userTeamid) REFERENCES dbo.UserTeam (id),
 	--CONSTRAINT FK_UserTeamH2hLeague_admin_userTeamid FOREIGN KEY (admin_userTeamid) REFERENCES dbo.UserTeam (id),
 	--CONSTRAINT FK_UserTeamH2hLeague_start_gameweekid FOREIGN KEY (start_gameweekid) REFERENCES dbo.Gameweeks (id)

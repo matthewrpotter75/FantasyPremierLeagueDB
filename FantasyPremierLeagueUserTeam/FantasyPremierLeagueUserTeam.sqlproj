@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>FantasyPremierLeagueUserTeam</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{fa471d28-32c0-44e4-8da2-b2e0343670c4}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql140DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>FantasyPremierLeagueUserTeam</RootNamespace>
+    <AssemblyName>FantasyPremierLeagueUserTeam</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <TargetFrameworkProfile />
+    <Recovery>SIMPLE</Recovery>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo" />
+    <Folder Include="Security" />
+    <Folder Include="Storage" />
+    <Folder Include="Deployment" />
+    <Folder Include="dbo\Tables" />
+    <Folder Include="dbo\Stored Procedures" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\Chip.sql" />
+    <Build Include="dbo\Tables\League.sql" />
+    <Build Include="dbo\Tables\LeagueResults.sql" />
+    <Build Include="dbo\Tables\LeagueTeamOverall.sql" />
+    <Build Include="dbo\Tables\UserTeam.sql" />
+    <Build Include="dbo\Tables\UserTeam_ManualInserts.sql" />
+    <Build Include="dbo\Tables\UserTeamChip.sql" />
+    <Build Include="dbo\Tables\UserTeamClassicLeague.sql" />
+    <Build Include="dbo\Tables\UserTeamCounts.sql" />
+    <Build Include="dbo\Tables\UserTeamCup.sql" />
+    <Build Include="dbo\Tables\UserTeamCupTiebreak.sql" />
+    <Build Include="dbo\Tables\UserTeamGameweekHistory.sql" />
+    <Build Include="dbo\Tables\UserTeamH2hLeague.sql" />
+    <Build Include="dbo\Tables\UserTeamLeague.sql" />
+    <Build Include="dbo\Tables\UserTeamLeagueTeam.sql" />
+    <Build Include="dbo\Tables\UserTeamPick.sql" />
+    <Build Include="dbo\Tables\UserTeamPickAutomaticSub.sql" />
+    <Build Include="dbo\Tables\UserTeamSeason.sql" />
+    <Build Include="dbo\Tables\UserTeamTableCounts.sql" />
+    <Build Include="dbo\Tables\UserTeamTransferHistory.sql" />
+    <Build Include="dbo\Tables\UserTeamWildcard.sql" />
+    <Build Include="Security\FantasyPremierLeagueUserTeam.sql" />
+    <Build Include="Security\FantasyPremierLeagueUserTeam_Login.sql" />
+    <Build Include="Security\Permissions.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+    <None Include="Deployment\PopulateChip.sql" />
+    <Build Include="dbo\Stored Procedures\GetMaxUserTeamIdForEachUserTeamTable.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamCounts.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamCountsIncrease.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamRecordsForUserTeamId.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamTableCounts.sql" />
+    <Build Include="dbo\Stored Procedures\GetUserTeamTableRowCountsIncrease.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FantasyPremierLeagueUserTeam.publish.xml" />
+    <None Include="FantasyPremierLeagueUserTeam.scmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Deployment\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FantasyPremierLeagueDB\FantasyPremierLeague.sqlproj">
+      <Name>FantasyPremierLeague</Name>
+      <Project>{1498f4dd-7abc-4379-86c1-21eb011d3a3b}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>FantasyPremierLeague</DatabaseSqlCmdVariable>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="FantasyPremierLeague">
+      <DefaultValue>FantasyPremierLeague</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+</Project>

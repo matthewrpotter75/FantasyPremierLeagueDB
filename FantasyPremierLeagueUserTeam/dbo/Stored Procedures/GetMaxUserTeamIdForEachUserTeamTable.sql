@@ -4,7 +4,7 @@ BEGIN
 
 	SET NOCOUNT ON;
 
-	SELECT 'UserTeam' AS [Table], MAX(id) AS MAxUserTeamId
+	SELECT 'UserTeam' AS [Table], MAX(id) AS MaxUserTeamId
 	FROM dbo.UserTeam ut WITH (NOLOCK)
 	WHERE NOT EXISTS
 	(
@@ -15,7 +15,7 @@ BEGIN
 
 	UNION
 
-	SELECT 'UserTeamChip' AS [Table], MAX(userteamid) AS MAxUserTeamId
+	SELECT 'UserTeamChip' AS [Table], MAX(userteamid) AS MaxUserTeamId
 	FROM dbo.UserTeamChip ut WITH (NOLOCK)
 	WHERE NOT EXISTS
 	(
@@ -26,7 +26,7 @@ BEGIN
 
 	UNION
 
-	SELECT 'UserTeamCup' AS [Table], MAX(fromuserteamid) AS MAxUserTeamId
+	SELECT 'UserTeamCup' AS [Table], MAX(fromuserteamid) AS MaxUserTeamId
 	FROM dbo.UserTeamCup ut WITH (NOLOCK)
 	WHERE NOT EXISTS
 	(
@@ -37,7 +37,7 @@ BEGIN
 
 	UNION
 
-	SELECT 'UserTeamClassicLeague' AS [Table], MAX(userteamid) AS MAxUserTeamId
+	SELECT 'UserTeamClassicLeague' AS [Table], MAX(userteamid) AS MaxUserTeamId
 	FROM dbo.UserTeamClassicLeague ut WITH (NOLOCK)
 	WHERE NOT EXISTS
 	(
@@ -48,7 +48,7 @@ BEGIN
 
 	UNION
 
-	SELECT 'UserTeamGameweekHistory' AS [Table], MAX(userteamid) AS MAxUserTeamId
+	SELECT 'UserTeamGameweekHistory' AS [Table], MAX(userteamid) AS MaxUserTeamId
 	FROM dbo.UserTeamGameweekHistory ut WITH (NOLOCK)
 	WHERE NOT EXISTS
 	(
@@ -59,7 +59,7 @@ BEGIN
 
 	UNION
 
-	SELECT 'UserTeamPick' AS [Table], MAX(userteamid) AS MAxUserTeamId
+	SELECT 'UserTeamPick' AS [Table], MAX(userteamid) AS MaxUserTeamId
 	FROM dbo.UserTeamPick ut WITH (NOLOCK)
 	WHERE NOT EXISTS
 	(
@@ -70,7 +70,7 @@ BEGIN
 
 	UNION
 
-	SELECT 'UserTeamSeason' AS [Table], MAX(userteamid) AS MAxUserTeamId
+	SELECT 'UserTeamSeason' AS [Table], MAX(userteamid) AS MaxUserTeamId
 	FROM dbo.UserTeamSeason ut WITH (NOLOCK)
 	WHERE NOT EXISTS
 	(
@@ -81,7 +81,7 @@ BEGIN
 
 	UNION
 
-	SELECT 'UserTeamTransferHistory' AS [Table], MAX(userteamid) AS MAxUserTeamId
+	SELECT 'UserTeamTransferHistory' AS [Table], MAX(userteamid) AS MaxUserTeamId
 	FROM dbo.UserTeamTransferHistory ut WITH (NOLOCK)
 	WHERE NOT EXISTS
 	(
