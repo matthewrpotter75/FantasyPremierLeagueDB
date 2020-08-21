@@ -1,31 +1,13 @@
 CREATE TABLE dbo.UserTeamClassicLeague
 (
-	id INT NOT NULL,
+	leagueid INT NOT NULL,
 	entry_rank INT NULL,
 	entry_last_rank INT NULL,
-	entry_movement VARCHAR(10) NULL,
-	entry_change INT NULL,
 	entry_can_leave BIT NOT NULL,
 	entry_can_admin BIT NOT NULL,
 	entry_can_invite BIT NOT NULL,
-	entry_can_forum BIT NOT NULL,
-	entry_code VARCHAR(20) NULL,
-	league_name VARCHAR(100) NOT NULL,
-	short_name VARCHAR(50) NULL,
-	created SMALLDATETIME NOT NULL,
-	closed BIT NOT NULL,
-	forum_disabled BIT NOT NULL,
-	make_code_public BIT NOT NULL,
-	league_rank INT NULL,
-	league_size INT NULL,
-	league_type CHAR(1) NOT NULL,
-	scoring VARCHAR(2) NOT NULL,
-	reprocess_standings VARCHAR(50) NOT NULL,
-	start_gameweekid INT NOT NULL,
-	admin_userTeamid INT NULL,
 	userteamid INT NOT NULL,
-	CONSTRAINT PK_UserTeamClassicLeague PRIMARY KEY CLUSTERED (userteamid ASC, id ASC)
-	--CONSTRAINT FK_UserTeamClassicLeague_userTeamid FOREIGN KEY (userTeamid) REFERENCES dbo.UserTeam (id),
-	--CONSTRAINT FK_UserTeamClassicLeague_admin_userTeamid FOREIGN KEY (admin_userTeamid) REFERENCES dbo.UserTeam (id),
-	--CONSTRAINT FK_UserTeamClassicLeague_start_gameweekid FOREIGN KEY (start_gameweekid) REFERENCES dbo.Gameweeks (id)
+	CONSTRAINT PK_UserTeamClassicLeague PRIMARY KEY CLUSTERED (userteamid ASC, leagueid ASC)
+	--CONSTRAINT FK_UserTeamClassicLeague_userteamid FOREIGN KEY (userteamid) REFERENCES dbo.UserTeam (id),
+	--CONSTRAINT FK_UserTeamClassicLeague_leagueid FOREIGN KEY (leagueid) REFERENCES dbo.UserTeamLeague (id)
 );

@@ -79,7 +79,7 @@
     <Build Include="dbo\Tables\Players.sql" />
     <Build Include="dbo\Tables\months.sql" />
     <Build Include="dbo\Tables\formations.sql" />
-    <Build Include="dbo\Tables\fixture.sql" />
+    <Build Include="dbo\Tables\Fixture.sql" />
     <Build Include="dbo\Tables\history_summary.sql" />
     <Build Include="dbo\Tables\Fixtures.sql" />
     <Build Include="dbo\Tables\PlayerHistory.sql" />
@@ -105,6 +105,10 @@
     <None Include="Deployment\PopulateDifficulty.sql" />
     <None Include="Deployment\PopuateGameweekFixtures_FixturesOnly.sql" />
     <None Include="Deployment\PopuateGameweekFixtures.sql" />
+    <Build Include="dbo\Stored Procedures\DeletePlayerHistoryForTeamIdOpponentIdGameweekId.sql" />
+    <Build Include="dbo\Tables\PlayerHistoryPast.sql" />
+    <Build Include="dbo\Tables\PlayerStats.sql" />
+    <Build Include="dbo\Tables\GameweekChipStats.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDB.publish.xml" />

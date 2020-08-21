@@ -1,0 +1,14 @@
+CREATE TABLE dbo.PlayerStats
+(
+	id INT IDENTITY(1,1) NOT NULL,
+	label VARCHAR(50) NOT NULL,
+	[name] VARCHAR(50) NOT NULL,
+	playerStatsMatchId INT NOT NULL DEFAULT (1)
+	CONSTRAINT PK_PlayerStats PRIMARY KEY CLUSTERED (id ASC)
+)
+GO
+
+
+
+
+

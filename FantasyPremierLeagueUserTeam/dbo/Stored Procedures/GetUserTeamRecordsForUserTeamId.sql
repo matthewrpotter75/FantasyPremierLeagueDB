@@ -42,7 +42,7 @@ BEGIN
 	SELECT uts.*
 	FROM dbo.UserTeamSeason uts
 	INNER JOIN dbo.UserTeam ut
-	ON uts.userplayerid = ut.userPlayerid
+	ON uts.userteamid = ut.id
 	WHERE ut.id = @UserTeamId;
 
 	SELECT 'UserTeamGameweekHistory';

@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[history_summary] (
     [id]                              INT           NOT NULL,
     [kickoff_time]                    SMALLDATETIME NOT NULL,
-    [kickoff_time_formatted]          VARCHAR (16)  NOT NULL,
+    [kickoff_time_formatted]          VARCHAR (16)  NULL,
     [team_h_score]                    TINYINT       NULL,
     [team_a_score]                    TINYINT       NULL,
     [was_home]                        BIT           NOT NULL,

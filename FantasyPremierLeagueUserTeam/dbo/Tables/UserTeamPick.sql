@@ -2,9 +2,9 @@ CREATE TABLE dbo.UserTeamPick
 (
 	playerid INT NOT NULL,
 	position INT NOT NULL,
+	multiplier INT NOT NULL,
 	is_captain BIT NOT NULL,
 	is_vice_captain BIT NOT NULL,
-	multiplier INT NOT NULL,
 	userteamid INT NOT NULL,
 	gameweekid INT NOT NULL,
 	CONSTRAINT PK_UserTeamPick PRIMARY KEY CLUSTERED (userteamid ASC, gameweekid ASC, position ASC)

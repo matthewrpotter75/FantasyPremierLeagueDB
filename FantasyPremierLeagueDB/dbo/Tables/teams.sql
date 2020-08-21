@@ -4,7 +4,7 @@
     [code]                  INT     NOT NULL,
     [short_name]            VARCHAR (3)  NOT NULL,
     [unavailable]           BIT          NOT NULL,
-    [strength]              INT      NOT NULL,
+    [strength]              INT      NULL,
     [position]              INT      NOT NULL,
     [played]                INT      NOT NULL,
     [win]                   INT      NOT NULL,
@@ -20,6 +20,7 @@
     [strength_defence_home] INT     NOT NULL,
     [strength_defence_away] INT     NOT NULL,
     [team_division]         INT     NULL,
+    [pulse_id]              INT     NOT NULL,
     CONSTRAINT [PK_Teams] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 

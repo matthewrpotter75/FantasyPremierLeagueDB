@@ -10,18 +10,18 @@ MERGE INTO dbo.Chip AS Target
 USING 
 (
 	VALUES 
-	(1, 'Wildcard'),
-	(2, 'Bench Boost'),
-	(3, 'Free Hit'),
-	(4, 'Triple Captain')
+	(1, 'wildcard','Wildcard'),
+	(2, 'bboost','Bench Boost'),
+	(3, 'freehit','Free Hit'),
+	(4, '3xc','Triple Captain')
 )
-AS Source (chipid, chip_name)
+AS Source (chipid, chipname, chipdesc)
 ON Target.chipid = Source.chipid
 WHEN MATCHED THEN 
-UPDATE SET chip_name = Source.chip_name
+UPDATE SET chipname = Source.chipname, chipdesc = Source.chipdesc
 WHEN NOT MATCHED BY TARGET THEN 
-INSERT (chipid, chip_name) 
-VALUES (chipid, chip_name)  
+INSERT (chipid, chipname, chipdesc) 
+VALUES (chipid, chipname, chipdesc)  
 WHEN NOT MATCHED BY SOURCE THEN 
 DELETE;
 GO

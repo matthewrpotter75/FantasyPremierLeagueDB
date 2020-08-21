@@ -99,6 +99,8 @@
     <Build Include="dbo\Stored Procedures\GetUserTeamRecordsForUserTeamId.sql" />
     <Build Include="dbo\Stored Procedures\GetUserTeamTableCounts.sql" />
     <Build Include="dbo\Stored Procedures\GetUserTeamTableRowCountsIncrease.sql" />
+    <Build Include="dbo\Tables\UserTeamH2hLeagueStaging.sql" />
+    <Build Include="dbo\Tables\UserTeamClassicLeagueStaging.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueUserTeam.publish.xml" />

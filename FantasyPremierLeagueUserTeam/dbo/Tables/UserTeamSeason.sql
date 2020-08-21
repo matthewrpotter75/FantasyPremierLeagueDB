@@ -5,7 +5,6 @@ CREATE TABLE dbo.UserTeamSeason
 	total_points INT NOT NULL,
 	userteam_rank INT NOT NULL,
 	seasonid INT NOT NULL,
-	userplayerid INT NOT NULL,
 	userteamid INT NOT NULL,
 	CONSTRAINT PK_UserTeamSeason PRIMARY KEY CLUSTERED (userteamid ASC, id ASC)
 	--CONSTRAINT FK_UserTeamSeason_userplayerid FOREIGN KEY (userplayerid) REFERENCES dbo.UserTeam (userPlayerid)
