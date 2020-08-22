@@ -119,6 +119,15 @@
     <Build Include="dbo\Stored Procedures\CopyDimChipSeasonChipKeysFromPreviousSeason.sql" />
     <Build Include="dbo\Functions\fnGetUserTeamFreeTransfers.sql" />
     <Build Include="dbo\Stored Procedures\GetUserTeamSeasonPointsByGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPointsBetweenGameweeksForSeason.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayerPointsAndStatsBetweenGameweeksForSeason.sql" />
+    <Build Include="dbo\Stored Procedures\UpdateTodaysFactDailyPlayerPricesToYesterday.sql" />
+    <Build Include="dbo\Stored Procedures\InsertTodaysFactDailyPlayerPricesAsYesterday.sql" />
+    <Build Include="dbo\Stored Procedures\DeleteFactPlayerHistoryForSeasonKeyGameweekKeyHomeTeamKeyAwayTeamKey.sql" />
+    <Build Include="dbo\Stored Procedures\GetPlayersWithMultiplePriceRisesBetweenGameweek.sql" />
+    <Build Include="dbo\Stored Procedures\GetBlankedFixturesInFactGameweekFixture.sql" />
+    <Build Include="dbo\Stored Procedures\GetBlankedFixturesInDimTeamGameweekFixtureCounts.sql" />
+    <Build Include="dbo\Stored Procedures\GetBlankedFixturesInDimTeamGameweekFixture.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDW.publish.xml" />

@@ -1,11 +1,22 @@
 CREATE PROCEDURE dbo.GetPlayerPricesChangesByNameSearch
 (
-	@PlayerSearchString VARCHAR(100)
+	@PlayerSearchString VARCHAR(100),
+	@SeasonKey INT = NULL
 )
 AS
 BEGIN
 
 	SET NOCOUNT ON;
+
+	IF @SeasonKey IS NULL
+	BEGIN
+
+		SELECT @SeasonKey = SeasonKey
+		FROM dbo.DimSeason
+		WHERE SeasonStartDate < GETDATE()
+		AND SeasonEndDate > GETDATE();
+
+	END
 
 	IF @PlayerSearchString IS NOT NULL
 	BEGIN
@@ -41,9 +52,11 @@ BEGIN
 		INNER JOIN dbo.DimTeam t
 		ON pa.TeamKey = t.TeamKey
 		WHERE Cost <> PrevCost
+		AND d.SeasonKey = @SeasonKey
 		AND PATINDEX(@PlayerSearchString, p.PlayerName) > 0
 		ORDER BY pc.PlayerKey, PlayerName, pc.DateKey;
 
 	END
 
 END
+GO

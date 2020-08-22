@@ -24,7 +24,7 @@
     [Creativity]       DECIMAL (6, 2) NOT NULL,
     [Threat]           DECIMAL (6, 2) NOT NULL,
     [ICTIndex]         DECIMAL (6, 2) NOT NULL,
-    [EAIndex]          SMALLINT       NOT NULL,
+    [EAIndex]          SMALLINT       NULL,
     CONSTRAINT [PK_FactPlayerHistoryPastSeasons] PRIMARY KEY CLUSTERED ([FactPlayerHistoryPastSeasonKey] ASC),
 	CONSTRAINT [FK_FactPlayerHistoryPastSeasons_PlayerKey] FOREIGN KEY ([PlayerKey]) REFERENCES [dbo].[DimPlayer] ([PlayerKey]),
 	CONSTRAINT [FK_FactPlayerHistoryPastSeasons_SeasonKey] FOREIGN KEY ([SeasonKey]) REFERENCES [dbo].[DimSeason] ([SeasonKey])
