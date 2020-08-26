@@ -64,6 +64,9 @@
     <Folder Include="dbo\Stored Procedures" />
     <Folder Include="dbo\Types" />
     <Folder Include="dbo\Views" />
+    <Folder Include="Security" />
+    <Folder Include="Storage" />
+    <Folder Include="Deployment" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\DimUserTeam.sql" />
@@ -82,5 +85,13 @@
     <Build Include="dbo\Tables\FactUserTeamChip.sql" />
     <Build Include="dbo\Tables\FactUserTeamCup.sql" />
     <Build Include="dbo\Tables\DimPlayer.sql" />
+    <Build Include="Security\FantasyPremierLeagueUserTeamDW.sql" />
+    <Build Include="Security\FantasyPremierLeagueUserTeamDW_Login.sql" />
+    <Build Include="Security\Permissions.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Deployment\FantasyPremierLeagueUserTeamDW.publish.xml" />
+    <None Include="FantasyPremierLeagueUserTeamDW.scmp" />
   </ItemGroup>
 </Project>

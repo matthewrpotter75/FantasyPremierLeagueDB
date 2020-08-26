@@ -1,0 +1,1 @@
+﻿CREATE USER [FantasyPremierLeagueUserTeamDW] FOR LOGIN [FantasyPremierLeagueUserTeamDW];
