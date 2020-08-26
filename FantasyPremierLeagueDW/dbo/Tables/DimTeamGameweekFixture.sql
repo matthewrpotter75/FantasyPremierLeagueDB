@@ -2,7 +2,7 @@ CREATE TABLE dbo.DimTeamGameweekFixture
 (
 	TeamKey INT NOT NULL,
 	GameweekFixtureKey INT NOT NULL,
-	GameweekKey INT NOT NULL,
+	GameweekKey INT NULL,
 	SeasonKey INT NOT NULL,
 	OpponentTeamKey INT NOT NULL,
 	IsHome BIT NOT NULL,

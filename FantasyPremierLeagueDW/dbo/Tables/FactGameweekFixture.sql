@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[FactGameweekFixture]
 (
 	[GameweekFixtureKey] INT IDENTITY(1,1) NOT NULL,
-	[GameweekKey] INT NOT NULL,
+	[GameweekKey] INT NULL,
 	[SeasonKey] INT NOT NULL,
 	[HomeTeamKey] INT NOT NULL,
 	[AwayTeamKey] INT NOT NULL,

@@ -65,4 +65,22 @@
     <Folder Include="dbo\Types" />
     <Folder Include="dbo\Views" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\DimUserTeam.sql" />
+    <Build Include="dbo\Tables\DimRegion.sql" />
+    <Build Include="dbo\Tables\DimUserPlayer.sql" />
+    <Build Include="dbo\Tables\DimChip.sql" />
+    <Build Include="dbo\Tables\DimLeague.sql" />
+    <Build Include="dbo\Tables\DimUserTeamLeague.sql" />
+    <Build Include="dbo\Tables\DimLeagueType.sql" />
+    <Build Include="dbo\Tables\DimSeason.sql" />
+    <Build Include="dbo\Tables\FactUserTeamSeason.sql" />
+    <Build Include="dbo\Tables\FactUserTeamTransferHistory.sql" />
+    <Build Include="dbo\Tables\FactUserTeamGameweekHistory.sql" />
+    <Build Include="dbo\Tables\FactUserTeamPick.sql" />
+    <Build Include="dbo\Tables\FactUserTeamPickAutomaticSub.sql" />
+    <Build Include="dbo\Tables\FactUserTeamChip.sql" />
+    <Build Include="dbo\Tables\FactUserTeamCup.sql" />
+    <Build Include="dbo\Tables\DimPlayer.sql" />
+  </ItemGroup>
 </Project>

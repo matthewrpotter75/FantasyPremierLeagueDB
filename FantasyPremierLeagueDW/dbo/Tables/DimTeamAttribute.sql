@@ -3,7 +3,7 @@
 	[TeamAttributeKey] INT IDENTITY(1,1) NOT NULL,
 	[TeamKey] INT NOT NULL,
 	[SeasonKey] INT NOT NULL,
-    [Strength] INT NOT NULL,
+    [Strength] INT NULL,
     [Position] INT NOT NULL,
     [Played] INT NOT NULL,
     [Win] INT NOT NULL,
