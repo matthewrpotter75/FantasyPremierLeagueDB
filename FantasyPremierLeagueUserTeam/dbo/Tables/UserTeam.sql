@@ -1,8 +1,8 @@
 CREATE TABLE dbo.UserTeam
 (
 	id INT NOT NULL,
-	player_first_name VARCHAR(500) NULL,
-	player_last_name VARCHAR(500) NULL,
+	player_first_name NVARCHAR(500) NULL,
+	player_last_name NVARCHAR(500) NULL,
 	player_region_id INT NULL,
 	player_region_name VARCHAR(100) NULL,
 	player_region_iso_code VARCHAR(3) NULL,
@@ -12,7 +12,7 @@ CREATE TABLE dbo.UserTeam
 	summary_gameweek_rank INT NULL,
 	current_gameweekId INT NOT NULL,
 	joined_time SMALLDATETIME NOT NULL,
-	team_name VARCHAR(200) NOT NULL,
+	team_name NVARCHAR(200) NOT NULL,
 	team_bank INT NOT NULL,
 	team_value INT NOT NULL,
 	team_transfers INT NOT NULL,

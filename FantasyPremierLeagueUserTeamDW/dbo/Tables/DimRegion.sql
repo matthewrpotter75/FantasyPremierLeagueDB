@@ -1,6 +1,6 @@
 CREATE TABLE dbo.DimRegion
 (
-	RegionKey INT NOT NULL,
+	RegionKey INT IDENTITY(1,1) NOT NULL,
 	RegionName VARCHAR(100) NULL,
 	RegionISOCode VARCHAR(3) NULL,
 	RegionId INT NOT NULL,

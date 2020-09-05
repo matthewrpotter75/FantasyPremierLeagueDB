@@ -89,6 +89,10 @@
     <Build Include="Security\FantasyPremierLeagueUserTeamDW_Login.sql" />
     <Build Include="Security\Permissions.sql" />
     <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Tables\DimTeam.sql" />
+    <Build Include="dbo\Tables\DimTeamSeason.sql" />
+    <Build Include="dbo\Tables\DimPlayerSeason.sql" />
+    <Build Include="dbo\Tables\DimGameweek.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Deployment\FantasyPremierLeagueUserTeamDW.publish.xml" />

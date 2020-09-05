@@ -11,3 +11,8 @@ CREATE TABLE dbo.UserTeamClassicLeague
 	--CONSTRAINT FK_UserTeamClassicLeague_userteamid FOREIGN KEY (userteamid) REFERENCES dbo.UserTeam (id),
 	--CONSTRAINT FK_UserTeamClassicLeague_leagueid FOREIGN KEY (leagueid) REFERENCES dbo.UserTeamLeague (id)
 );
+GO
+
+CREATE NONCLUSTERED INDEX [IX_UserteamClassicLeague_userteamid]
+    ON [dbo].[UserTeamClassicLeague]([userteamid] ASC);
+GO

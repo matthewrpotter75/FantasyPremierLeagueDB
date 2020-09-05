@@ -12,3 +12,8 @@ CREATE TABLE dbo.UserTeamPick
 	--CONSTRAINT FK_UserTeamPick_gameweekId FOREIGN KEY (gameweekid) REFERENCES dbo.Gameweeks (id),
 	--CONSTRAINT FK_UserTeamPick_playerid FOREIGN KEY (playerid) REFERENCES dbo.Players (id),
 );
+GO
+
+CREATE NONCLUSTERED INDEX [IX_UserteamPick_userteamid]
+    ON [dbo].[UserTeamPick]([userteamid] ASC);
+GO

@@ -1,6 +1,7 @@
 CREATE TABLE dbo.FactUserTeamGameweekHistory
 (
 	UserTeamKey INT NOT NULL,
+	SeasonKey INT NOT NULL,
 	GameweekKey INT NOT NULL,
 	Points INT NOT NULL,
 	TotalPoints INT NOT NULL,
@@ -12,6 +13,6 @@ CREATE TABLE dbo.FactUserTeamGameweekHistory
 	TeamBank INT NOT NULL,
 	TeamValue INT NOT NULL,
 	PointsOnBench INT NOT NULL,
-	CONSTRAINT PK_FactUserTeamGameweekHistory PRIMARY KEY CLUSTERED (UserTeamKey ASC, GameweekKey ASC)
+	CONSTRAINT PK_FactUserTeamGameweekHistory PRIMARY KEY CLUSTERED (UserTeamKey ASC, SeasonKey ASC, GameweekKey ASC)
 )
 GO

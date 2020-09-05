@@ -12,3 +12,8 @@ CREATE TABLE dbo.UserTeamH2hLeague
 	--CONSTRAINT FK_UserTeamH2hLeague_leagueid FOREIGN KEY (leagueid) REFERENCES dbo.UserTeamLeague (id),
 	--CONSTRAINT FK_UserTeamH2hLeague_start_gameweekid FOREIGN KEY (start_gameweekid) REFERENCES dbo.Gameweeks (id)
 );
+GO
+
+CREATE NONCLUSTERED INDEX [IX_UserteamH2hLeague_userteamid]
+    ON [dbo].[UserTeamH2hLeague]([userteamid] ASC);
+GO

@@ -1,8 +1,10 @@
 CREATE TABLE dbo.DimUserPlayer
 (
-	UserPlayerKey INT NOT NULL,
-	PlayerFirstName VARCHAR(500) NULL,
-	PlayerLastName VARCHAR(500) NULL,
+	UserPlayerKey INT IDENTITY(1,1) NOT NULL,
+	PlayerFirstName NVARCHAR(500) NOT NULL,
+	PlayerLastName NVARCHAR(500) NOT NULL,
+	RegionKey INT NOT NULL,
+	UserTeamId INT NOT NULL,
 	CONSTRAINT PK_DimUserPlayer PRIMARY KEY CLUSTERED (UserPlayerKey ASC)
 )
 GO

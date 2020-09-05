@@ -9,7 +9,6 @@ CREATE TABLE dbo.UserTeamCup
 	awayTeam_playerName VARCHAR(200) NOT NULL,
 	is_knockout BIT NOT NULL,
 	winner INT NULL,
-	own_entry BIT NOT NULL,
 	homeTeam_points INT NOT NULL,
 	homeTeam_win INT NOT NULL,
 	homeTeam_draw INT NOT NULL,
@@ -30,8 +29,8 @@ CREATE TABLE dbo.UserTeamCup
 );
 GO
 
-CREATE INDEX IX_UserTeamCup_homeTeam_userteamid ON dbo.UserTeamCup (homeTeam_userTeamid);
-GO
+--CREATE INDEX IX_UserTeamCup_homeTeam_userteamid ON dbo.UserTeamCup (homeTeam_userTeamid);
+--GO
 
-CREATE INDEX IX_UserTeamCup_awayTeam_userteamid ON dbo.UserTeamCup (awayTeam_userTeamid);
-GO
+--CREATE INDEX IX_UserTeamCup_awayTeam_userteamid ON dbo.UserTeamCup (awayTeam_userTeamid);
+--GO
