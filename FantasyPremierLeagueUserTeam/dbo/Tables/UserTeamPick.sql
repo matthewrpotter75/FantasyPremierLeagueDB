@@ -14,6 +14,6 @@ CREATE TABLE dbo.UserTeamPick
 );
 GO
 
-CREATE NONCLUSTERED INDEX [IX_UserteamPick_userteamid]
+CREATE NONCLUSTERED INDEX [IX_UserTeamPick_userteamid]
     ON [dbo].[UserTeamPick]([userteamid] ASC);
 GO

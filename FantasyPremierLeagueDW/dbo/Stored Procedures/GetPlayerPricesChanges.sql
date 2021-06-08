@@ -2,7 +2,8 @@ CREATE PROCEDURE dbo.GetPlayerPricesChanges
 (
 	@Date DATETIME = NULL,
 	@SeasonKey INT = NULL,
-	@PriceChangeDirectionFilter VARCHAR(3) = NULL
+	@PriceChangeDirectionFilter VARCHAR(3) = NULL,
+	@Debug BIT = NULL
 )
 AS
 BEGIN
@@ -21,15 +22,28 @@ BEGIN
 
 	END
 
+	IF @Debug IS NOT NULL
+	BEGIN
+		SELECT @SeasonKey AS SeasonKey;
+	END
+
 	IF @Date IS NOT NULL
 	BEGIN
 
 		SELECT @DateKey = DateKey FROM dbo.DimDate WHERE [Date] = CAST(@Date AS DATE);
 
+		IF @Debug IS NOT NULL
+		BEGIN
+			SELECT * FROM dbo.DimDate WHERE [Date] = CAST(@Date AS DATE);
+		END
+
 		;WITH PrevCost AS
 		(
-			SELECT *, CAST(Cost AS SMALLINT) AS CostINT, LAG(Cost) OVER (PARTITION BY PlayerKey ORDER BY DateKey) AS PrevCost
-			FROM dbo.FactPlayerDailyPrices
+			SELECT fpdp.*, CAST(fpdp.Cost AS SMALLINT) AS CostINT, LAG(fpdp.Cost) OVER (PARTITION BY fpdp.PlayerKey ORDER BY fpdp.DateKey) AS PrevCost
+			FROM dbo.FactPlayerDailyPrices fpdp
+			INNER JOIN dbo.DimDate dd
+			ON fpdp.DateKey = dd.DateKey
+			WHERE dd.SeasonKey = @SeasonKey
 		)
 		SELECT p.PlayerName, 
 		t.TeamShortName AS Team,		
