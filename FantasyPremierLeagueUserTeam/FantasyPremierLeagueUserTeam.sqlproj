@@ -65,6 +65,8 @@
     <Folder Include="Deployment" />
     <Folder Include="dbo\Tables" />
     <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="Storage\Filegroups" />
+    <Folder Include="Storage\Files" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Chip.sql" />
@@ -124,7 +126,6 @@
     <Build Include="dbo\Stored Procedures\GetCompletedUserTeamGameweekHistoryIds.sql" />
     <Build Include="dbo\Stored Procedures\GetAllUserTeamGameweekHistoryIdsForUserTeamId.sql" />
     <Build Include="dbo\Stored Procedures\GetAllUserTeamPickAutomaticSubIdsForUserTeamIdAndGameweekId.sql" />
-    <Build Include="dbo\Stored Procedures\GetCompletedH2hLeagueIds.sql" />
     <Build Include="dbo\Stored Procedures\GetAllH2hLeagueIdsForUserTeamId.sql" />
     <Build Include="dbo\Stored Procedures\GetMaxGameweekId.sql" />
     <Build Include="dbo\Stored Procedures\GetAllUserTeamPickIds.sql" />
@@ -136,7 +137,6 @@
     <Build Include="dbo\Stored Procedures\GetAllUserTeamIdsWithTransferHistory.sql" />
     <Build Include="dbo\Stored Procedures\GetUserTeamRecordsForAllUserTeamTablesForUserTeamId.sql" />
     <Build Include="Security\FantasyPremierLeagueUserTeamTruncateProxy.sql" />
-    <Build Include="dbo\Tables\UserTeamPickTest.sql" />
     <Build Include="dbo\Tables\UserTeamPickStagingWithDups.sql" />
     <Build Include="dbo\Tables\UserTeamPickStagingInsert.sql" />
     <Build Include="dbo\Tables\UserTeamPickStagingDups.sql" />
@@ -154,6 +154,20 @@
     <Build Include="dbo\Stored Procedures\TruncateUserTeamUpdateStaging.sql" />
     <Build Include="dbo\Stored Procedures\GetAllCupIdsForUserTeamIds.sql" />
     <Build Include="dbo\Stored Procedures\GetSeasonCountFromUserTeamSeasonForUserTeamIds.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamClassicLeague.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamChip.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamCup.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamH2hLeague.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamPick.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamSeason.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamTransferHistory.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamClassicLeague.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamCup.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamChip.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamH2hLeague.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamPick.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamSeason.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamTransferHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueUserTeam.publish.xml" />

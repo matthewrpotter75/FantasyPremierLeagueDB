@@ -8,9 +8,11 @@
     [userteamid]      INT NOT NULL,
     [gameweekid]      INT NOT NULL
     --CONSTRAINT [PK_UserTeamPickStagingInsert] PRIMARY KEY CLUSTERED ([userteamid] ASC, [gameweekid] ASC, [position] ASC)
-);
+	CONSTRAINT [PK_UserTeamPickStagingInsert] PRIMARY KEY CLUSTERED ([userteamid] ASC, [gameweekid] ASC, [position] ASC) ON [FantasyPremierLeagueUserTeamPick]
+) ON [FantasyPremierLeagueUserTeamPick];
 GO
 
-CREATE NONCLUSTERED INDEX [IX_UserTeamPickStagingInsert_userteamid_gameweekid_position]
-    ON [dbo].[UserTeamPickStagingInsert]([userteamid] ASC, [gameweekid] ASC, [position] ASC);
+--CREATE NONCLUSTERED INDEX [IX_UserTeamPickStagingInsert_userteamid_gameweekid_position]
+    --ON [dbo].[UserTeamPickStagingInsert]([userteamid] ASC, [gameweekid] ASC, [position] ASC)
+--ON [FantasyPremierLeagueUserTeamPick];;
 GO

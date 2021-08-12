@@ -9,6 +9,6 @@ CREATE TABLE dbo.UserTeamTransferHistoryStaging
 	player_out_cost INT NOT NULL,
 	gameweekid INT NOT NULL,
 	userteamtransferhistoryid BIGINT NOT NULL
-)
+) ON [FantasyPremierLeagueUserTeamTransferHistory];
 GO
 

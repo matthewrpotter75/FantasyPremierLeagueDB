@@ -1,11 +1,11 @@
-CREATE PROCEDURE dbo.GetActualGameweekId
-AS
-BEGIN
+--CREATE PROCEDURE dbo.GetActualGameweekId
+--AS
+--BEGIN
 
-	SET NOCOUNT ON;
+--	SET NOCOUNT ON;
 
-	SELECT MAX(id) AS id 
-	FROM FantasyPremierLeague.dbo.Gameweeks 
-	WHERE deadline_time < GETDATE();
+--	SELECT MAX(id) AS id 
+--	FROM FantasyPremierLeague.dbo.Gameweeks 
+--	WHERE deadline_time < GETDATE();
 
-END
+--END

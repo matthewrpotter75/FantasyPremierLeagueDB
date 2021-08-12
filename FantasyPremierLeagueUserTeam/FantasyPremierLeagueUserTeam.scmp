@@ -238,7 +238,7 @@
       </PropertyElementName>
       <PropertyElementName>
         <Name>IgnoreFilegroupPlacement</Name>
-        <Value>True</Value>
+        <Value>False</Value>
       </PropertyElementName>
       <PropertyElementName>
         <Name>IgnoreFullTextCatalogFilePath</Name>
@@ -246,7 +246,7 @@
       </PropertyElementName>
       <PropertyElementName>
         <Name>IgnoreFileAndLogFilePath</Name>
-        <Value>True</Value>
+        <Value>False</Value>
       </PropertyElementName>
       <PropertyElementName>
         <Name>IgnoreLoginSids</Name>
@@ -258,7 +258,7 @@
       </PropertyElementName>
       <PropertyElementName>
         <Name>IgnoreFileSize</Name>
-        <Value>True</Value>
+        <Value>False</Value>
       </PropertyElementName>
       <PropertyElementName>
         <Name>AllowUnsafeRowLevelSecurityDataMovement</Name>
@@ -682,7 +682,7 @@
       </PropertyElementName>
       <PropertyElementName>
         <Name>ExcludeCredentials</Name>
-        <Value>True</Value>
+        <Value>False</Value>
       </PropertyElementName>
       <PropertyElementName>
         <Name>ExcludeDatabaseScopedCredentials</Name>
@@ -750,7 +750,7 @@
       </PropertyElementName>
       <PropertyElementName>
         <Name>ExcludeFiles</Name>
-        <Value>True</Value>
+        <Value>False</Value>
       </PropertyElementName>
       <PropertyElementName>
         <Name>ExcludeFileTables</Name>
@@ -905,19 +905,11 @@
         <Value>ExcludedType</Value>
       </PropertyElementName>
       <PropertyElementName>
-        <Name>Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlFile</Name>
-        <Value>ExcludedType</Value>
-      </PropertyElementName>
-      <PropertyElementName>
         <Name>Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlLogin</Name>
         <Value>ExcludedType</Value>
       </PropertyElementName>
       <PropertyElementName>
         <Name>Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlLinkedServer</Name>
-        <Value>ExcludedType</Value>
-      </PropertyElementName>
-      <PropertyElementName>
-        <Name>Microsoft.Data.Tools.Schema.Sql.SchemaModel.SqlCredential</Name>
         <Value>ExcludedType</Value>
       </PropertyElementName>
       <PropertyElementName>

@@ -23,11 +23,11 @@ CREATE TABLE dbo.UserTeamCup
 	gameweekid INT NOT NULL,
 	fromuserteamid INT NOT NULL,
 	tiebreak VARCHAR(50) NULL,
-	CONSTRAINT PK_UserTeamCup PRIMARY KEY CLUSTERED ([id] ASC, [fromuserteamid] ASC)
+	CONSTRAINT [PK_UserTeamCup] PRIMARY KEY CLUSTERED ([id] ASC, [fromuserteamid] ASC) ON [FantasyPremierLeagueUserTeamCup]
 	--CONSTRAINT FK_UserTeamCup_homeTeam_userTeamid FOREIGN KEY (homeTeam_userTeamid) REFERENCES dbo.UserTeam (id),
 	--CONSTRAINT FK_UserTeamCup_awayTeam_userTeamid FOREIGN KEY (awayTeam_userTeamid) REFERENCES dbo.UserTeam (id),
 	--CONSTRAINT FK_UserTeamCup_gameweekId FOREIGN KEY (gameweekid) REFERENCES dbo.Gameweeks (id)
-);
+) ON [FantasyPremierLeagueUserTeamCup];
 GO
 
 --CREATE INDEX IX_UserTeamCup_homeTeam_userteamid ON dbo.UserTeamCup (homeTeam_userTeamid);
