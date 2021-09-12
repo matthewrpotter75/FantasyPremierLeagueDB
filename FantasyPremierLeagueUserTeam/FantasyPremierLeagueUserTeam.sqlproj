@@ -168,6 +168,10 @@
     <Build Include="Storage\Files\FantasyPremierLeagueUserTeamPick.sql" />
     <Build Include="Storage\Files\FantasyPremierLeagueUserTeamSeason.sql" />
     <Build Include="Storage\Files\FantasyPremierLeagueUserTeamTransferHistory.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamGameweekHistory.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamGameweekHistory.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamStaging.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamStaging.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueUserTeam.publish.xml" />

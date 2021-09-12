@@ -24,6 +24,7 @@ CREATE TABLE dbo.UserTeamCupStaging
 	fromuserteamid INT NULL,
 	tiebreak VARCHAR(50) NULL
 )
+ON FantasyPremierLeagueUserTeamStaging
 GO
 
 

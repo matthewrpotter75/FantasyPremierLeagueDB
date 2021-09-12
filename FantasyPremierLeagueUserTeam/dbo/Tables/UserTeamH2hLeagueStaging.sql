@@ -8,6 +8,7 @@ CREATE TABLE dbo.UserTeamH2hLeagueStaging
 	entry_can_invite BIT NOT NULL,
 	userteamid INT NOT NULL,
 )
+ON FantasyPremierLeagueUserTeamStaging
 GO
 
 

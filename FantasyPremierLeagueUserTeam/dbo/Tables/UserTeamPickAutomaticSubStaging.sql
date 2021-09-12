@@ -6,6 +6,7 @@ CREATE TABLE dbo.UserTeamPickAutomaticSubStaging
 	userteamid INT NOT NULL,
 	gameweekid INT NOT NULL
 )
+ON FantasyPremierLeagueUserTeamStaging
 GO
 
 

@@ -5,6 +5,7 @@ CREATE TABLE dbo.UserTeamSeasonStaging
 	total_points INT NOT NULL,
 	userteam_rank INT NOT NULL,
 )
+ON FantasyPremierLeagueUserTeamStaging
 GO
 
 

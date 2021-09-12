@@ -10,4 +10,5 @@
 	--CONSTRAINT PK_UserTeamClassicLeagueStaging PRIMARY KEY CLUSTERED (userteamid ASC, leagueid ASC)
 	--CONSTRAINT FK_UserTeamClassicLeagueStaging_userteamid FOREIGN KEY (userteamid) REFERENCES dbo.UserTeam (id),
 	--CONSTRAINT FK_UserTeamClassicLeagueStaging_leagueid FOREIGN KEY (leagueid) REFERENCES dbo.UserTeamLeague (id)
-);
+)
+ON FantasyPremierLeagueUserTeamStaging;

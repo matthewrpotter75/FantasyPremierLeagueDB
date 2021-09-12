@@ -14,5 +14,6 @@ CREATE TABLE dbo.UserTeamGameweekHistoryStaging
 	userteam_value INT NOT NULL,
 	points_on_bench INT NOT NULL,
 )
+ON FantasyPremierLeagueUserTeamStaging
 GO
 

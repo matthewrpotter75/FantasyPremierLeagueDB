@@ -7,11 +7,11 @@ CREATE TABLE dbo.UserTeamPickStaging
 	is_vice_captain BIT NOT NULL,
 	userteamid INT NOT NULL,
 	gameweekid INT NOT NULL,
-    DateInserted DATETIME DEFAULT (getdate()) NULL
-) ON [FantasyPremierLeagueUserTeamPick];
+    DateInserted DATETIME CONSTRAINT DF_UserTeamPickStaging_DateInserted DEFAULT (GETDATE()) NULL
+) ON FantasyPremierLeagueUserTeamStaging;
 GO
 
---CREATE NONCLUSTERED INDEX [IX_UserTeamPickStaging_userteamid_gameweekid_playerid]
-    --ON [dbo].[UserTeamPickStaging]([userteamid] ASC, [gameweekid] ASC, [playerid] ASC)
-	--ON [FantasyPremierLeagueUserTeamPick];
+--CREATE NONCLUSTERED INDEX IX_UserTeamPickStaging_userteamid_gameweekid_playerid
+    --ON dbo.UserTeamPickStaging(userteamid ASC, gameweekid ASC, playerid ASC)
+--ON FantasyPremierLeagueUserTeamStaging;
 --GO
