@@ -1,4 +1,7 @@
 CREATE PROCEDURE dbo.GetLatestGameweekId
+(
+	@SeasonKey INT = 16
+)
 AS
 BEGIN
 
@@ -12,9 +15,12 @@ BEGIN
 		INNER JOIN FantasyPremierLeagueDW.dbo.FactGameweekFixture gwf 
 		ON gw.SeasonKey = gwf.SeasonKey
 		AND gw.GameweekKey = gwf.GameweekKey
+		WHERE gw.SeasonKey = @SeasonKey
+		AND gwf.KickoffTime < GETDATE()
 	)
 	SELECT TOP 1 GameweekKey AS id 
 	FROM DimGameweek
 	ORDER BY DeadlineDiff DESC;
 
 END
+GO

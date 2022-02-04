@@ -4,7 +4,12 @@ CREATE TABLE dbo.DimPlayerTeamSeason
 	TeamKey INT NOT NULL,
 	SeasonKey INT NOT NULL,
 	DateInserted DATETIME NOT NULL,
-	CONSTRAINT PK_DimPlayerTeamSeason PRIMARY KEY CLUSTERED (PlayerKey ASC,TeamKey ASC,SeasonKey ASC)
+ CONSTRAINT PK_DimPlayerTeamSeason PRIMARY KEY CLUSTERED 
+(
+	PlayerKey ASC,
+	TeamKey ASC,
+	SeasonKey ASC
+)
 )
 GO
 
@@ -31,3 +36,5 @@ GO
 
 ALTER TABLE dbo.DimPlayerTeamSeason CHECK CONSTRAINT FK_DimPlayerTeamSeason_TeamKey
 GO
+
+

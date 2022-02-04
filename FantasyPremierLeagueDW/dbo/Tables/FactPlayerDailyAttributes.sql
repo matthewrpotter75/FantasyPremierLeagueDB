@@ -33,5 +33,6 @@
     ICT_Index                    DECIMAL (6,2) NULL,
     EA_Index                     SMALLINT NOT NULL,
 	CONSTRAINT PK_FactPlayerDailyAttributes PRIMARY KEY CLUSTERED (PlayerKey ASC,DateKey ASC),
+    CONSTRAINT [FK_FactPlayerDailyAttributes_DateKey] FOREIGN KEY ([DateKey]) REFERENCES [dbo].[DimDate] ([DateKey]),
 	CONSTRAINT FK_FactPlayerDailyAttributes_PlayerKey FOREIGN KEY(PlayerKey) REFERENCES dbo.DimPlayer ([PlayerKey])
 );
