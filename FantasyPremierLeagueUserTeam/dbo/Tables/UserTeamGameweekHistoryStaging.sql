@@ -17,3 +17,8 @@ CREATE TABLE dbo.UserTeamGameweekHistoryStaging
 ON FantasyPremierLeagueUserTeamStaging
 GO
 
+CREATE NONCLUSTERED INDEX IX_UserTeamGameweekHistoryStaging_userteamid_INC_gameweekid
+    ON dbo.[UserTeamGameweekHistoryStaging](userteamid ASC)
+    INCLUDE(gameweekid)
+    ON FantasyPremierLeagueUserTeamStaging;
+GO

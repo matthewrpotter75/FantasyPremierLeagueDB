@@ -9,6 +9,12 @@ CREATE TABLE dbo.UserTeamTransferHistoryStaging
 	player_out_cost INT NOT NULL,
 	gameweekid INT NOT NULL,
 	userteamtransferhistoryid BIGINT NOT NULL
-) ON FantasyPremierLeagueUserTeamStaging;
+) ON [FantasyPremierLeagueUserTeamTransferHistory];
+GO
+
+CREATE NONCLUSTERED INDEX [IX_UserTeamTransferHistoryStaging_userteamid_INC_gameweekid]
+    ON [dbo].[UserTeamTransferHistoryStaging]([userteamid] ASC)
+    INCLUDE([gameweekid])
+    ON [FantasyPremierLeagueUserTeamTransferHistory];
 GO
 

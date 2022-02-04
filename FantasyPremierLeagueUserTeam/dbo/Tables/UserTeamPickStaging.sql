@@ -11,6 +11,12 @@ CREATE TABLE dbo.UserTeamPickStaging
 ) ON FantasyPremierLeagueUserTeamStaging;
 GO
 
+CREATE NONCLUSTERED INDEX [IX_UserTeamPickStaging_userteamid_INC_gameweekid]
+    ON [dbo].[UserTeamPickStaging]([userteamid] ASC)
+    INCLUDE([gameweekid])
+    ON [FantasyPremierLeagueUserTeamStaging];
+GO
+
 --CREATE NONCLUSTERED INDEX IX_UserTeamPickStaging_userteamid_gameweekid_playerid
     --ON dbo.UserTeamPickStaging(userteamid ASC, gameweekid ASC, playerid ASC)
 --ON FantasyPremierLeagueUserTeamStaging;

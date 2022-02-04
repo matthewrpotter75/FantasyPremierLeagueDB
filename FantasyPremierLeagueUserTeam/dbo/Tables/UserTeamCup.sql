@@ -1,10 +1,10 @@
 CREATE TABLE dbo.UserTeamCup
 (
 	id INT NOT NULL,
-	homeTeam_userTeamid INT NOT NULL,
+	homeTeam_userTeamid INT NULL,
 	homeTeam_userTeamName VARCHAR(200) NOT NULL,
 	homeTeam_playerName VARCHAR(200) NOT NULL,
-	awayTeam_userTeamid INT NOT NULL,
+	awayTeam_userTeamid INT NULL,
 	awayTeam_userTeamName VARCHAR(200) NOT NULL,
 	awayTeam_playerName VARCHAR(200) NOT NULL,
 	is_knockout BIT NOT NULL,
@@ -20,6 +20,7 @@ CREATE TABLE dbo.UserTeamCup
 	homeTeam_total INT NOT NULL,
 	awayTeam_total INT NOT NULL,
 	seed_value INT NULL,
+	league INT NULL,
 	gameweekid INT NOT NULL,
 	fromuserteamid INT NOT NULL,
 	tiebreak VARCHAR(50) NULL,

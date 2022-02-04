@@ -51,6 +51,7 @@
 	@UserTeamId49 INT = 0,
 	@UserTeamId50 INT = 0
 )
+WITH RECOMPILE
 AS
 BEGIN
 
@@ -116,17 +117,26 @@ BEGIN
 	(
 		SELECT utp.userteamid,utp.gameweekid
 		FROM dbo.UserTeamPick utp WITH (NOLOCK)
-		INNER JOIN #userteam ut
-		ON utp.userteamid = ut.userteamid
+		WHERE EXISTS
+		(
+			SELECT 1
+			FROM #userteam ut
+			WHERE utp.userteamid = ut.userteamid
+		)
 
 		UNION
 
 		SELECT utp.userteamid,utp.gameweekid
 		FROM dbo.UserTeamPickStaging utp WITH (NOLOCK)
-		INNER JOIN #userteam ut
-		ON utp.userteamid = ut.userteamid
+		WHERE EXISTS
+		(
+			SELECT 1
+			FROM #userteam ut
+			WHERE utp.userteamid = ut.userteamid
+		)
 	) utpall
-	GROUP BY userteamid;
+	GROUP BY userteamid
+	OPTION (MAXDOP 1);
 
 	DROP TABLE #userteam;
 
