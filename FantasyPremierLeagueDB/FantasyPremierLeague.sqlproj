@@ -109,6 +109,8 @@
     <Build Include="dbo\Tables\PlayerHistoryPast.sql" />
     <Build Include="dbo\Tables\PlayerStats.sql" />
     <Build Include="dbo\Tables\GameweekChipStats.sql" />
+    <Build Include="dbo\Stored Procedures\GetActualGameweekId.sql" />
+    <Build Include="dbo\Stored Procedures\GetLatestGameweekId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueDB.publish.xml" />
