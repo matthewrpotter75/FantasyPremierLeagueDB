@@ -7,7 +7,7 @@ ALTER DATABASE [$(DatabaseName)]
 ADD FILE
 (
 	NAME = GAMEWEEKHISTORY,
-	FILENAME = '$(DefaultDataPath)$(DefaultFilePrefix)_FantasyPremierLeagueUserTeamGameweekHistory.ndf',
+	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamGameweekHistory.ndf',
 	SIZE=500MB,
 	FILEGROWTH=500MB
 )

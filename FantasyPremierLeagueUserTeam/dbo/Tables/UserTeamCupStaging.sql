@@ -22,8 +22,10 @@ CREATE TABLE dbo.UserTeamCupStaging
 	seed_value INT NULL,
 	league INT NULL,
 	gameweekid INT NOT NULL,
-	fromuserteamid INT NULL,
-	tiebreak VARCHAR(50) NULL
+	fromuserteamid INT NOT NULL,
+	tiebreak VARCHAR(50) NULL,
+	DateInserted SMALLDATETIME CONSTRAINT DF_UserTeamCupStaging_DateInserted DEFAULT (GETDATE()) NOT NULL,
+    CONSTRAINT PK_UserTeamCupStaging PRIMARY KEY CLUSTERED (id ASC, fromuserteamid ASC, DateInserted ASC) ON FantasyPremierLeagueUserTeamStaging
 )
 ON FantasyPremierLeagueUserTeamStaging
 GO

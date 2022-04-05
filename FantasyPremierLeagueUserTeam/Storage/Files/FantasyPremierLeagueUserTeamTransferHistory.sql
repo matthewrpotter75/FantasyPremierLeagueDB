@@ -7,7 +7,7 @@ ALTER DATABASE [$(DatabaseName)]
 ADD FILE
 (
 	NAME = 'TRANSFERHISTORY',
-	FILENAME = '$(DefaultDataPath)$(DefaultFilePrefix)_FantasyPremierLeagueUserTeamTransferHistory.ndf',
+	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamTransferHistory.ndf',
 	SIZE=1000MB,
 	FILEGROWTH=500MB
 )

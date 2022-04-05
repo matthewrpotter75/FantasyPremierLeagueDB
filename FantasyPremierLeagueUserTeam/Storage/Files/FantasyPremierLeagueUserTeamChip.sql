@@ -7,7 +7,7 @@ ALTER DATABASE [$(DatabaseName)]
 ADD FILE
 (
 	NAME = 'CHIP',
-	FILENAME = '$(DefaultDataPath)$(DefaultFilePrefix)_FantasyPremierLeagueUserTeamChip.ndf',
+	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamChip.ndf',
 	SIZE=500MB,
 	FILEGROWTH=100MB
 )

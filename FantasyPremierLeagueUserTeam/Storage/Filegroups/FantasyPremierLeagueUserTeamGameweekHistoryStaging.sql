@@ -4,4 +4,4 @@ Any sqlcmd variables will be properly substituted during
 build and deployment.
 */
 ALTER DATABASE [$(DatabaseName)]
-	ADD FILEGROUP [FantasyPremierLeagueUserTeamPick]
+	ADD FILEGROUP [FantasyPremierLeagueUserTeamGameweekHistoryStaging]
