@@ -4,7 +4,9 @@ CREATE TABLE dbo.UserTeamSeason
 	seasonid TINYINT NOT NULL,
 	total_points INT NOT NULL,
 	userteam_rank INT NOT NULL,
-	CONSTRAINT PK_UserTeamSeason PRIMARY KEY CLUSTERED (userteamid ASC, seasonid ASC) ON FantasyPremierLeagueUserTeamSeason
+	CONSTRAINT PK_UserTeamSeason PRIMARY KEY CLUSTERED (userteamid ASC, seasonid ASC) 
+	WITH (DATA_COMPRESSION = PAGE)
+	ON FantasyPremierLeagueUserTeamSeason
 	--CONSTRAINT FK_UserTeamSeason_userplayerid FOREIGN KEY (userplayerid) REFERENCES dbo.UserTeam (userPlayerid)
 ) ON FantasyPremierLeagueUserTeamSeason;
 GO

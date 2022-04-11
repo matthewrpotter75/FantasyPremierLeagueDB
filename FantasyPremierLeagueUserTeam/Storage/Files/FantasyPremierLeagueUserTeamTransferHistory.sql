@@ -8,7 +8,7 @@ ADD FILE
 (
 	NAME = 'TRANSFERHISTORY',
 	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamTransferHistory.ndf',
-	SIZE=1000MB,
+	SIZE=15000MB,
 	FILEGROWTH=500MB
 )
 TO FILEGROUP FantasyPremierLeagueUserTeamTransferHistory

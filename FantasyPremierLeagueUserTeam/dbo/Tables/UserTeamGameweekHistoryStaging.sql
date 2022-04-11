@@ -14,7 +14,9 @@ CREATE TABLE dbo.UserTeamGameweekHistoryStaging
 	userteam_value INT NOT NULL,
 	points_on_bench INT NOT NULL,
 	DateInserted SMALLDATETIME CONSTRAINT DF_UserTeamGameweekHistoryStaging_DateInserted DEFAULT (getdate()) NOT NULL,
-    CONSTRAINT PK_UserTeamGameweekHistoryStaging PRIMARY KEY CLUSTERED (userteamid ASC, gameweekid ASC, DateInserted ASC) ON FantasyPremierLeagueUserTeamGameweekHistoryStaging
+    CONSTRAINT PK_UserTeamGameweekHistoryStaging PRIMARY KEY CLUSTERED (userteamid ASC, gameweekid ASC, DateInserted ASC) 
+	WITH (DATA_COMPRESSION = PAGE)
+	ON FantasyPremierLeagueUserTeamGameweekHistoryStaging
 )
 ON FantasyPremierLeagueUserTeamGameweekHistoryStaging
 GO

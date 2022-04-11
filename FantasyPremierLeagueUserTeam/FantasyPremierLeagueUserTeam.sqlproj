@@ -188,6 +188,10 @@
     <Build Include="dbo\Stored Procedures\UserTeamCupStagingTransfer.sql" />
     <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamGameweekHistoryStaging.sql" />
     <Build Include="Storage\Files\FantasyPremierLeagueUserTeamGameweekHistoryStaging.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamPick.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamPickAutomaticSub.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamPick.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamPickAutomaticSub.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FantasyPremierLeagueUserTeam.publish.xml" />

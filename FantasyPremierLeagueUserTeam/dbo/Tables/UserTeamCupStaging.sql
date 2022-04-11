@@ -24,8 +24,10 @@ CREATE TABLE dbo.UserTeamCupStaging
 	gameweekid INT NOT NULL,
 	fromuserteamid INT NOT NULL,
 	tiebreak VARCHAR(50) NULL,
-	DateInserted SMALLDATETIME CONSTRAINT DF_UserTeamCupStaging_DateInserted DEFAULT (GETDATE()) NOT NULL,
-    CONSTRAINT PK_UserTeamCupStaging PRIMARY KEY CLUSTERED (id ASC, fromuserteamid ASC, DateInserted ASC) ON FantasyPremierLeagueUserTeamStaging
+	DateInserted SMALLDATETIME CONSTRAINT DF_UserTeamCupStaging_DateInserted DEFAULT (getdate()) NOT NULL,
+    CONSTRAINT PK_UserTeamCupStaging PRIMARY KEY CLUSTERED (id ASC, fromuserteamid ASC, DateInserted ASC)
+	WITH (DATA_COMPRESSION = PAGE)
+	ON FantasyPremierLeagueUserTeamStaging
 )
 ON FantasyPremierLeagueUserTeamStaging
 GO

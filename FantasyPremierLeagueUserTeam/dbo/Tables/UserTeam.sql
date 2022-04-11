@@ -21,7 +21,7 @@ CREATE TABLE dbo.UserTeam
 	started_gameweekid INT NOT NULL,
 	[DateInserted] DATETIME CONSTRAINT DF_UserTeam_DateInserted DEFAULT (getdate()) NULL,
 	[DateUpdated] DATETIME NULL,
-	CONSTRAINT PK_UserTeam PRIMARY KEY CLUSTERED (id ASC)
+	CONSTRAINT PK_UserTeam PRIMARY KEY CLUSTERED (id ASC) WITH (DATA_COMPRESSION = PAGE)
 	--CONSTRAINT FK_UserTeam_started_gameweekId FOREIGN KEY (started_gameweekId) REFERENCES dbo.Gameweeks (id),
 	--CONSTRAINT FK_UserTeam_current_gameweek FOREIGN KEY (current_gameweekId) REFERENCES dbo.Gameweeks (id),
 	--CONSTRAINT FK_UserTeam_favourite_teamId FOREIGN KEY (favourite_teamId) REFERENCES dbo.Teams (id)

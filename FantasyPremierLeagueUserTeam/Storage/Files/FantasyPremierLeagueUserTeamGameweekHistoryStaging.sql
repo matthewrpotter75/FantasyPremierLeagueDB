@@ -9,7 +9,7 @@ ALTER DATABASE [$(DatabaseName)]
 		NAME = GAMEWEEKHISTORYSTAGING,
 		FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamGameweekHistoryStaging.ndf',
 		SIZE=500MB,
-		FILEGROWTH=500MB
+		FILEGROWTH=100MB
 	)
 	TO FILEGROUP FantasyPremierLeagueUserTeamGameweekHistoryStaging
 GO
