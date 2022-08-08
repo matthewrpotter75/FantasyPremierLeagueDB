@@ -6,10 +6,10 @@ build and deployment.
 ALTER DATABASE [$(DatabaseName)]
 ADD FILE
 (
-	NAME = 'CHIP',
-	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamChip.ndf',
+	NAME = 'GAMEWEEKHISTORYSTAGING',
+	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamGameweekHistoryStaging.ndf',
 	SIZE=500MB,
 	FILEGROWTH=100MB
 )
-TO FILEGROUP FantasyPremierLeagueUserTeamChip
+TO FILEGROUP FantasyPremierLeagueUserTeamGameweekHistoryStaging
 GO

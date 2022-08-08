@@ -6,7 +6,8 @@
 	entry_can_leave BIT NOT NULL,
 	entry_can_admin BIT NOT NULL,
 	entry_can_invite BIT NOT NULL,
-	userteamid INT NOT NULL
+	userteamid INT NOT NULL,
+	DateInserted SMALLDATETIME CONSTRAINT DF_UserTeamClassicLeagueStaging_DateInserted DEFAULT (getdate()) NOT NULL
 	--CONSTRAINT PK_UserTeamClassicLeagueStaging PRIMARY KEY CLUSTERED (userteamid ASC, leagueid ASC)
 	--CONSTRAINT FK_UserTeamClassicLeagueStaging_userteamid FOREIGN KEY (userteamid) REFERENCES dbo.UserTeam (id),
 	--CONSTRAINT FK_UserTeamClassicLeagueStaging_leagueid FOREIGN KEY (leagueid) REFERENCES dbo.UserTeamLeague (id)

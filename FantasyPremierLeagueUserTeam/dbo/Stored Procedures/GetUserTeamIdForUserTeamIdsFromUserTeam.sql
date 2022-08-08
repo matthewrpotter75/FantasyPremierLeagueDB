@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[GetUserTeamIdForUserTeamIdsFromUserTeam]
+﻿CREATE PROCEDURE dbo.GetUserTeamIdForUserTeamIdsFromUserTeam
 (
 	@UserTeamId1 INT = 0,
 	@UserTeamId2 INT = 0,
@@ -49,7 +49,17 @@
 	@UserTeamId47 INT = 0,
 	@UserTeamId48 INT = 0,
 	@UserTeamId49 INT = 0,
-	@UserTeamId50 INT = 0
+	@UserTeamId50 INT = 0,
+	@UserTeamId51 INT = 0,
+	@UserTeamId52 INT = 0,
+	@UserTeamId53 INT = 0,
+	@UserTeamId54 INT = 0,
+	@UserTeamId55 INT = 0,
+	@UserTeamId56 INT = 0,
+	@UserTeamId57 INT = 0,
+	@UserTeamId58 INT = 0,
+	@UserTeamId59 INT = 0,
+	@UserTeamId60 INT = 0
 )
 AS
 BEGIN
@@ -109,7 +119,18 @@ BEGIN
 		@UserTeamId47,
 		@UserTeamId48,
 		@UserTeamId49,
-		@UserTeamId50
+		@UserTeamId50,
+		@UserTeamId51,
+		@UserTeamId52,
+		@UserTeamId53,
+		@UserTeamId54,
+		@UserTeamId55,
+		@UserTeamId56,
+		@UserTeamId57,
+		@UserTeamId58,
+		@UserTeamId59,
+		@UserTeamId60
 	);
 
 END
+GO

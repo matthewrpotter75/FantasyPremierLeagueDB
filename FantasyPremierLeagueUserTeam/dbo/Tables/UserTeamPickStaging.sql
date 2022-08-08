@@ -7,17 +7,34 @@ CREATE TABLE dbo.UserTeamPickStaging
 	is_vice_captain BIT NOT NULL,
 	userteamid INT NOT NULL,
 	gameweekid INT NOT NULL,
-    DateInserted DATETIME CONSTRAINT DF_UserTeamPickStaging_DateInserted DEFAULT (GETDATE()) NULL
-) ON FantasyPremierLeagueUserTeamStaging;
+    DateInserted SMALLDATETIME CONSTRAINT DF_UserTeamPickStaging_DateInserted DEFAULT (getdate()) NOT NULL,
+    DeleteFlag BIT CONSTRAINT DF_UserTeamPickStaging_DeleteFlag DEFAULT ((0)) NULL
+)
+ON FantasyPremierLeagueUserTeamPickStaging;
 GO
 
-CREATE NONCLUSTERED INDEX [IX_UserTeamPickStaging_userteamid_INC_gameweekid]
-    ON [dbo].[UserTeamPickStaging]([userteamid] ASC)
-    INCLUDE([gameweekid])
-    ON [FantasyPremierLeagueUserTeamStaging];
+CREATE NONCLUSTERED INDEX IX_UserTeamPick_DeleteFlag
+ON dbo.UserTeamPickStaging(DeleteFlag ASC) 
+WITH (DATA_COMPRESSION = PAGE)
+ON FantasyPremierLeagueUserTeamPickStaging;
 GO
 
---CREATE NONCLUSTERED INDEX IX_UserTeamPickStaging_userteamid_gameweekid_playerid
-    --ON dbo.UserTeamPickStaging(userteamid ASC, gameweekid ASC, playerid ASC)
---ON FantasyPremierLeagueUserTeamStaging;
---GO
+CREATE NONCLUSTERED INDEX IX_UserTeamPickStaging_DateInserted
+ON dbo.UserTeamPickStaging(DateInserted ASC) 
+WITH (DATA_COMPRESSION = PAGE)
+ON FantasyPremierLeagueUserTeamPickStaging;
+GO
+
+CREATE NONCLUSTERED INDEX IX_UserTeamPickStaging_userteamid_gameweekid_position_DateInserted_INC_playerid
+ON dbo.UserTeamPickStaging(userteamid ASC, gameweekid ASC, position ASC, DateInserted ASC)
+INCLUDE(playerid) 
+WITH (DATA_COMPRESSION = PAGE)
+ON FantasyPremierLeagueUserTeamPickStaging;
+GO
+
+CREATE NONCLUSTERED INDEX IX_UserTeamPickStaging_userteamid_INC_gameweekid
+ON dbo.UserTeamPickStaging(userteamid ASC)
+INCLUDE(gameweekid) 
+WITH (DATA_COMPRESSION = PAGE)
+ON FantasyPremierLeagueUserTeamPickStaging;
+GO

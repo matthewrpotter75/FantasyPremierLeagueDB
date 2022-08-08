@@ -6,11 +6,10 @@ build and deployment.
 ALTER DATABASE [$(DatabaseName)]
 ADD FILE
 (
-	NAME = GAMEWEEKHISTORY,
-	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamGameweekHistory.ndf',
+	NAME = 'PICKSTAGING',
+	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamPickStaging.ndf',
 	SIZE=500MB,
-	FILEGROWTH=500MB
+	FILEGROWTH=100MB
 )
-TO FILEGROUP FantasyPremierLeagueUserTeamGameweekHistory
+TO FILEGROUP FantasyPremierLeagueUserTeamPickStaging
 GO
-	

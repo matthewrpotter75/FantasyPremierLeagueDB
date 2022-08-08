@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE dbo.GetMaxGameweekIdForUserTeamIdsFromUserTeamTransferHistory
+﻿CREATE PROCEDURE dbo.GetFirstGameweekIdForUserTeamIdsFromUserTeamGameweekHistory
 (
 	@UserTeamId1 INT = 0,
 	@UserTeamId2 INT = 0,
@@ -132,27 +132,27 @@ BEGIN
 	(@UserTeamId59),
 	(@UserTeamId60);
 
-	SELECT userteamid,MAX(gameweekid) AS gameweekid 
+	SELECT userteamid, MIN(gameweekid) AS gameweekid
 	FROM
 	(
-		SELECT utth.userteamid,utth.gameweekid
-		FROM dbo.UserTeamTransferHistory utth WITH (NOLOCK)
+		SELECT utgh.userteamid,utgh.gameweekid
+		FROM dbo.UserTeamGameweekHistory utgh WITH (NOLOCK)
 		WHERE EXISTS
 		(
 			SELECT 1
 			FROM #userteam ut
-			WHERE utth.userteamid = ut.userteamid
+			WHERE utgh.userteamid = ut.userteamid
 		)
 
 		UNION
 
-		SELECT utth.userteamid,utth.gameweekid
-		FROM dbo.UserTeamTransferHistoryStaging utth WITH (NOLOCK)
+		SELECT utgh.userteamid,gameweekid
+		FROM dbo.UserTeamGameweekHistoryStaging utgh WITH (NOLOCK)
 		WHERE EXISTS
 		(
 			SELECT 1
 			FROM #userteam ut
-			WHERE utth.userteamid = ut.userteamid
+			WHERE utgh.userteamid = ut.userteamid
 		)
 	) utpall
 	GROUP BY userteamid
