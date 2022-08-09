@@ -8,7 +8,7 @@ ADD FILE
 (
 	NAME = 'H2HLEAGUE',
 	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamH2hLeague.ndf',
-	SIZE=100MB,
+	SIZE=200MB,
 	FILEGROWTH=50MB
 )
 TO FILEGROUP FantasyPremierLeagueUserTeamH2hLeague

@@ -4,12 +4,13 @@ Any sqlcmd variables will be properly substituted during
 build and deployment.
 */
 ALTER DATABASE [$(DatabaseName)]
-ADD FILE
-(
+	ADD FILE
+	(
 	NAME = 'GAMEWEEKHISTORYSTAGING',
-	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamGameweekHistoryStaging.ndf',
-	SIZE=500MB,
-	FILEGROWTH=100MB
-)
-TO FILEGROUP FantasyPremierLeagueUserTeamGameweekHistoryStaging
+		FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamGameweekHistoryStaging.ndf',
+		SIZE=500MB,
+		FILEGROWTH=100MB
+	)
+	TO FILEGROUP FantasyPremierLeagueUserTeamGameweekHistoryStaging
 GO
+	

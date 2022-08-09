@@ -53,22 +53,22 @@ BEGIN
 		WHILE @RowsDeleted > 0
 		BEGIN
 
-			--Delete UserTeamGameweekHistoryStaging rows already on UserTeamGameweekHistory
+		--Delete UserTeamGameweekHistoryStaging rows already on UserTeamGameweekHistory
 			DELETE TOP (@DeleteIncrement) st
-			FROM dbo.UserTeamGameweekHistoryStaging st
-			WHERE EXISTS
-			(
-				SELECT 1
-				FROM dbo.UserTeamGameweekHistory WITH (NOLOCK)
-				WHERE userteamid = st.userteamid
-				AND gameweekid = st.gameweekid
-			)
-			OPTION (MAXDOP 1);
+		FROM dbo.UserTeamGameweekHistoryStaging st
+		WHERE EXISTS
+		(
+			SELECT 1
+			FROM dbo.UserTeamGameweekHistory WITH (NOLOCK)
+			WHERE userteamid = st.userteamid
+			AND gameweekid = st.gameweekid
+		)
+		OPTION (MAXDOP 1);
 
 			SELECT @RowsDeleted = @@ROWCOUNT;
 			SELECT @TotalRowsDeleted = @TotalRowsDeleted + @RowsDeleted;
 
-			SELECT @Time = GETDATE();
+		SELECT @Time = GETDATE();
 			RAISERROR('%s: %d already existing rows deleted', 0, 1, @Time, @RowsDeleted) WITH NOWAIT;
 
 		END

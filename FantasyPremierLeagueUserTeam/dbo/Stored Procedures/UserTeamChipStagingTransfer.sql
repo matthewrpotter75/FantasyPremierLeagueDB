@@ -51,25 +51,25 @@ BEGIN
 		WHILE @RowsDeleted > 0
 		BEGIN
 
-			--Delete UserTeamChipStaging rows already on UserTeamChip
+		--Delete UserTeamChipStaging rows already on UserTeamChip
 			DELETE TOP (@DeleteIncrement) st
-			FROM dbo.UserTeamChipStaging st
-			WHERE EXISTS
-			(
-				SELECT 1
-				FROM dbo.UserTeamChip WITH (NOLOCK)
-				WHERE userteamid = st.userteamid
-				AND gameweekid = st.gameweekid
-				AND chipid = st.chipid
-				AND chip_time = st.chip_time
-			)
-			OPTION (MAXDOP 1);
+		FROM dbo.UserTeamChipStaging st
+		WHERE EXISTS
+		(
+			SELECT 1
+			FROM dbo.UserTeamChip WITH (NOLOCK)
+			WHERE userteamid = st.userteamid
+			AND gameweekid = st.gameweekid
+			AND chipid = st.chipid
+			AND chip_time = st.chip_time
+		)
+		OPTION (MAXDOP 1);
 
-			SELECT @RowsDeleted = @@ROWCOUNT;
+		SELECT @RowsDeleted = @@ROWCOUNT;
 			SELECT @TotalRowsDeleted = @TotalRowsDeleted + @RowsDeleted;
 
-			SELECT @Time = GETDATE();
-			RAISERROR('%s: %d already existing rows deleted', 0, 1, @Time, @RowsDeleted) WITH NOWAIT;
+		SELECT @Time = GETDATE();
+		RAISERROR('%s: %d already existing rows deleted', 0, 1, @Time, @RowsDeleted) WITH NOWAIT;
 
 		END
 

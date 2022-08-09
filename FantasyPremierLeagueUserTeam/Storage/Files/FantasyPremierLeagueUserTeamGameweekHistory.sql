@@ -8,7 +8,7 @@ ADD FILE
 (
 	NAME = GAMEWEEKHISTORY,
 	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamGameweekHistory.ndf',
-	SIZE=500MB,
+	SIZE=10000MB,
 	FILEGROWTH=500MB
 )
 TO FILEGROUP FantasyPremierLeagueUserTeamGameweekHistory

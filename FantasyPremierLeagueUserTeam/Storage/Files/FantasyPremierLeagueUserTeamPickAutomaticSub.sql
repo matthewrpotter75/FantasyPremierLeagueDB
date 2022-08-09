@@ -8,8 +8,9 @@ ADD FILE
 (
 	NAME = 'PICKAUTOMATICSUB',
 	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamPickAutomaticSub.ndf',
-	SIZE=500MB,
-	FILEGROWTH=100MB
+	SIZE=4000MB,
+	FILEGROWTH=500MB
 )
 TO FILEGROUP FantasyPremierLeagueUserTeamPickAutomaticSub
 GO
+	

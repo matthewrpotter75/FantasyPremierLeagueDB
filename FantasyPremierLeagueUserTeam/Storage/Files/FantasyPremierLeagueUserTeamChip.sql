@@ -8,7 +8,7 @@ ADD FILE
 (
 	NAME = 'CHIP',
 	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamChip.ndf',
-	SIZE=500MB,
+	SIZE=1100MB,
 	FILEGROWTH=100MB
 )
 TO FILEGROUP FantasyPremierLeagueUserTeamChip

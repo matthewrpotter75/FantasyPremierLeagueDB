@@ -61,22 +61,22 @@ BEGIN
 		WHILE @RowsDeleted > 0
 		BEGIN
 
-			--Delete UserTeamCupStaging rows already on UserTeamCup
+		--Delete UserTeamCupStaging rows already on UserTeamCup
 			DELETE TOP (@DeleteIncrement) st
-			FROM dbo.UserTeamCupStaging st
-			WHERE EXISTS
-			(
-				SELECT 1
-				FROM dbo.UserTeamCup WITH (NOLOCK)
-				WHERE id = st.id
-			)
-			OPTION (MAXDOP 1);
+		FROM dbo.UserTeamCupStaging st
+		WHERE EXISTS
+		(
+			SELECT 1
+			FROM dbo.UserTeamCup WITH (NOLOCK)
+			WHERE id = st.id
+		)
+		OPTION (MAXDOP 1);
 
-			SELECT @RowsDeleted = @@ROWCOUNT;
+		SELECT @RowsDeleted = @@ROWCOUNT;
 			SELECT @TotalRowsDeleted = @TotalRowsDeleted + @RowsDeleted;
 
-			SELECT @Time = GETDATE();
-			RAISERROR('%s: %d already existing rows deleted', 0, 1, @Time, @RowsDeleted) WITH NOWAIT;
+		SELECT @Time = GETDATE();
+		RAISERROR('%s: %d already existing rows deleted', 0, 1, @Time, @RowsDeleted) WITH NOWAIT;
 
 		END
 

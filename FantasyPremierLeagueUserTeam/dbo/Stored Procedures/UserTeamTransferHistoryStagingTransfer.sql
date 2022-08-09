@@ -105,8 +105,8 @@ BEGIN
 
 			SELECT @TotalExistingRowsDeleted = @TotalExistingRowsDeleted + @RowsDeleted;
 
-			SELECT @Time = GETDATE();
-			RAISERROR('%s: Loop %d: %d already existing rows deleted', 0, 1, @Time, @i, @RowsDeleted) WITH NOWAIT;
+				SELECT @Time = GETDATE();
+				RAISERROR('%s: Loop %d: %d already existing rows deleted', 0, 1, @Time, @i, @RowsDeleted) WITH NOWAIT;
 
 			SET @i = @i + 1;
 

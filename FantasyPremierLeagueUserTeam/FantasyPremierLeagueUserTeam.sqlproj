@@ -158,14 +158,14 @@
     <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamChip.sql" />
     <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamCup.sql" />
     <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamH2hLeague.sql" />
-    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamPick.sql" />
+    <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamPickStaging.sql" />
     <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamSeason.sql" />
     <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamTransferHistory.sql" />
     <Build Include="Storage\Files\FantasyPremierLeagueUserTeamClassicLeague.sql" />
     <Build Include="Storage\Files\FantasyPremierLeagueUserTeamCup.sql" />
     <Build Include="Storage\Files\FantasyPremierLeagueUserTeamChip.sql" />
     <Build Include="Storage\Files\FantasyPremierLeagueUserTeamH2hLeague.sql" />
-    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamPick.sql" />
+    <Build Include="Storage\Files\FantasyPremierLeagueUserTeamPickStaging.sql" />
     <Build Include="Storage\Files\FantasyPremierLeagueUserTeamSeason.sql" />
     <Build Include="Storage\Files\FantasyPremierLeagueUserTeamTransferHistory.sql" />
     <Build Include="Storage\Filegroups\FantasyPremierLeagueUserTeamGameweekHistory.sql" />

@@ -8,7 +8,7 @@ ADD FILE
 (
 	NAME = 'STAGING',
 	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamStaging.ndf',
-	SIZE=200MB,
+	SIZE=500MB,
 	FILEGROWTH=200MB
 )
 TO FILEGROUP FantasyPremierLeagueUserTeamStaging

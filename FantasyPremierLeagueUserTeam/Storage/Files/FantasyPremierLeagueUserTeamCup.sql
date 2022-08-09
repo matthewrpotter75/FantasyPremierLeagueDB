@@ -8,8 +8,8 @@ ADD FILE
 (
 	NAME = 'CUP',
 	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamCup.ndf',
-	SIZE=500MB,
-	FILEGROWTH=100MB
+	SIZE=4000MB,
+	FILEGROWTH=500MB
 )
 TO FILEGROUP FantasyPremierLeagueUserTeamCup
 GO 	

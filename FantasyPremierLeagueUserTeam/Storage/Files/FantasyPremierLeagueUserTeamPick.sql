@@ -8,8 +8,8 @@ ADD FILE
 (
 	NAME = 'PICK',
 	FILENAME = '$(DefaultDataPath)FantasyPremierLeagueUserTeamPick.ndf',
-	SIZE=500MB,
-	FILEGROWTH=100MB
+	SIZE=50000MB,
+	FILEGROWTH=500MB
 )
 TO FILEGROUP FantasyPremierLeagueUserTeamPick
 GO
